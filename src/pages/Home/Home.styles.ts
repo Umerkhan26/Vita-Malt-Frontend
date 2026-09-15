@@ -664,6 +664,11 @@ export const HowEnterInner = styled.div`
   ${contentPadX}
   max-width: 920px;
 
+  /* Match the How it works starting edge on laptop screens */
+  @media (min-width: 901px) and (max-width: 1535px) {
+    max-width: 1220px;
+  }
+
   @media (min-width: 1536px) {
     max-width: 1320px;
   }
@@ -732,6 +737,10 @@ export const HowEnterHead = styled.div`
     }
   }
 
+  @media (min-width: 901px) and (max-width: 1535px) {
+    max-width: 1090px;
+  }
+
   @media (max-width: 640px) {
     margin-bottom: 18px;
 
@@ -794,6 +803,10 @@ export const HowEnterGrid = styled.div`
     max-width: 300px;
     margin: 0 auto;
     gap: 28px;
+  }
+
+  @media (min-width: 901px) and (max-width: 1535px) {
+    max-width: 1090px;
   }
 
   @media (min-width: 1536px) {
