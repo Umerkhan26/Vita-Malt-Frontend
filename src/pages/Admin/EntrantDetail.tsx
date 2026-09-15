@@ -16,20 +16,25 @@ const Back = styled.button`
   margin-bottom: 8px;
   padding: 7px 11px;
   border-radius: 8px;
-  border: 1px solid ${COLORS.line};
-  background: ${COLORS.white};
+  border: 1px solid rgba(0, 107, 63, 0.18);
+  background: linear-gradient(145deg, ${COLORS.white}, #f1f8f3);
+  color: ${COLORS.redDeep};
   font-weight: 700;
   font-size: 0.82rem;
   cursor: pointer;
+  box-shadow: 0 5px 14px rgba(0, 56, 32, 0.07);
+  transition: color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
 
   &:hover {
-    border-color: ${COLORS.red};
-    color: ${COLORS.red};
+    border-color: ${COLORS.gold};
+    color: ${COLORS.redDark};
+    box-shadow: 0 7px 18px rgba(0, 56, 32, 0.12);
+    transform: translateY(-1px);
   }
 `;
 
 const Meta = styled.p`
-  color: ${COLORS.muted};
+  color: ${COLORS.redDark};
   margin-bottom: 10px;
   font-size: 0.85rem;
 `;
