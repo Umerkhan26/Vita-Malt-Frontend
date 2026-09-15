@@ -7,7 +7,8 @@ import Reveal from "../../components/Reveal/Reveal";
 import { apiService } from "../../services/api";
 import { RootState } from "../../redux/store";
 import { trackEvent } from "../../utils/analytics";
-import hero from "../../assets/vita-malt-hero-banner.jpg";
+import heroSmall from "../../assets/vita-malt-hero-banner-1280.webp";
+import heroLarge from "../../assets/vita-malt-hero-banner-2560.webp";
 import howEnterBg from "../../assets/Howtoenterbg.jpg";
 import stepIconCart from "../../assets/icon1-clear.png";
 import stepIconCrown from "../../assets/icon2-clear.png";
@@ -197,7 +198,12 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <Hero>
-        <HeroImage src={hero} alt="Vitalize Your Game — Win the ultimate entertainment package" />
+        <HeroImage
+          src={heroLarge}
+          srcSet={`${heroSmall} 1280w, ${heroLarge} 2560w`}
+          sizes="100vw"
+          alt="Vitalize Your Game — Win the ultimate entertainment package"
+        />
         <HeroShade />
         <HeroContent>
           <HeroTop>
