@@ -1767,11 +1767,27 @@ export const EnterProductArt = styled.figure`
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
+  position: relative;
   min-height: 0;
   margin: clamp(20px, 2.5vw, 30px) 0 0;
   overflow: visible;
 
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    right: 28%;
+    bottom: 1px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(0, 53, 31, 0.2) 0%, rgba(0, 53, 31, 0) 72%);
+    filter: blur(4px);
+  }
+
   img {
+    position: relative;
+    z-index: 1;
     display: block;
     width: 100%;
     max-width: 100%;
@@ -1862,6 +1878,108 @@ export const Input = styled.input`
   @media (max-width: 640px) {
     padding: 12px 14px;
     border-radius: 10px;
+  }
+`;
+
+export const CodeList = styled.div`
+  display: grid;
+  gap: 10px;
+`;
+
+export const CodeRow = styled.div`
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+`;
+
+export const CodeNumber = styled.span`
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0, 107, 63, 0.1);
+  color: ${COLORS.redDeep};
+  font-size: 0.8rem;
+  font-weight: 900;
+`;
+
+export const CodeToolbar = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 12px;
+  color: ${COLORS.muted};
+  font-size: 0.84rem;
+  font-weight: 700;
+
+  @media (max-width: 420px) {
+    flex-wrap: wrap;
+  }
+`;
+
+export const CodeStepper = styled.div`
+  display: inline-grid;
+  grid-template-columns: 34px 38px 34px;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(0, 107, 63, 0.18);
+  border-radius: 10px;
+  background: #f2f8f4;
+`;
+
+export const StepperButton = styled.button`
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: ${COLORS.redDeep};
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: rgba(0, 107, 63, 0.1);
+  }
+
+  &:disabled {
+    color: rgba(29, 57, 44, 0.28);
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    position: relative;
+    z-index: 1;
+    outline: 3px solid rgba(0, 107, 63, 0.2);
+    outline-offset: -3px;
+  }
+`;
+
+export const StepperValue = styled.strong`
+  display: grid;
+  place-items: center;
+  min-height: 34px;
+  border-right: 1px solid rgba(0, 107, 63, 0.14);
+  border-left: 1px solid rgba(0, 107, 63, 0.14);
+  color: ${COLORS.ink};
+  font-size: 0.9rem;
+`;
+
+export const CodeCounter = styled.span`
+  margin-left: auto;
+  color: ${COLORS.muted};
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  @media (max-width: 420px) {
+    width: 100%;
+    margin-left: 0;
   }
 `;
 

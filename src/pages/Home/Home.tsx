@@ -56,6 +56,14 @@ import {
   EnterCard,
   Label,
   Input,
+  CodeList,
+  CodeRow,
+  CodeNumber,
+  CodeToolbar,
+  CodeStepper,
+  StepperButton,
+  StepperValue,
+  CodeCounter,
   Check,
   Submit,
   Progress,
@@ -74,7 +82,7 @@ import {
 
 const Home: React.FC = () => {
   const auth = useSelector((s: RootState) => s.auth);
-  const [code, setCode] = useState("");
+  const [codes, setCodes] = useState([""]);
   const [fullName, setFullName] = useState(auth.username || "");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -92,13 +100,42 @@ const Home: React.FC = () => {
     entrant: { _id: string; email?: string };
   } | null>(null);
   const [showAccount, setShowAccount] = useState(false);
+  const [submissionProgress, setSubmissionProgress] = useState<{ current: number; total: number } | null>(null);
+
+  const filledCodeCount = codes.filter((value) => value.trim()).length;
+
+  const updateCode = (index: number, value: string) => {
+    setCodes((current) => current.map((code, codeIndex) => (codeIndex === index ? value.toUpperCase() : code)));
+  };
+
+  const increaseCodeCount = () => setCodes((current) => [...current, ""]);
+
+  const decreaseCodeCount = () => {
+    setCodes((current) => (current.length === 1 ? current : current.slice(0, -1)));
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const submittedCodes = codes.map((value) => value.trim().toUpperCase()).filter(Boolean);
+    if (!submittedCodes.length) {
+      toast.error("Enter at least one crown code");
+      return;
+    }
+    if (new Set(submittedCodes).size !== submittedCodes.length) {
+      toast.error("Remove duplicate codes before submitting");
+      return;
+    }
+
     setLoading(true);
-    trackEvent("submit_start");
-    try {
-      const payload: Record<string, unknown> = { code };
+    trackEvent("submit_start", { codeCount: submittedCodes.length });
+    const failedCodes: { code: string; message: string }[] = [];
+    let acceptedCount = 0;
+    let latestData: NonNullable<typeof result> | null = null;
+
+    for (let index = 0; index < submittedCodes.length; index += 1) {
+      const submittedCode = submittedCodes[index];
+      setSubmissionProgress({ current: index + 1, total: submittedCodes.length });
+      const payload: Record<string, unknown> = { code: submittedCode };
       if (!auth.isLoggedIn) {
         payload.fullName = fullName;
         payload.phone = phone;
@@ -106,25 +143,55 @@ const Home: React.FC = () => {
         payload.dateOfBirth = dob || undefined;
         payload.isOver18 = isOver18;
       }
-      const data = (await apiService.submitCode(payload)) as typeof result;
-      setResult(data);
-      setCode("");
-      if (!auth.isLoggedIn) {
-        setFullName("");
-        setPhone("");
-        setEmail("");
-        setDob("");
-        setIsOver18(false);
+
+      try {
+        const data = (await apiService.submitCode(payload)) as NonNullable<typeof result>;
+        latestData = data;
+        acceptedCount += 1;
+      } catch (error) {
+        failedCodes.push({
+          code: submittedCode,
+          message: error instanceof Error ? error.message : "Submission failed",
+        });
       }
-      toast.success(data?.message || "Code accepted");
-      trackEvent("submit_success", { createdDrawEntry: (data as { createdDrawEntry?: boolean })?.createdDrawEntry });
-      if (data?.promptCreateAccount) setShowAccount(true);
-    } catch (error) {
-      trackEvent("submit_fail");
-      toast.error(error instanceof Error ? error.message : "Submission failed");
-    } finally {
-      setLoading(false);
     }
+
+    if (latestData) {
+      setResult(latestData);
+      setCodes(failedCodes.length ? failedCodes.map(({ code }) => code) : [""]);
+      if (!auth.isLoggedIn) {
+        if (!failedCodes.length) {
+          setFullName("");
+          setPhone("");
+          setEmail("");
+          setDob("");
+          setIsOver18(false);
+        }
+      }
+      trackEvent("submit_success", {
+        codeCount: acceptedCount,
+        createdDrawEntry: (latestData as { createdDrawEntry?: boolean }).createdDrawEntry,
+      });
+      if (latestData.promptCreateAccount) setShowAccount(true);
+    }
+
+    if (!failedCodes.length) {
+      toast.success(`${acceptedCount} code${acceptedCount === 1 ? "" : "s"} accepted`);
+    } else if (acceptedCount) {
+      toast.warning(
+        `${acceptedCount} accepted, ${failedCodes.length} failed. Failed codes remain in the form.`
+      );
+    } else {
+      trackEvent("submit_fail");
+      toast.error(
+        failedCodes.length === 1
+          ? failedCodes[0].message
+          : `All ${failedCodes.length} codes failed. Please review and try again.`
+      );
+    }
+
+    setSubmissionProgress(null);
+    setLoading(false);
   };
 
   return (
@@ -176,7 +243,7 @@ const Home: React.FC = () => {
                   <span className="how">How to </span>
                   <span className="enter">enter</span>
                 </h2>
-                <p>Three steps from shelf to draw entry — codes can be submitted one at a time.</p>
+                <p>Three steps from shelf to draw entry — submit one code or several codes together.</p>
               </HowEnterHead>
             </Reveal>
             <HowEnterGrid>
@@ -292,15 +359,42 @@ const Home: React.FC = () => {
             </Reveal>
             <Reveal variant="right" delay={120}>
               <EnterCard onSubmit={onSubmit}>
-                <Label htmlFor="code">Crown code</Label>
-                <Input
-                  id="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  placeholder="Type your code"
-                  autoCapitalize="characters"
-                  required
-                />
+                <Label htmlFor="code-1">Crown codes</Label>
+                <CodeToolbar>
+                  <span>How many codes?</span>
+                  <CodeStepper aria-label="Number of crown codes">
+                    <StepperButton
+                      type="button"
+                      onClick={decreaseCodeCount}
+                      disabled={codes.length === 1}
+                      aria-label="Remove one code field"
+                    >
+                      −
+                    </StepperButton>
+                    <StepperValue aria-live="polite">{codes.length}</StepperValue>
+                    <StepperButton type="button" onClick={increaseCodeCount} aria-label="Add one code field">
+                      +
+                    </StepperButton>
+                  </CodeStepper>
+                  <CodeCounter>
+                    {filledCodeCount} of {codes.length} filled
+                  </CodeCounter>
+                </CodeToolbar>
+                <CodeList>
+                  {codes.map((code, index) => (
+                    <CodeRow key={index}>
+                      <CodeNumber aria-hidden>{index + 1}</CodeNumber>
+                      <Input
+                        id={`code-${index + 1}`}
+                        value={code}
+                        onChange={(e) => updateCode(index, e.target.value)}
+                        placeholder="Type your code"
+                        autoCapitalize="characters"
+                        required={index === 0}
+                      />
+                    </CodeRow>
+                  ))}
+                </CodeList>
                 {!auth.isLoggedIn && (
                   <>
                     <Label>Full name</Label>
@@ -318,7 +412,9 @@ const Home: React.FC = () => {
                   </>
                 )}
                 <Submit type="submit" disabled={loading}>
-                  {loading ? "Checking code…" : "Submit code"}
+                  {submissionProgress
+                    ? `Submitting ${submissionProgress.current} of ${submissionProgress.total}…`
+                    : `Submit ${filledCodeCount || ""} code${filledCodeCount === 1 ? "" : "s"}`.replace("  ", " ")}
                 </Submit>
                 {result && (
                   <Progress>
