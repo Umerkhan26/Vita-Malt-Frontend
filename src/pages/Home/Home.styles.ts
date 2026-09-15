@@ -1061,25 +1061,33 @@ export const HowWorksSection = styled.section`
     position: absolute;
     z-index: 0;
     pointer-events: none;
-    width: min(30vw, 390px);
-    height: 150px;
-    opacity: 0.92;
+    width: min(24vw, 300px);
+    height: 116px;
+    opacity: 0.7;
   }
 
   &::before {
-    top: -42px;
-    left: -82px;
-    transform: rotate(-13deg);
-    background: linear-gradient(135deg, #ffad22 0%, #f37021 58%, transparent 59%);
-    clip-path: polygon(0 22%, 100% 0, 80% 35%, 100% 58%, 52% 52%, 18% 100%);
+    top: 8px;
+    left: -138px;
+    transform: rotate(-8deg);
+    border-radius: 48% 52% 42% 58%;
+    background:
+      linear-gradient(166deg, transparent 0 25%, #ffb138 26% 40%, transparent 41%),
+      linear-gradient(172deg, transparent 0 51%, #f37021 52% 65%, transparent 66%),
+      linear-gradient(178deg, transparent 0 73%, #ffc65a 74% 82%, transparent 83%);
+    clip-path: polygon(0 8%, 100% 0, 83% 21%, 100% 35%, 72% 48%, 94% 62%, 64% 72%, 80% 89%, 0 100%);
   }
 
   &::after {
-    right: -92px;
-    bottom: -50px;
-    transform: rotate(-10deg);
-    background: linear-gradient(145deg, #006b3f 0%, #004d2c 62%, transparent 63%);
-    clip-path: polygon(0 48%, 100% 0, 78% 45%, 100% 68%, 34% 64%, 0 100%);
+    right: -142px;
+    bottom: 0;
+    transform: rotate(-9deg);
+    border-radius: 52% 48% 58% 42%;
+    background:
+      linear-gradient(166deg, transparent 0 24%, #0b8754 25% 39%, transparent 40%),
+      linear-gradient(173deg, transparent 0 50%, #006b3f 51% 64%, transparent 65%),
+      linear-gradient(179deg, transparent 0 72%, #31a36d 73% 81%, transparent 82%);
+    clip-path: polygon(20% 4%, 100% 0, 100% 100%, 0 91%, 18% 73%, 0 60%, 28% 47%, 7% 30%);
   }
 
   @media (max-width: 640px) {
@@ -1087,9 +1095,9 @@ export const HowWorksSection = styled.section`
 
     &::before,
     &::after {
-      width: 190px;
-      height: 90px;
-      opacity: 0.7;
+      width: 170px;
+      height: 76px;
+      opacity: 0.5;
     }
   }
 
@@ -1104,7 +1112,7 @@ export const HowWorksInner = styled.div`
   z-index: 1;
   ${contentWidth}
   ${contentPadX}
-  max-width: 1020px;
+  max-width: 1220px;
 
   @media (min-width: 1536px) {
     max-width: 1320px;
@@ -1112,17 +1120,17 @@ export const HowWorksInner = styled.div`
 `;
 
 export const HowWorksHead = styled.div`
-  max-width: 920px;
-  margin: 0 auto 24px;
+  max-width: 1090px;
+  margin: 0 auto 26px;
   text-align: left;
 
   h2 {
     display: inline-block;
     position: relative;
-    margin: 0 0 12px;
+    margin: 0 0 15px;
     color: #15352a;
     font-family: "Montserrat", system-ui, sans-serif;
-    font-size: clamp(2rem, 4.2vw, 3rem);
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.04em;
@@ -1179,7 +1187,7 @@ export const HowWorksGrid = styled.div`
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
   gap: clamp(18px, 2.4vw, 28px);
-  max-width: 920px;
+  max-width: 1090px;
   margin: 0 auto;
 
   > * {
@@ -1209,16 +1217,39 @@ export const HowWorksCard = styled.article`
   isolation: isolate;
   overflow: hidden;
   width: 100%;
-  min-height: 260px;
-  padding: 22px 20px 112px;
+  min-height: 310px;
+  padding: 26px 24px 138px;
   border: 1px solid rgba(0, 77, 44, 0.09);
   border-top: 4px solid #f37021;
-  border-radius: 8px;
-  background: linear-gradient(160deg, #ffffff 0%, #ffffff 68%, #f5fbf5 100%);
-  box-shadow: 0 12px 28px rgba(0, 77, 44, 0.1);
+  border-radius: 10px;
+  background:
+    linear-gradient(160deg, #ffffff 0%, #ffffff 66%, #f5fbf5 100%);
+  box-shadow:
+    0 14px 30px rgba(0, 77, 44, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: -16px;
+    right: 24%;
+    bottom: 30px;
+    height: 62px;
+    opacity: 0.18;
+    transform: rotate(-7deg);
+    border-radius: 50%;
+    background:
+      repeating-linear-gradient(
+        -7deg,
+        transparent 0 7px,
+        #00995a 8px 14px,
+        transparent 15px 21px
+      );
+  }
 
   &::after {
     content: "";
@@ -1228,7 +1259,7 @@ export const HowWorksCard = styled.article`
     bottom: -30px;
     width: 150px;
     height: 205px;
-    opacity: 0.1;
+    opacity: 0.16;
     transform: rotate(-8deg);
     background:
       repeating-linear-gradient(90deg, transparent 0 17px, #f3a936 18px 21px),
@@ -1245,8 +1276,8 @@ export const HowWorksCard = styled.article`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 38px;
+    width: 44px;
+    height: 40px;
     margin-bottom: 13px;
     border-radius: 5px;
     background: linear-gradient(145deg, #0b7b4b, #005d37);
@@ -1259,7 +1290,7 @@ export const HowWorksCard = styled.article`
   h3 {
     margin: 0 0 9px;
     color: #006b3f;
-    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    font-size: clamp(1.02rem, 1.55vw, 1.18rem);
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -1269,7 +1300,7 @@ export const HowWorksCard = styled.article`
   ul {
     margin: 0;
     color: #526158;
-    font-size: clamp(0.75rem, 1.1vw, 0.86rem);
+    font-size: clamp(0.77rem, 1.12vw, 0.88rem);
     font-weight: 500;
     line-height: 1.45;
   }
@@ -1311,10 +1342,10 @@ export const HowWorksIcon = styled.div<{ $kind: "purchase" | "uncap" | "register
   position: absolute;
   z-index: 1;
   left: 50%;
-  bottom: ${({ $kind }) => ($kind === "uncap" ? "-30px" : "10px")};
+  bottom: ${({ $kind }) => ($kind === "uncap" ? "-24px" : "14px")};
   transform: translateX(-50%);
-  width: ${({ $kind }) => ($kind === "purchase" ? "150px" : $kind === "uncap" ? "128px" : "108px")};
-  height: ${({ $kind }) => ($kind === "purchase" ? "112px" : $kind === "uncap" ? "142px" : "108px")};
+  width: ${({ $kind }) => ($kind === "purchase" ? "164px" : $kind === "uncap" ? "152px" : "126px")};
+  height: ${({ $kind }) => ($kind === "purchase" ? "120px" : $kind === "uncap" ? "170px" : "124px")};
   display: flex;
   align-items: flex-end;
   justify-content: center;
