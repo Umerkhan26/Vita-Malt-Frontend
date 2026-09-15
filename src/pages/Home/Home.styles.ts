@@ -84,7 +84,7 @@ export const HeroContent = styled.div`
   }
 
   @media (max-width: 380px) {
-    padding: 14px 22px 16px;
+    padding: 14px 16px 16px;
     gap: 10px;
   }
 `;
@@ -467,6 +467,7 @@ export const Section = styled.section<{ $tone?: "white" | "paper" | "blush" | "i
   ${contentPadX}
   position: relative;
   overflow-x: clip;
+  scroll-margin-top: 72px;
   background: ${({ $tone }) => {
     switch ($tone) {
       case "white":
@@ -644,6 +645,7 @@ export const HowEnterSection = styled.section`
   color: #004b23;
   font-family: "Montserrat", system-ui, sans-serif;
   ${contentPadX}
+  scroll-margin-top: 72px;
 
   &::before {
     content: "";
@@ -660,11 +662,13 @@ export const HowEnterSection = styled.section`
   }
 
   @media (max-width: 900px) {
-    padding: 28px 0 36px;
+    padding-top: 28px;
+    padding-bottom: 36px;
   }
 
   @media (max-width: 640px) {
-    padding: 24px 0 32px;
+    padding-top: 24px;
+    padding-bottom: 32px;
   }
 
   /* Large desktop only — laptop layout remains unchanged */
@@ -752,11 +756,11 @@ export const HowEnterHead = styled.div`
   }
 
   @media (max-width: 900px) {
-    text-align: center;
+    text-align: left;
 
     p {
-      margin-left: auto;
-      margin-right: auto;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 
@@ -830,6 +834,11 @@ export const HowEnterGrid = styled.div`
     gap: 28px;
   }
 
+  @media (max-width: 640px) {
+    width: 100%;
+    max-width: 360px;
+  }
+
   @media (min-width: 901px) and (max-width: 1535px) {
     max-width: 1090px;
   }
@@ -849,6 +858,8 @@ export const HowEnterCard = styled.article`
   align-items: center;
   text-align: center;
   height: 220px;
+  min-width: 0;
+  max-width: 100%;
   box-sizing: border-box;
   background: #ffffff;
   border: none;
@@ -934,6 +945,7 @@ export const HowEnterCard = styled.article`
     font-size: clamp(0.76rem, 1.15vw, 0.86rem);
     font-weight: 400;
     line-height: 1.35;
+    overflow-wrap: anywhere;
   }
 
   @media (max-width: 640px) {
@@ -955,6 +967,20 @@ export const HowEnterCard = styled.article`
 
     p {
       font-size: 0.82rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    min-height: 220px;
+    padding-left: 14px;
+    padding-right: 14px;
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.79rem;
     }
   }
 
@@ -1095,6 +1121,7 @@ export const HowWorksSection = styled.section`
   color: #173328;
   font-family: "Montserrat", system-ui, sans-serif;
   ${contentPadX}
+  scroll-margin-top: 72px;
 
   &::before,
   &::after {
@@ -1132,7 +1159,8 @@ export const HowWorksSection = styled.section`
   }
 
   @media (max-width: 640px) {
-    padding: 38px 0 46px;
+    padding-top: 38px;
+    padding-bottom: 46px;
 
     &::before,
     &::after {
@@ -1206,7 +1234,7 @@ export const HowWorksHead = styled.div`
   }
 
   @media (max-width: 640px) {
-    text-align: center;
+    text-align: left;
     margin-bottom: 20px;
 
     h2 {
@@ -1267,6 +1295,8 @@ export const HowWorksCard = styled.article`
   isolation: isolate;
   overflow: hidden;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 310px;
   padding: 26px 24px 138px;
   border: 1px solid rgba(0, 77, 44, 0.09);
@@ -1353,6 +1383,7 @@ export const HowWorksCard = styled.article`
     font-size: clamp(0.77rem, 1.12vw, 0.88rem);
     font-weight: 500;
     line-height: 1.45;
+    overflow-wrap: anywhere;
   }
 
   ul {
@@ -1364,7 +1395,22 @@ export const HowWorksCard = styled.article`
   }
 
   @media (max-width: 760px) {
-    min-height: 250px;
+    min-height: 315px;
+    padding: 22px 18px 148px;
+  }
+
+  @media (max-width: 360px) {
+    min-height: 310px;
+    padding: 20px 16px 142px;
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p,
+    ul {
+      font-size: 0.8rem;
+    }
   }
 
   @media (min-width: 1536px) {
@@ -1407,6 +1453,12 @@ export const HowWorksIcon = styled.div<{ $kind: "purchase" | "uncap" | "register
     object-fit: contain;
     object-position: center bottom;
     filter: drop-shadow(0 8px 12px rgba(0, 45, 27, 0.18));
+  }
+
+  @media (max-width: 380px) {
+    bottom: ${({ $kind }) => ($kind === "uncap" ? "-18px" : "12px")};
+    width: ${({ $kind }) => ($kind === "purchase" ? "142px" : $kind === "uncap" ? "132px" : "108px")};
+    height: ${({ $kind }) => ($kind === "purchase" ? "104px" : $kind === "uncap" ? "148px" : "106px")};
   }
 
   @media (min-width: 1536px) {
@@ -1552,6 +1604,8 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
   padding: clamp(24px, 3vw, 32px);
   min-height: 310px;
   height: 100%;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -1594,6 +1648,7 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
   @media (max-width: 640px) {
     min-height: 0;
     padding: 20px 18px;
+    border-radius: 16px;
 
     h3 {
       font-size: 1.15rem;
@@ -1645,10 +1700,21 @@ export const EnterWrap = styled.div`
 
   @media (max-width: 960px) {
     grid-template-columns: 1fr;
+    gap: 28px;
+
+    > * {
+      min-width: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    gap: 22px;
   }
 `;
 
 export const EnterCopy = styled.div`
+  min-width: 0;
+
   h2 {
     display: inline-block;
     position: relative;
@@ -1680,7 +1746,7 @@ export const EnterCopy = styled.div`
   @media (max-width: 640px) {
     h2 {
       font-size: clamp(1.4rem, 6.5vw, 1.85rem);
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       line-height: 1.15;
     }
     p {
@@ -1703,6 +1769,8 @@ export const EnterCard = styled.form`
     0 24px 58px rgba(0, 77, 44, 0.15),
     inset 0 1px 0 rgba(255,255,255,0.9);
   transition: box-shadow 0.3s ease;
+  min-width: 0;
+  max-width: 100%;
 
   &:focus-within {
     box-shadow:
@@ -1711,7 +1779,8 @@ export const EnterCard = styled.form`
   }
 
   @media (max-width: 640px) {
-    padding: 20px 18px;
+    padding: 20px 16px;
+    border-radius: 16px;
   }
 `;
 
@@ -1728,6 +1797,8 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 13px 14px;
   border-radius: 12px;
   border: 1px solid ${COLORS.line};
@@ -1882,6 +1953,22 @@ export const SplitInner = styled.div`
 
   @media (max-width: 800px) {
     grid-template-columns: 1fr;
+    gap: 18px;
+
+    > * {
+      min-width: 0;
+    }
+
+    > * > div {
+      padding: 22px 20px;
+      border-radius: 16px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    > * > div {
+      padding: 20px 16px;
+    }
   }
 `;
 
@@ -1977,6 +2064,8 @@ export const FaqItem = styled.details`
     border-color 0.2s ease,
     box-shadow 0.25s ease,
     transform 0.25s ease;
+  min-width: 0;
+  max-width: 100%;
 
   &[open] {
     border-color: ${COLORS.line};
@@ -2044,6 +2133,7 @@ export const FaqItem = styled.details`
 
     p {
       font-size: 0.88rem;
+      overflow-wrap: anywhere;
     }
   }
 `;
@@ -2070,6 +2160,8 @@ export const MoreLink = styled.a`
   @media (max-width: 640px) {
     margin-top: 16px;
     font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
   }
 `;
 
@@ -2105,5 +2197,6 @@ export const LegalNote = styled.p`
   @media (max-width: 640px) {
     font-size: 0.84rem;
     line-height: 1.55;
+    padding: 16px;
   }
 `;

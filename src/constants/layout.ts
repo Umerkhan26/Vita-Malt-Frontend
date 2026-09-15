@@ -38,6 +38,16 @@ export const contentPadX = css`
     padding-right: ${CONTENT_PAD_MOBILE};
   }
 
+  @media (max-width: 480px) {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  @media (max-width: 360px) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   @media (min-width: 1536px) {
     padding-left: ${CONTENT_PAD_DESKTOP};
     padding-right: ${CONTENT_PAD_DESKTOP};

@@ -49,6 +49,16 @@ const TopInner = styled.div`
   @media (max-width: 640px) {
     height: 54px;
   }
+
+  @media (max-width: 480px) {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  @media (max-width: 360px) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 `;
 
 const LogoLink = styled(Link)`
@@ -284,6 +294,10 @@ const FooterGrid = styled.div`
   @media (max-width: 520px) {
     grid-template-columns: 1fr;
     gap: 20px;
+
+    > * {
+      min-width: 0;
+    }
   }
 `;
 
