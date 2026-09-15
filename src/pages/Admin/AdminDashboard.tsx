@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   FaUsers,
@@ -86,8 +86,23 @@ const pickMeta = (data: Record<string, unknown>): PageMeta => ({
 const AdminDashboard: React.FC = () => {
   const auth = useSelector((s: RootState) => s.auth);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
-  const [module, setModule] = useState<Module>("overview");
+  const initialModule = (() => {
+    const m = searchParams.get("module");
+    if (
+      m === "users" ||
+      m === "leaderboard" ||
+      m === "codes" ||
+      m === "activity" ||
+      m === "prizes" ||
+      m === "tools"
+    ) {
+      return m;
+    }
+    return "overview";
+  })();
+  const [module, setModule] = useState<Module>(initialModule);
   const [codesTab, setCodesTab] = useState<"codes" | "flagged">("codes");
   const [activityTab, setActivityTab] = useState<"submissions" | "entries">("submissions");
   const [prizesTab, setPrizesTab] = useState<"winners" | "draw">("winners");
@@ -184,6 +199,49 @@ const AdminDashboard: React.FC = () => {
       navigate("/", { replace: true });
     }
   }, [auth, navigate]);
+
+  useEffect(() => {
+    const m = searchParams.get("module");
+    if (
+      m === "users" ||
+      m === "leaderboard" ||
+      m === "codes" ||
+      m === "activity" ||
+      m === "prizes" ||
+      m === "tools" ||
+      m === "overview"
+    ) {
+      setModule(m === "overview" ? "overview" : m);
+      if (m === "leaderboard") {
+        setUserSortBy("codes");
+        setPage(1);
+      }
+      if (m === "users") {
+        setUserSortBy("newest");
+        setUserMinCodes("");
+        setPage(1);
+      }
+    }
+  }, [searchParams]);
+
+  const goModule = (id: Module) => {
+    setModule(id);
+    if (id === "leaderboard") {
+      setUserSortBy("codes");
+      setPage(1);
+    }
+    if (id === "users") {
+      setUserSortBy("newest");
+      setUserMinCodes("");
+      setPage(1);
+    }
+    if (id === "overview") {
+      setSearchParams({}, { replace: true });
+    } else {
+      setSearchParams({ module: id }, { replace: true });
+    }
+    setMenuOpen(false);
+  };
 
   const withLoad = async (fn: () => Promise<void>) => {
     setLoading(true);
@@ -455,11 +513,6 @@ const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     if (auth.role !== "admin") return;
-    apiService.adminOverview().then((res) => setOverview(res as Record<string, unknown>)).catch(() => undefined);
-  }, [auth.role]);
-
-  useEffect(() => {
-    if (auth.role !== "admin") return;
     if (view === "overview") withLoad(loadOverview);
     if (view === "users" || view === "leaderboard") withLoad(loadEntrants);
     if (view === "submissions") withLoad(loadSubmissions);
@@ -577,19 +630,7 @@ const AdminDashboard: React.FC = () => {
             <S.MenuItem
               key={item.id}
               $active={module === item.id}
-              onClick={() => {
-                setModule(item.id);
-                if (item.id === "leaderboard") {
-                  setUserSortBy("codes");
-                  setPage(1);
-                }
-                if (item.id === "users") {
-                  setUserSortBy("newest");
-                  setUserMinCodes("");
-                  setPage(1);
-                }
-                setMenuOpen(false);
-              }}
+              onClick={() => goModule(item.id)}
             >
               {item.icon}
               {item.label}
@@ -674,6 +715,48 @@ const AdminDashboard: React.FC = () => {
               </S.Action>
             </S.PageHead>
 
+            {loading || !overview ? (
+              <>
+                <S.KpiGrid>
+                  {[0, 1, 2, 3].map((i) => (
+                    <S.Kpi key={i}>
+                      <S.ShimmerBlock $h={10} $w="42%" />
+                      <S.ShimmerBlock $h={28} $w="36%" style={{ marginTop: 10 }} />
+                      <S.ShimmerBlock $h={10} $w="70%" style={{ marginTop: 8 }} />
+                    </S.Kpi>
+                  ))}
+                </S.KpiGrid>
+                <S.Split>
+                  <S.Panel>
+                    <h2>Latest code attempts</h2>
+                    {renderTableShimmer(
+                      [
+                        { label: "Code", kind: "code" },
+                        { label: "Person", width: "55%" },
+                        { label: "Result", kind: "badge" },
+                        { label: "When", width: "40%" },
+                      ],
+                      5
+                    )}
+                  </S.Panel>
+                  <S.Panel>
+                    <h2>Top by codes</h2>
+                    {renderTableShimmer(
+                      [
+                        { label: "Rank", kind: "rank" },
+                        { label: "Name", width: "55%" },
+                        { label: "Phone", width: "70%" },
+                        { label: "Type", kind: "badge" },
+                        { label: "Codes", kind: "num" },
+                        { label: "Tickets", kind: "num" },
+                      ],
+                      5
+                    )}
+                  </S.Panel>
+                </S.Split>
+              </>
+            ) : (
+              <>
             <S.KpiGrid>
               <S.Kpi $accent={COLORS.red}>
                 <span>People entered</span>
@@ -802,18 +885,14 @@ const AdminDashboard: React.FC = () => {
                 <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
                   <S.Action
                     $ghost
-                    onClick={() => {
-                      setModule("leaderboard");
-                      setUserSortBy("codes");
-                      setPage(1);
-                    }}
+                    onClick={() => goModule("leaderboard")}
                   >
                     Open leaderboard
                   </S.Action>
                   <S.Action
                     $ghost
                     onClick={() => {
-                      setModule("prizes");
+                      goModule("prizes");
                       setPrizesTab("draw");
                     }}
                   >
@@ -835,7 +914,7 @@ const AdminDashboard: React.FC = () => {
               <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
                 <S.Action
                   onClick={() => {
-                    setModule("codes");
+                    goModule("codes");
                     setCodesTab("codes");
                     setModal("import");
                   }}
@@ -845,7 +924,7 @@ const AdminDashboard: React.FC = () => {
                 <S.Action
                   $ghost
                   onClick={() => {
-                    setModule("prizes");
+                    goModule("prizes");
                     setPrizesTab("draw");
                   }}
                 >
@@ -856,6 +935,8 @@ const AdminDashboard: React.FC = () => {
                 </S.Action>
               </div>
             </S.Panel>
+              </>
+            )}
           </>
         )}
 

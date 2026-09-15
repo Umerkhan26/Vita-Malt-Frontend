@@ -69,12 +69,12 @@ const EntrantDetail: React.FC = () => {
           <strong>Admin Panel</strong>
         </S.SidebarHeader>
         <S.SidebarMenu>
-          <S.MenuItem $active onClick={() => navigate("/admin/dashboard")}>
+          <S.MenuItem $active onClick={() => navigate("/admin/dashboard?module=users")}>
             <FaUser /> User detail
           </S.MenuItem>
           <S.MenuItem
             onClick={() => {
-              navigate("/admin/dashboard");
+              navigate("/admin/dashboard?module=users");
             }}
           >
             <FaArrowLeft /> Back to users
@@ -97,7 +97,7 @@ const EntrantDetail: React.FC = () => {
       </S.Sidebar>
 
       <S.Main>
-        <Back type="button" onClick={() => navigate("/admin/dashboard")}>
+        <Back type="button" onClick={() => navigate("/admin/dashboard?module=users")}>
           <FaArrowLeft /> Back to All Users
         </Back>
         <S.PageHead>
