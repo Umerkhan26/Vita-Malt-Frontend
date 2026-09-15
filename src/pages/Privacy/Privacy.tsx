@@ -23,17 +23,6 @@ const Doc = styled.article`
   }
 `;
 
-const Note = styled.p`
-  color: ${COLORS.muted};
-  line-height: 1.65;
-  font-size: 0.92rem;
-  margin-bottom: 22px;
-  padding: 12px 14px;
-  background: ${COLORS.paper};
-  border-left: 4px solid ${COLORS.gold};
-  border-radius: 0 4px 4px 0;
-`;
-
 const Section = styled.section`
   margin-bottom: 28px;
   padding-bottom: 24px;
@@ -100,9 +89,8 @@ const ContactLink = styled(Link)`
 `;
 
 /**
- * Privacy page is derived from the official FAQ/T&C document
- * (Vitalize_Your_Game_Revised_FAQ_TC- v2), FAQ Q17 + entry fields in Section A/B.
- * That Word file does not contain a separate Privacy Policy chapter.
+ * Privacy page content from official FAQ/T&C personal-information wording
+ * (Vitalize_Your_Game_Revised_FAQ_TC- v2).
  */
 const Privacy: React.FC = () => (
   <Layout>
@@ -112,10 +100,6 @@ const Privacy: React.FC = () => (
       lead="How we use personal information for Vitalize Your Game."
     />
     <PageBody>
-      <Note>
-        This page summarises personal-information wording from the official Vitalize Your Game FAQs and Terms &amp;
-        Conditions (St. Vincent Brewery Ltd.). The official document does not include a separate Privacy Policy chapter.
-      </Note>
       <Doc>
         <Section>
           <h3>How your information is used</h3>
@@ -135,9 +119,6 @@ const Privacy: React.FC = () => (
             <li>Confirmation that you are 18 years or older</li>
             <li>Your promotional code</li>
           </ul>
-          <p>
-            This matches the information required to enter a code under the official FAQs and How to Enter terms.
-          </p>
         </Section>
 
         <Section>
