@@ -613,6 +613,727 @@ export const StepGrid = styled.div`
   }
 `;
 
+/** Campaign "How to enter" — compact art match (no bottles) */
+export const HowEnterSection = styled.section`
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Short band — crop the photo, don’t stretch empty sky */
+  padding: clamp(28px, 3.5vw, 40px) 0 clamp(32px, 4vw, 48px);
+  background-color: #c8dfd0;
+  background-position: center 48%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #004b23;
+  font-family: "Montserrat", system-ui, sans-serif;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 62% 58% at 50% 40%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.12) 58%,
+      transparent 78%
+    );
+  }
+
+  @media (max-width: 900px) {
+    padding: 28px 0 36px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 24px 0 32px;
+  }
+
+  /* Large desktop only — laptop layout remains unchanged */
+  @media (min-width: 1536px) {
+    min-height: 500px;
+    padding: 52px 0 64px;
+    background-position: center 48%;
+  }
+`;
+
+export const HowEnterInner = styled.div`
+  position: relative;
+  z-index: 1;
+  ${contentWidth}
+  ${contentPadX}
+  max-width: 920px;
+
+  @media (min-width: 1536px) {
+    max-width: 1320px;
+  }
+`;
+
+export const HowEnterStage = styled.div`
+  position: relative;
+`;
+
+export const HowEnterHead = styled.div`
+  text-align: left;
+  width: 100%;
+  max-width: 840px;
+  margin: 0 auto 20px;
+
+  h2 {
+    margin: 0 0 8px;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(2.2rem, 4.8vw, 3rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+
+  .how {
+    color: #004b23;
+    font-weight: 900;
+  }
+
+  .enter {
+    position: relative;
+    display: inline-block;
+    color: #f26522;
+    font-weight: 900;
+    padding-bottom: 6px;
+  }
+
+  .enter::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    border-radius: 3px 8px 3px 6px / 4px 6px 3px 5px;
+    background: #004b23;
+    transform: rotate(-1deg);
+  }
+
+  p {
+    margin: 0;
+    max-width: 34rem;
+    color: #1a2e22;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(0.8rem, 1.4vw, 0.92rem);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 900px) {
+    text-align: center;
+
+    p {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin-bottom: 18px;
+
+    h2 {
+      font-size: clamp(1.85rem, 8.5vw, 2.25rem);
+    }
+
+    .enter::after {
+      height: 5px;
+    }
+
+    p {
+      font-size: 0.82rem;
+      padding: 0 6px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    max-width: 1180px;
+    margin-bottom: 28px;
+
+    h2 {
+      font-size: 4rem;
+      margin-bottom: 12px;
+    }
+
+    .enter::after {
+      height: 8px;
+    }
+
+    p {
+      max-width: 42rem;
+      font-size: 1rem;
+    }
+  }
+`;
+
+export const HowEnterGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 26px);
+  align-items: stretch;
+  max-width: 840px;
+  margin: 0 auto;
+
+  > * {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  > * > * {
+    flex: 1;
+    height: 100%;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+    margin: 0 auto;
+    gap: 28px;
+  }
+
+  @media (min-width: 1536px) {
+    max-width: 1180px;
+    gap: 36px;
+  }
+`;
+
+export const HowEnterCard = styled.article`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 220px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: none;
+  border-top: 4px solid #f15a24;
+  border-radius: 16px;
+  padding: 44px 18px 10px;
+  box-shadow: 0 10px 24px rgba(0, 40, 24, 0.12);
+  font-family: "Montserrat", system-ui, sans-serif;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0, 40, 24, 0.15);
+  }
+
+  @media (hover: none) {
+    &:hover {
+      transform: none;
+    }
+  }
+
+  /* Step number — green disc + short orange rule under it (image 1) */
+  .badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #11814f 0%, #00613a 100%);
+    color: #ffffff;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #ffffff;
+    box-shadow:
+      0 0 0 2px rgba(243, 112, 33, 0.28),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+      0 5px 12px rgba(0, 56, 32, 0.3);
+  }
+
+  .badge::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 38px;
+    height: 4px;
+    border-radius: 2px;
+    background: #f15a24;
+  }
+
+  h3 {
+    margin: 3px 0 8px;
+    width: 100%;
+    padding: 0 4px;
+    text-align: center;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(1rem, 1.55vw, 1.12rem);
+    font-weight: 800;
+    color: #004b23;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    margin: 0;
+    width: 100%;
+    padding: 0 4px;
+    flex: 0 0 auto;
+    text-align: center;
+    color: #333333;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(0.76rem, 1.15vw, 0.86rem);
+    font-weight: 400;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 640px) {
+    height: auto;
+    min-height: 230px;
+    padding: 34px 16px 16px;
+    border-radius: 14px;
+
+    .badge {
+      width: 48px;
+      height: 48px;
+      font-size: 0.92rem;
+    }
+
+    h3 {
+      margin: 12px 0 10px;
+      font-size: 1.05rem;
+    }
+
+    p {
+      font-size: 0.82rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    height: 280px;
+    padding: 54px 26px 18px;
+    border-top-width: 5px;
+    border-radius: 19px;
+
+    .badge {
+      width: 64px;
+      height: 64px;
+      font-size: 1.25rem;
+    }
+
+    .badge::after {
+      top: calc(100% + 9px);
+      width: 42px;
+      height: 5px;
+    }
+
+    h3 {
+      margin: 5px 0 11px;
+      font-size: 1.28rem;
+    }
+
+    p {
+      max-width: 20rem;
+      font-size: 0.94rem;
+      line-height: 1.42;
+    }
+  }
+`;
+
+export const HowEnterIcon = styled.div`
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 54px;
+  flex: 0 0 54px;
+
+  img {
+    display: block;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+  }
+
+  /* Icons ~1/4–1/3 of card height like image 1 */
+  img.cart {
+    width: 52px;
+    height: auto;
+  }
+
+  img.crown {
+    width: 126px;
+    height: auto;
+    transform: translateY(-6px);
+  }
+
+  img.ticket {
+    width: 92px;
+    height: auto;
+  }
+
+  img.upload {
+    width: 44px;
+    height: auto;
+  }
+
+  @media (max-width: 640px) {
+    height: 50px;
+    flex-basis: 50px;
+    padding-top: 8px;
+
+    img.cart,
+    img.crown {
+      height: auto;
+    }
+
+    img.cart {
+      width: 48px;
+    }
+
+    img.crown {
+      width: 110px;
+    }
+
+    img.ticket {
+      width: 82px;
+      height: auto;
+    }
+
+    img.upload {
+      width: 40px;
+      height: auto;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    height: 64px;
+    flex-basis: 64px;
+    padding-top: 10px;
+    gap: 10px;
+
+    img.cart {
+      width: 62px;
+    }
+
+    img.crown {
+      width: 148px;
+    }
+
+    img.ticket {
+      width: 108px;
+    }
+
+    img.upload {
+      width: 52px;
+    }
+  }
+`;
+
+/** “How it works” campaign panel */
+export const HowWorksSection = styled.section`
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(46px, 6vw, 72px) 0 clamp(52px, 6.5vw, 80px);
+  background-color: #eef7e9;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #173328;
+  font-family: "Montserrat", system-ui, sans-serif;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    width: min(30vw, 390px);
+    height: 150px;
+    opacity: 0.92;
+  }
+
+  &::before {
+    top: -42px;
+    left: -82px;
+    transform: rotate(-13deg);
+    background: linear-gradient(135deg, #ffad22 0%, #f37021 58%, transparent 59%);
+    clip-path: polygon(0 22%, 100% 0, 80% 35%, 100% 58%, 52% 52%, 18% 100%);
+  }
+
+  &::after {
+    right: -92px;
+    bottom: -50px;
+    transform: rotate(-10deg);
+    background: linear-gradient(145deg, #006b3f 0%, #004d2c 62%, transparent 63%);
+    clip-path: polygon(0 48%, 100% 0, 78% 45%, 100% 68%, 34% 64%, 0 100%);
+  }
+
+  @media (max-width: 640px) {
+    padding: 38px 0 46px;
+
+    &::before,
+    &::after {
+      width: 190px;
+      height: 90px;
+      opacity: 0.7;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    min-height: 510px;
+    padding: 70px 0 82px;
+  }
+`;
+
+export const HowWorksInner = styled.div`
+  position: relative;
+  z-index: 1;
+  ${contentWidth}
+  ${contentPadX}
+  max-width: 1020px;
+
+  @media (min-width: 1536px) {
+    max-width: 1320px;
+  }
+`;
+
+export const HowWorksHead = styled.div`
+  max-width: 920px;
+  margin: 0 auto 24px;
+  text-align: left;
+
+  h2 {
+    display: inline-block;
+    position: relative;
+    margin: 0 0 12px;
+    color: #15352a;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(2rem, 4.2vw, 3rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 5px;
+    border-radius: 4px;
+    background: #f37021;
+  }
+
+  p {
+    margin: 0;
+    color: #52645a;
+    font-size: clamp(0.85rem, 1.4vw, 0.98rem);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 900px) {
+    max-width: 660px;
+  }
+
+  @media (max-width: 640px) {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 2rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    max-width: 1160px;
+    margin-bottom: 30px;
+
+    h2 {
+      font-size: 3.5rem;
+    }
+
+    p {
+      font-size: 1.05rem;
+    }
+  }
+`;
+
+export const HowWorksGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(18px, 2.4vw, 28px);
+  max-width: 920px;
+  margin: 0 auto;
+
+  > * {
+    display: flex;
+    min-width: 0;
+    height: 100%;
+  }
+
+  > * > * {
+    flex: 1;
+  }
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+    gap: 18px;
+  }
+
+  @media (min-width: 1536px) {
+    max-width: 1160px;
+    gap: 36px;
+  }
+`;
+
+export const HowWorksCard = styled.article`
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 260px;
+  padding: 22px 20px 112px;
+  border: 1px solid rgba(0, 77, 44, 0.09);
+  border-top: 4px solid #f37021;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #ffffff 0%, #ffffff 68%, #f5fbf5 100%);
+  box-shadow: 0 12px 28px rgba(0, 77, 44, 0.1);
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: -38px;
+    bottom: -30px;
+    width: 150px;
+    height: 205px;
+    opacity: 0.1;
+    transform: rotate(-8deg);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 17px, #f3a936 18px 21px),
+      linear-gradient(90deg, transparent 44%, #f3a936 45% 55%, transparent 56%);
+    clip-path: polygon(46% 0, 54% 0, 58% 22%, 75% 12%, 80% 17%, 62% 32%, 90% 28%, 92% 35%, 63% 42%, 86% 53%, 83% 60%, 60% 51%, 66% 78%, 59% 81%, 51% 56%, 42% 82%, 35% 79%, 42% 52%, 16% 62%, 12% 55%, 38% 42%, 8% 36%, 11% 29%, 41% 33%, 22% 17%, 27% 12%, 44% 23%);
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 77, 44, 0.16);
+  }
+
+  .step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 38px;
+    margin-bottom: 13px;
+    border-radius: 5px;
+    background: linear-gradient(145deg, #0b7b4b, #005d37);
+    color: #ffffff;
+    font-size: 0.84rem;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(0, 77, 44, 0.2);
+  }
+
+  h3 {
+    margin: 0 0 9px;
+    color: #006b3f;
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  p,
+  ul {
+    margin: 0;
+    color: #526158;
+    font-size: clamp(0.75rem, 1.1vw, 0.86rem);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  ul {
+    padding-left: 1.05rem;
+  }
+
+  li + li {
+    margin-top: 5px;
+  }
+
+  @media (max-width: 760px) {
+    min-height: 250px;
+  }
+
+  @media (min-width: 1536px) {
+    min-height: 300px;
+    padding: 26px 24px 132px;
+
+    .step {
+      width: 48px;
+      height: 43px;
+      font-size: 0.92rem;
+    }
+
+    h3 {
+      font-size: 1.28rem;
+    }
+
+    p,
+    ul {
+      font-size: 0.92rem;
+    }
+  }
+`;
+
+export const HowWorksIcon = styled.div<{ $kind: "purchase" | "uncap" | "register" }>`
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: ${({ $kind }) => ($kind === "uncap" ? "-30px" : "10px")};
+  transform: translateX(-50%);
+  width: ${({ $kind }) => ($kind === "purchase" ? "150px" : $kind === "uncap" ? "128px" : "108px")};
+  height: ${({ $kind }) => ($kind === "purchase" ? "112px" : $kind === "uncap" ? "142px" : "108px")};
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    filter: drop-shadow(0 8px 12px rgba(0, 45, 27, 0.18));
+  }
+
+  @media (min-width: 1536px) {
+    width: ${({ $kind }) => ($kind === "purchase" ? "176px" : $kind === "uncap" ? "148px" : "126px")};
+    height: ${({ $kind }) => ($kind === "purchase" ? "128px" : $kind === "uncap" ? "164px" : "124px")};
+  }
+`;
+
 export const StepCard = styled.article`
   background: ${COLORS.white};
   border: 1px solid ${COLORS.line};

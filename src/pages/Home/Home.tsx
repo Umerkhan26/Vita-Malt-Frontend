@@ -8,6 +8,15 @@ import { apiService } from "../../services/api";
 import { RootState } from "../../redux/store";
 import { trackEvent } from "../../utils/analytics";
 import hero from "../../assets/vita-malt-hero-banner.jpg";
+import howEnterBg from "../../assets/Howtoenterbg.jpg";
+import stepIconCart from "../../assets/icon1-clear.png";
+import stepIconCrown from "../../assets/icon2-clear.png";
+import stepIconTicket from "../../assets/icon3-clear.png";
+import stepIconUpload from "../../assets/icon4-clear.png";
+import howWorksBg from "../../assets/how-works-bg.jpg";
+import howWorksPurchase from "../../assets/how-works-purchase.webp";
+import howWorksUncap from "../../assets/how-works-uncap.webp";
+import howWorksRegister from "../../assets/how-works-register.webp";
 import {
   Hero,
   HeroImage,
@@ -25,8 +34,19 @@ import {
   PrizeSection,
   SectionInner,
   SectionHead,
-  StepGrid,
-  StepCard,
+  HowEnterSection,
+  HowEnterInner,
+  HowEnterStage,
+  HowEnterHead,
+  HowEnterGrid,
+  HowEnterCard,
+  HowEnterIcon,
+  HowWorksSection,
+  HowWorksInner,
+  HowWorksHead,
+  HowWorksGrid,
+  HowWorksCard,
+  HowWorksIcon,
   PrizeGrid,
   PrizeCard,
   EnterWrap,
@@ -142,79 +162,108 @@ const Home: React.FC = () => {
         </DateBar>
       </Reveal>
 
-      <Section id="how-to-enter" $tone="white">
-        <SectionInner>
-          <Reveal>
-            <SectionHead>
-              <h2>How to enter</h2>
-              <p>Three steps from shelf to draw entry — codes can be submitted one at a time.</p>
-            </SectionHead>
-          </Reveal>
-          <StepGrid>
-            <Reveal delay={0}>
-              <StepCard>
-                <span>01</span>
-                <h3>Buy Vita Malt</h3>
-                <p>Pick up participating Ginger, Classic, Ginseng, or Coconut Hibiscus during the promotion period.</p>
-              </StepCard>
+      <HowEnterSection
+        id="how-to-enter"
+        style={{ backgroundImage: `url(${howEnterBg})` }}
+      >
+        <HowEnterInner>
+          <HowEnterStage>
+            <Reveal>
+              <HowEnterHead>
+                <h2>
+                  <span className="how">How to </span>
+                  <span className="enter">enter</span>
+                </h2>
+                <p>Three steps from shelf to draw entry — codes can be submitted one at a time.</p>
+              </HowEnterHead>
             </Reveal>
-            <Reveal delay={120}>
-              <StepCard>
-                <span>02</span>
-                <h3>Check under the crown</h3>
-                <p>Find either an Instant Win prize or a promotional alphanumeric code.</p>
-              </StepCard>
-            </Reveal>
-            <Reveal delay={220}>
-              <StepCard>
-                <span>03</span>
-                <h3>Upload 4 codes for the Grand Prize</h3>
-                <p>
-                  Every 4 valid codes = 1 draw entry. Codes can be entered separately — no need to submit all four at
-                  once.
-                </p>
-              </StepCard>
-            </Reveal>
-          </StepGrid>
-        </SectionInner>
-      </Section>
+            <HowEnterGrid>
+              <Reveal delay={0}>
+                <HowEnterCard>
+                  <span className="badge">01</span>
+                  <h3>Buy Vita Malt</h3>
+                  <p>
+                    Pick up participating Ginger, Classic, Ginseng, or Coconut Hibiscus during the promotion period.
+                  </p>
+                  <HowEnterIcon>
+                    <img className="cart" src={stepIconCart} alt="" aria-hidden />
+                  </HowEnterIcon>
+                </HowEnterCard>
+              </Reveal>
+              <Reveal delay={100}>
+                <HowEnterCard>
+                  <span className="badge">02</span>
+                  <h3>Check under the crown</h3>
+                  <p>Find either an Instant Win prize or a promotional alphanumeric code.</p>
+                  <HowEnterIcon>
+                    <img className="crown" src={stepIconCrown} alt="" aria-hidden />
+                  </HowEnterIcon>
+                </HowEnterCard>
+              </Reveal>
+              <Reveal delay={200}>
+                <HowEnterCard>
+                  <span className="badge">03</span>
+                  <h3>Upload 4 codes for the Grand Prize</h3>
+                  <p>
+                    Every 4 valid codes = 1 draw entry. Codes can be entered separately — no need to submit all four at
+                    once.
+                  </p>
+                  <HowEnterIcon>
+                    <img className="ticket" src={stepIconTicket} alt="" aria-hidden />
+                    <img className="upload" src={stepIconUpload} alt="" aria-hidden />
+                  </HowEnterIcon>
+                </HowEnterCard>
+              </Reveal>
+            </HowEnterGrid>
+          </HowEnterStage>
+        </HowEnterInner>
+      </HowEnterSection>
 
-      <Section id="how-it-works" $tone="soft">
-        <SectionInner>
+      <HowWorksSection id="how-it-works" style={{ backgroundImage: `url(${howWorksBg})` }}>
+        <HowWorksInner>
           <Reveal>
-            <SectionHead>
+            <HowWorksHead>
               <h2>How it works</h2>
               <p>Built for quick entry after a store purchase — from phone, no friction.</p>
-            </SectionHead>
+            </HowWorksHead>
           </Reveal>
-          <StepGrid>
-            <Reveal delay={0} variant="scale">
-              <StepCard>
-                <span>01</span>
+          <HowWorksGrid>
+            <Reveal delay={0}>
+              <HowWorksCard>
+                <span className="step">01</span>
                 <h3>Purchase</h3>
                 <p>Buy participating Vita Malt at any supermarket, shop, or retailer during the promotion period.</p>
-              </StepCard>
+                <HowWorksIcon $kind="purchase">
+                  <img src={howWorksPurchase} alt="" aria-hidden />
+                </HowWorksIcon>
+              </HowWorksCard>
             </Reveal>
-            <Reveal delay={120} variant="scale">
-              <StepCard>
-                <span>02</span>
+            <Reveal delay={110}>
+              <HowWorksCard>
+                <span className="step">02</span>
                 <h3>Uncap &amp; scan</h3>
                 <p>Check under the crown for a promotional code or an Instant Win.</p>
-              </StepCard>
+                <HowWorksIcon $kind="uncap">
+                  <img src={howWorksUncap} alt="" aria-hidden />
+                </HowWorksIcon>
+              </HowWorksCard>
             </Reveal>
-            <Reveal delay={220} variant="scale">
-              <StepCard>
-                <span>03</span>
+            <Reveal delay={220}>
+              <HowWorksCard>
+                <span className="step">03</span>
                 <h3>Register your entries</h3>
                 <ul>
                   <li>Complete registration with name and contact details.</li>
                   <li>Upload codes on this website for registration and submission.</li>
                 </ul>
-              </StepCard>
+                <HowWorksIcon $kind="register">
+                  <img src={howWorksRegister} alt="" aria-hidden />
+                </HowWorksIcon>
+              </HowWorksCard>
             </Reveal>
-          </StepGrid>
-        </SectionInner>
-      </Section>
+          </HowWorksGrid>
+        </HowWorksInner>
+      </HowWorksSection>
 
       <Section id="enter" $tone="blush">
         <SectionInner>
