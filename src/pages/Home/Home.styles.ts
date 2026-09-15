@@ -626,6 +626,7 @@ export const HowEnterSection = styled.section`
   background-repeat: no-repeat;
   color: #004b23;
   font-family: "Montserrat", system-ui, sans-serif;
+  ${contentPadX}
 
   &::before {
     content: "";
@@ -652,7 +653,7 @@ export const HowEnterSection = styled.section`
   /* Large desktop only — laptop layout remains unchanged */
   @media (min-width: 1536px) {
     min-height: 500px;
-    padding: 52px 0 64px;
+    padding: 52px clamp(24px, 3vw, 40px) 64px;
     background-position: center 48%;
   }
 `;
@@ -661,16 +662,21 @@ export const HowEnterInner = styled.div`
   position: relative;
   z-index: 1;
   ${contentWidth}
-  ${contentPadX}
-  max-width: 920px;
+  max-width: 876px;
 
   /* Match the How it works starting edge on laptop screens */
   @media (min-width: 901px) and (max-width: 1535px) {
-    max-width: 1220px;
+    max-width: 1176px;
   }
 
   @media (min-width: 1536px) {
     max-width: 1320px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @media (min-width: 1720px) {
+    max-width: 1400px;
   }
 `;
 
@@ -760,6 +766,8 @@ export const HowEnterHead = styled.div`
 
   @media (min-width: 1536px) {
     max-width: 1180px;
+    margin-left: 0;
+    margin-right: 0;
     margin-bottom: 28px;
 
     h2 {
@@ -811,6 +819,8 @@ export const HowEnterGrid = styled.div`
 
   @media (min-width: 1536px) {
     max-width: 1180px;
+    margin-left: 0;
+    margin-right: 0;
     gap: 36px;
   }
 `;
@@ -1067,6 +1077,7 @@ export const HowWorksSection = styled.section`
   background-repeat: no-repeat;
   color: #173328;
   font-family: "Montserrat", system-ui, sans-serif;
+  ${contentPadX}
 
   &::before,
   &::after {
@@ -1116,7 +1127,7 @@ export const HowWorksSection = styled.section`
 
   @media (min-width: 1536px) {
     min-height: 510px;
-    padding: 70px 0 82px;
+    padding: 70px clamp(24px, 3vw, 40px) 82px;
   }
 `;
 
@@ -1124,11 +1135,16 @@ export const HowWorksInner = styled.div`
   position: relative;
   z-index: 1;
   ${contentWidth}
-  ${contentPadX}
-  max-width: 1220px;
+  max-width: 1176px;
 
   @media (min-width: 1536px) {
     max-width: 1320px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @media (min-width: 1720px) {
+    max-width: 1400px;
   }
 `;
 
@@ -1183,6 +1199,8 @@ export const HowWorksHead = styled.div`
 
   @media (min-width: 1536px) {
     max-width: 1160px;
+    margin-left: 0;
+    margin-right: 0;
     margin-bottom: 30px;
 
     h2 {
@@ -1221,6 +1239,8 @@ export const HowWorksGrid = styled.div`
 
   @media (min-width: 1536px) {
     max-width: 1160px;
+    margin-left: 0;
+    margin-right: 0;
     gap: 36px;
   }
 `;
