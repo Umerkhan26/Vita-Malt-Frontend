@@ -112,17 +112,13 @@ const Home: React.FC = () => {
         <HeroShade />
         <HeroContent>
           <HeroTop>
-            <Reveal variant="fade" delay={120} duration={900} margin="0px">
-              <Kicker>Sep 18 – Nov 20, 2026</Kicker>
-            </Reveal>
+            <Kicker>Sep 18 – Nov 20, 2026</Kicker>
           </HeroTop>
           <HeroBottom>
-            <Reveal variant="up" delay={280} duration={850} margin="0px">
-              <HeroActions>
-                <GoldBtn href="#enter">Submit your code</GoldBtn>
-                <GhostBtn href="#how-to-enter">See how to enter</GhostBtn>
-              </HeroActions>
-            </Reveal>
+            <HeroActions>
+              <GoldBtn href="#enter">Submit your code</GoldBtn>
+              <GhostBtn href="#how-to-enter">See how to enter</GhostBtn>
+            </HeroActions>
           </HeroBottom>
         </HeroContent>
       </Hero>

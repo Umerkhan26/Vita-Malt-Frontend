@@ -2,13 +2,8 @@ import styled, { keyframes } from "styled-components";
 import { COLORS } from "../../constants/colors";
 import { contentWidth, contentPadX } from "../../constants/layout";
 
-const heroZoom = keyframes`
-  from { transform: scale(1); }
-  to { transform: scale(1.045); }
-`;
-
 const softPulse = keyframes`
-  0%, 100% { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); }
+  0%, 100% { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); }
   50% { box-shadow: 0 10px 28px rgba(243, 112, 33, 0.45); }
 `;
 
@@ -46,12 +41,9 @@ export const HeroImage = styled.img`
   /* contain + matching aspect = full creative visible, no crop */
   object-fit: contain;
   object-position: center center;
-  transform-origin: center center;
-  animation: ${heroZoom} 22s ease-out forwards;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
+  /* No zoom on desktop — scale shifts the green prize box onto the CTAs */
+  transform: none;
+  animation: none;
 
   @media (max-width: 900px) {
     position: relative;
@@ -100,8 +92,8 @@ export const HeroContent = styled.div`
 export const HeroTop = styled.div`
   pointer-events: auto;
   position: absolute;
-  /* Same pin on laptop + desktop — above “WIN THE”, left with prize column */
-  top: 4%;
+  /* Sit in the sky band above “WIN THE” (~8% from top in banner art) */
+  top: 1.8%;
   left: 10.6%;
   right: auto;
   width: auto;
@@ -109,6 +101,12 @@ export const HeroTop = styled.div`
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  z-index: 3;
+
+  /* Laptop: pull badge up + keep clear air above WIN THE */
+  @media (min-width: 901px) and (max-width: 1535px) {
+    top: 0.35%;
+  }
 
   @media (max-width: 900px) {
     position: relative;
@@ -122,9 +120,12 @@ export const HeroTop = styled.div`
 export const HeroBottom = styled.div`
   pointer-events: auto;
   position: absolute;
-  /* Desktop: under prize list, left-aligned with green box */
-  top: auto;
-  bottom: 2%;
+  /*
+    Banner green prize box ends ~90.6% from top (image geometry).
+    Pin CTAs just under it — same % on laptop + desktop so they never sit on the card.
+  */
+  top: 91.45%;
+  bottom: auto;
   left: 10.6%;
   right: auto;
   width: auto;
@@ -134,19 +135,36 @@ export const HeroBottom = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   box-sizing: border-box;
+  z-index: 3;
 
-  /* Laptop only: tiny lift from bottom — not enough to hit the green prize box */
+  a {
+    padding: 10px 18px;
+    font-size: 0.8rem;
+    line-height: 1.05;
+    min-height: 0;
+    white-space: nowrap;
+  }
+
+  /* Laptop / mid screens: more gap under green box (buttons were flush) */
   @media (min-width: 901px) and (max-width: 1535px) {
-    top: auto;
-    bottom: 0.5%;
-    left: 10.6%;
+    top: 93.1%;
+    gap: 8px;
 
     a {
-      padding: 10px 18px;
-      font-size: 0.8rem;
-      line-height: 1.1;
+      padding: 7px 12px;
+      font-size: 0.68rem;
+      line-height: 1;
+    }
+  }
+
+  @media (min-width: 1280px) and (max-width: 1535px) {
+    top: 92.7%;
+
+    a {
+      padding: 8px 14px;
+      font-size: 0.72rem;
     }
   }
 
@@ -158,6 +176,14 @@ export const HeroBottom = styled.div`
     max-width: none;
     width: 100%;
     justify-content: stretch;
+    gap: 10px;
+
+    a {
+      padding: 15px 16px;
+      font-size: 0.88rem;
+      min-height: 48px;
+      white-space: normal;
+    }
   }
 `;
 
@@ -168,14 +194,23 @@ export const Kicker = styled.p`
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 0.78rem;
-  padding: 8px 12px;
+  font-size: 0.76rem;
+  line-height: 1;
+  padding: 7px 12px;
   border-radius: 4px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  margin: 0;
   animation: ${softPulse} 3.2s ease-in-out infinite;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
+  }
+
+  /* Laptop: shorter badge so it clears WIN THE */
+  @media (min-width: 901px) and (max-width: 1535px) {
+    font-size: 0.62rem;
+    padding: 5px 9px;
+    letter-spacing: 0.06em;
   }
 
   @media (max-width: 900px) {
@@ -554,6 +589,19 @@ export const StepGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+  align-items: stretch;
+
+  > * {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  > * > * {
+    flex: 1;
+    height: 100%;
+  }
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
@@ -571,6 +619,10 @@ export const StepCard = styled.article`
   border-radius: 4px;
   padding: 28px 24px;
   min-height: 200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   box-shadow: 0 12px 32px rgba(0, 56, 32, 0.06);
   transition:
     transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
@@ -640,6 +692,7 @@ export const StepCard = styled.article`
   p {
     color: ${COLORS.muted};
     line-height: 1.55;
+    flex: 1;
   }
 
   ul {
@@ -647,6 +700,7 @@ export const StepCard = styled.article`
     padding-left: 1.1rem;
     color: ${COLORS.muted};
     line-height: 1.55;
+    flex: 1;
   }
 
   li + li {
@@ -658,6 +712,19 @@ export const PrizeGrid = styled.div`
   display: grid;
   grid-template-columns: 1.25fr 1fr 1fr;
   gap: 18px;
+  align-items: stretch;
+
+  > * {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  > * > * {
+    flex: 1;
+    height: 100%;
+  }
 
   @media (max-width: 1000px) {
     grid-template-columns: 1fr;
@@ -676,6 +743,10 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
   border-radius: 4px;
   padding: 28px;
   min-height: 300px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   box-shadow: ${({ $featured }) => ($featured ? "0 20px 50px rgba(0,0,0,0.25)" : "0 12px 32px rgba(0,0,0,0.12)")};
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
@@ -734,6 +805,7 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
     margin-left: 18px;
     line-height: 1.75;
     color: ${({ $featured }) => ($featured ? "rgba(255,255,255,0.9)" : COLORS.muted)};
+    flex: 1;
   }
 `;
 
