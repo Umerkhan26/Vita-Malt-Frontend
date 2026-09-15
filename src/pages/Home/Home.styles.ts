@@ -517,6 +517,11 @@ export const Section = styled.section<{ $tone?: "white" | "paper" | "blush" | "i
 
 export const PrizeSection = styled(Section).attrs({ $tone: "ink" as const })`
   overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 42% 80% at 0% 55%, rgba(243, 112, 33, 0.24), transparent 68%),
+    radial-gradient(ellipse 45% 75% at 100% 25%, rgba(255, 166, 67, 0.2), transparent 68%),
+    linear-gradient(140deg, #003820 0%, #004d2c 54%, #006b3f 100%);
 
   &::after {
     content: "";
@@ -528,6 +533,18 @@ export const PrizeSection = styled(Section).attrs({ $tone: "ink" as const })`
     height: 140%;
     max-width: 100%;
     background: radial-gradient(ellipse, rgba(243, 112, 33, 0.28), transparent 65%);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    background-image:
+      linear-gradient(115deg, transparent 46%, rgba(255,255,255,0.28) 47%, transparent 48%),
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.35) 1px, transparent 0);
+    background-size: 100% 100%, 26px 26px;
   }
 `;
 
@@ -1496,7 +1513,7 @@ export const StepCard = styled.article`
 export const PrizeGrid = styled.div`
   display: grid;
   grid-template-columns: 1.25fr 1fr 1fr;
-  gap: 18px;
+  gap: clamp(18px, 2.4vw, 28px);
   align-items: stretch;
 
   > * {
@@ -1522,22 +1539,44 @@ export const PrizeGrid = styled.div`
 `;
 
 export const PrizeCard = styled.article<{ $featured?: boolean }>`
-  background: ${({ $featured }) => ($featured ? "rgba(0,0,0,0.28)" : COLORS.white)};
+  position: relative;
+  overflow: hidden;
+  background: ${({ $featured }) =>
+    $featured
+      ? "linear-gradient(145deg, rgba(0,35,20,0.78), rgba(0,77,44,0.74))"
+      : "linear-gradient(155deg, #ffffff 0%, #f5fbf7 100%)"};
   color: ${({ $featured }) => ($featured ? COLORS.white : COLORS.ink)};
-  border: 1px solid ${({ $featured }) => ($featured ? "rgba(243,112,33,0.45)" : "transparent")};
-  border-radius: 4px;
-  padding: 28px;
-  min-height: 300px;
+  border: 1px solid ${({ $featured }) => ($featured ? "rgba(243,112,33,0.75)" : "rgba(255,255,255,0.72)")};
+  border-top: 5px solid ${COLORS.gold};
+  border-radius: 18px;
+  padding: clamp(24px, 3vw, 32px);
+  min-height: 310px;
   height: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  box-shadow: ${({ $featured }) => ($featured ? "0 20px 50px rgba(0,0,0,0.25)" : "0 12px 32px rgba(0,0,0,0.12)")};
+  box-shadow: ${({ $featured }) =>
+    $featured ? "0 24px 58px rgba(0,0,0,0.3)" : "0 18px 42px rgba(0,0,0,0.18)"};
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.3s ease,
     border-color 0.2s ease;
-  backdrop-filter: ${({ $featured }) => ($featured ? "blur(8px)" : "none")};
+  backdrop-filter: ${({ $featured }) => ($featured ? "blur(12px)" : "none")};
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -58px;
+    bottom: -62px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: ${({ $featured }) =>
+      $featured
+        ? "radial-gradient(circle, rgba(243,112,33,0.34), transparent 68%)"
+        : "radial-gradient(circle, rgba(0,107,63,0.12), transparent 68%)"};
+    pointer-events: none;
+  }
 
   &:hover {
     transform: translateY(-6px);
@@ -1576,17 +1615,21 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
     text-transform: uppercase;
     font-size: 0.72rem;
     padding: 6px 10px;
-    border-radius: 4px;
+    border-radius: 999px;
     margin-bottom: 14px;
   }
 
   h3 {
-    font-size: 1.5rem;
+    position: relative;
+    z-index: 1;
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
     margin-bottom: 12px;
     letter-spacing: -0.02em;
   }
 
   ul {
+    position: relative;
+    z-index: 1;
     margin-left: 18px;
     line-height: 1.75;
     color: ${({ $featured }) => ($featured ? "rgba(255,255,255,0.9)" : COLORS.muted)};
@@ -1597,8 +1640,8 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
 export const EnterWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.05fr;
-  gap: clamp(28px, 4vw, 48px);
-  align-items: start;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
 
   @media (max-width: 960px) {
     grid-template-columns: 1fr;
@@ -1607,10 +1650,26 @@ export const EnterWrap = styled.div`
 
 export const EnterCopy = styled.div`
   h2 {
+    display: inline-block;
+    position: relative;
     font-size: clamp(2rem, 3.8vw, 2.9rem);
+    font-weight: 900;
     letter-spacing: -0.03em;
-    margin-bottom: 14px;
+    margin-bottom: 24px;
+    color: ${COLORS.redDeep};
   }
+
+  h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 18%;
+    bottom: -10px;
+    height: 5px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, ${COLORS.gold}, ${COLORS.goldSoft});
+  }
+
   p {
     color: ${COLORS.muted};
     line-height: 1.7;
@@ -1633,16 +1692,22 @@ export const EnterCopy = styled.div`
 `;
 
 export const EnterCard = styled.form`
-  background: ${COLORS.white};
-  border: 1px solid ${COLORS.line};
-  border-radius: 4px;
-  border-top: 4px solid ${COLORS.gold};
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(150deg, #ffffff 0%, #f8fcf9 100%);
+  border: 1px solid rgba(0, 107, 63, 0.14);
+  border-radius: 18px;
+  border-top: 5px solid ${COLORS.gold};
   padding: clamp(22px, 3vw, 32px);
-  box-shadow: 0 22px 56px rgba(0, 107, 63, 0.12);
+  box-shadow:
+    0 24px 58px rgba(0, 77, 44, 0.15),
+    inset 0 1px 0 rgba(255,255,255,0.9);
   transition: box-shadow 0.3s ease;
 
   &:focus-within {
-    box-shadow: 0 26px 64px rgba(0, 107, 63, 0.18);
+    box-shadow:
+      0 30px 68px rgba(0, 107, 63, 0.2),
+      0 0 0 3px rgba(0,107,63,0.07);
   }
 
   @media (max-width: 640px) {
@@ -1666,7 +1731,7 @@ export const Input = styled.input`
   padding: 13px 14px;
   border-radius: 12px;
   border: 1px solid ${COLORS.line};
-  background: ${COLORS.paper};
+  background: #f2f8f4;
   font-size: 16px; /* avoid iOS zoom on focus */
   min-height: 48px;
   -webkit-appearance: none;
@@ -1713,7 +1778,7 @@ export const Submit = styled.button`
   margin-top: 6px;
   padding: 15px;
   border-radius: 12px;
-  background: ${COLORS.red};
+  background: linear-gradient(135deg, ${COLORS.red}, ${COLORS.redDark});
   color: ${COLORS.white};
   font-weight: 800;
   font-size: 1.02rem;
@@ -1725,7 +1790,7 @@ export const Submit = styled.button`
     box-shadow 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: ${COLORS.redDark};
+    background: linear-gradient(135deg, ${COLORS.redDark}, ${COLORS.redDeep});
     transform: translateY(-1px);
     box-shadow: 0 10px 24px rgba(0, 56, 32, 0.22);
   }
@@ -1764,9 +1829,12 @@ export const Progress = styled.div`
 `;
 
 export const SplitBand = styled.section`
+  position: relative;
+  isolation: isolate;
   background:
-    radial-gradient(ellipse 50% 80% at 0% 50%, rgba(243, 112, 33, 0.22), transparent 55%),
-    linear-gradient(120deg, ${COLORS.redDeep} 0%, ${COLORS.redDark} 55%, ${COLORS.red} 100%);
+    radial-gradient(ellipse 45% 90% at 0% 45%, rgba(243, 112, 33, 0.32), transparent 62%),
+    radial-gradient(ellipse 42% 80% at 100% 80%, rgba(255, 169, 80, 0.18), transparent 65%),
+    linear-gradient(120deg, ${COLORS.redDeep} 0%, ${COLORS.redDark} 52%, ${COLORS.red} 100%);
   color: ${COLORS.white};
   padding-top: clamp(64px, 8vw, 88px);
   padding-bottom: clamp(64px, 8vw, 88px);
@@ -1788,8 +1856,29 @@ export const SplitInner = styled.div`
   ${contentWidth}
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(24px, 4vw, 40px);
-  align-items: center;
+  gap: clamp(20px, 3vw, 32px);
+  align-items: stretch;
+
+  > * {
+    display: flex;
+    height: 100%;
+  }
+
+  > * > div {
+    width: 100%;
+    padding: clamp(24px, 3vw, 34px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  > *:last-child > div {
+    background: rgba(0, 35, 20, 0.24);
+    border-top: 4px solid ${COLORS.gold};
+  }
 
   @media (max-width: 800px) {
     grid-template-columns: 1fr;
@@ -1799,7 +1888,8 @@ export const SplitInner = styled.div`
 export const SplitBandTitle = styled.h2`
   font-size: clamp(1.9rem, 3.6vw, 2.7rem);
   letter-spacing: -0.03em;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  font-weight: 900;
   line-height: 1.1;
 
   @media (max-width: 640px) {
@@ -1811,7 +1901,8 @@ export const SplitBandTitle = styled.h2`
 export const SplitBandSubTitle = styled.h3`
   color: ${COLORS.gold};
   margin-bottom: 10px;
-  font-size: 1.2rem;
+  font-size: clamp(1.35rem, 2.3vw, 1.75rem);
+  font-weight: 900;
   letter-spacing: -0.02em;
 
   @media (max-width: 640px) {
@@ -1834,7 +1925,7 @@ export const WhiteBtn = styled.a`
   display: inline-flex;
   margin-top: 16px;
   padding: 12px 18px;
-  border-radius: 4px;
+  border-radius: 999px;
   background: ${COLORS.white};
   color: ${COLORS.redDeep};
   font-weight: 800;
@@ -1868,7 +1959,7 @@ export const WhiteBtn = styled.a`
 export const FaqList = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
 
   @media (max-width: 800px) {
     grid-template-columns: 1fr;
@@ -1876,11 +1967,12 @@ export const FaqList = styled.div`
 `;
 
 export const FaqItem = styled.details`
-  background: ${COLORS.white};
-  border: 1px solid ${COLORS.line};
-  border-radius: 4px;
-  border-left: 4px solid ${COLORS.gold};
-  padding: 18px 20px;
+  background: linear-gradient(145deg, #ffffff, #f8fcf9);
+  border: 1px solid rgba(0, 107, 63, 0.12);
+  border-radius: 14px;
+  border-left: 5px solid ${COLORS.gold};
+  padding: 20px 22px;
+  box-shadow: 0 10px 26px rgba(0, 56, 32, 0.07);
   transition:
     border-color 0.2s ease,
     box-shadow 0.25s ease,
@@ -1889,7 +1981,7 @@ export const FaqItem = styled.details`
   &[open] {
     border-color: ${COLORS.line};
     border-left-color: ${COLORS.red};
-    box-shadow: 0 12px 28px rgba(0, 56, 32, 0.1);
+    box-shadow: 0 18px 38px rgba(0, 56, 32, 0.13);
   }
 
   @media (hover: hover) {
@@ -1916,6 +2008,13 @@ export const FaqItem = styled.details`
     &::after {
       content: "+";
       flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(243, 112, 33, 0.12);
       color: ${COLORS.gold};
       font-weight: 800;
       font-size: 1.15rem;
@@ -1957,7 +2056,9 @@ export const MoreLink = styled.a`
   font-weight: 800;
   text-decoration: none;
   min-height: 44px;
-  padding: 8px 0;
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 107, 63, 0.2);
+  border-radius: 999px;
   transition: color 0.2s ease, transform 0.2s ease, gap 0.2s ease;
   gap: 4px;
 
@@ -1973,7 +2074,9 @@ export const MoreLink = styled.a`
 `;
 
 export const LegalBand = styled.div`
-  background: #f3ebe3;
+  background:
+    linear-gradient(90deg, rgba(243,112,33,0.08), transparent 24%, transparent 76%, rgba(0,107,63,0.08)),
+    #f5efe8;
   padding-top: 28px;
   padding-bottom: 56px;
   ${contentPadX}
@@ -1994,6 +2097,10 @@ export const LegalNote = styled.p`
   color: ${COLORS.muted};
   font-size: 0.9rem;
   line-height: 1.65;
+  padding: 20px 22px;
+  border-left: 4px solid ${COLORS.gold};
+  border-radius: 0 12px 12px 0;
+  background: rgba(255, 255, 255, 0.58);
 
   @media (max-width: 640px) {
     font-size: 0.84rem;
