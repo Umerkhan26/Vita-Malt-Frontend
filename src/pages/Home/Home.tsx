@@ -17,6 +17,7 @@ import howWorksBg from "../../assets/how-works-bg.jpg";
 import howWorksPurchase from "../../assets/how-works-purchase.webp";
 import howWorksUncap from "../../assets/how-works-uncap.webp";
 import howWorksRegister from "../../assets/how-works-register.webp";
+import wetBottles from "../../assets/vita-malt-wet-bottles.webp";
 import {
   Hero,
   HeroImage,
@@ -51,6 +52,7 @@ import {
   PrizeCard,
   EnterWrap,
   EnterCopy,
+  EnterProductArt,
   EnterCard,
   Label,
   Input,
@@ -280,6 +282,12 @@ const Home: React.FC = () => {
                   code. Skipping is fully supported.
                 </p>
                 <p>Codes are single-use and checked instantly against the official master list.</p>
+                <EnterProductArt>
+                  <img
+                    src={wetBottles}
+                    alt="Vita Malt Classic, Ginger, Ginseng, and Coconut and Hibiscus bottles"
+                  />
+                </EnterProductArt>
               </EnterCopy>
             </Reveal>
             <Reveal variant="right" delay={120}>

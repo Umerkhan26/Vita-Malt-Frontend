@@ -1694,17 +1694,18 @@ export const PrizeCard = styled.article<{ $featured?: boolean }>`
 
 export const EnterWrap = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1.05fr;
-  gap: clamp(32px, 5vw, 64px);
-  align-items: center;
+  grid-template-columns: minmax(0, 1.25fr) minmax(380px, 0.9fr);
+  gap: clamp(28px, 3.5vw, 52px);
+  align-items: stretch;
 
-  @media (max-width: 960px) {
+  > * {
+    min-width: 0;
+    height: 100%;
+  }
+
+  @media (max-width: 820px) {
     grid-template-columns: 1fr;
     gap: 28px;
-
-    > * {
-      min-width: 0;
-    }
   }
 
   @media (max-width: 480px) {
@@ -1713,7 +1714,11 @@ export const EnterWrap = styled.div`
 `;
 
 export const EnterCopy = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
 
   h2 {
     display: inline-block;
@@ -1753,6 +1758,44 @@ export const EnterCopy = styled.div`
       font-size: 0.9rem;
       line-height: 1.55;
       margin-bottom: 10px;
+    }
+  }
+`;
+
+export const EnterProductArt = styled.figure`
+  flex: 1 1 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  min-height: 0;
+  margin: clamp(20px, 2.5vw, 30px) 0 0;
+  overflow: visible;
+
+  img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+
+  @media (max-width: 820px) {
+    flex: none;
+    justify-content: center;
+    
+    img {
+      width: min(100%, 700px);
+      height: auto;
+      object-position: center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin-top: 16px;
+
+    img {
+      width: 100%;
     }
   }
 `;
