@@ -74,6 +74,7 @@ const fmtWhen = (v: unknown) => {
 };
 type PageMeta = { page: number; totalPages: number; totalCount: number; hasNextPage: boolean; hasPrevPage: boolean };
 const emptyMeta = (): PageMeta => ({ page: 1, totalPages: 1, totalCount: 0, hasNextPage: false, hasPrevPage: false });
+const PAGE_SIZE = 100;
 
 const pickMeta = (data: Record<string, unknown>): PageMeta => ({
   page: Number(data.page) || 1,
@@ -275,7 +276,7 @@ const AdminDashboard: React.FC = () => {
 
   const renderTableShimmer = (
     cols: { label: string; width?: string; kind?: "text" | "badge" | "num" | "rank" | "actions" | "action" | "code" }[],
-    rows = 8
+    rows = 10
   ) => (
     <S.TableWrap>
       <S.Table>
@@ -404,7 +405,7 @@ const AdminDashboard: React.FC = () => {
     const minCodes = Number(userMinCodes) || 0;
     const data = (await apiService.adminEntrants(
       page,
-      50,
+      PAGE_SIZE,
       search,
       accountType,
       userStatus,
@@ -453,7 +454,7 @@ const AdminDashboard: React.FC = () => {
       winnersPage,
       winnersSearch,
       winnersStatus,
-      50,
+      PAGE_SIZE,
       winnersTier
     )) as Record<string, unknown> & { items: Record<string, unknown>[] };
     setWinners(data.items || []);
@@ -466,7 +467,7 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   const loadSocial = useCallback(async () => {
-    const data = (await apiService.adminSocial(socialPage, socialSearch, 50, socialPlatform)) as Record<
+    const data = (await apiService.adminSocial(socialPage, socialSearch, PAGE_SIZE, socialPlatform)) as Record<
       string,
       unknown
     > & {
@@ -486,7 +487,7 @@ const AdminDashboard: React.FC = () => {
   }, [contactPage, contactSearch, contactUnread]);
 
   const loadAudit = useCallback(async () => {
-    const data = (await apiService.adminAudit(auditPage, auditSearch, 50, auditActorType)) as Record<
+    const data = (await apiService.adminAudit(auditPage, auditSearch, PAGE_SIZE, auditActorType)) as Record<
       string,
       unknown
     > & {
@@ -501,7 +502,7 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   const loadDrawEntries = useCallback(async () => {
-    const data = (await apiService.adminDrawEntries(entriesPage, entriesSearch, 50, entriesWinner)) as Record<
+    const data = (await apiService.adminDrawEntries(entriesPage, entriesSearch, PAGE_SIZE, entriesWinner)) as Record<
       string,
       unknown
     > & {
@@ -568,18 +569,25 @@ const AdminDashboard: React.FC = () => {
     auditActorType,
   ]);
 
-  const renderPager = (meta: PageMeta, setPg: (fn: (p: number) => number) => void) => (
+  const renderPager = (meta: PageMeta, setPg: (fn: (p: number) => number) => void, noun = "rows") => (
     <S.Pager>
-      <S.Action $ghost disabled={!meta.hasPrevPage} onClick={() => setPg((p) => Math.max(1, p - 1))}>
-        Prev
-      </S.Action>
-      <S.Chip>
-        Page {meta.page} / {meta.totalPages}
-      </S.Chip>
-      <span style={{ fontSize: "0.72rem", color: "#5c6b62" }}>{meta.totalCount} total</span>
-      <S.Action $ghost disabled={!meta.hasNextPage} onClick={() => setPg((p) => p + 1)}>
-        Next
-      </S.Action>
+      <S.PagerMeta>
+        {meta.totalCount.toLocaleString()} {noun} · page {meta.page} of {meta.totalPages}
+      </S.PagerMeta>
+      <S.PagerControls>
+        <S.Action $ghost disabled={!meta.hasPrevPage} onClick={() => setPg((p) => Math.max(1, p - 1))}>
+          Prev
+        </S.Action>
+        <S.Chip>
+          Page {meta.page} / {meta.totalPages}
+        </S.Chip>
+        <span style={{ fontSize: "12px", color: "#5c6b62", whiteSpace: "nowrap" }}>
+          {meta.totalCount.toLocaleString()} total · {PAGE_SIZE} per page
+        </span>
+        <S.Action $ghost disabled={!meta.hasNextPage} onClick={() => setPg((p) => p + 1)}>
+          Next
+        </S.Action>
+      </S.PagerControls>
     </S.Pager>
   );
 
@@ -612,6 +620,10 @@ const AdminDashboard: React.FC = () => {
   const win = (overview?.winners || {}) as Record<string, number>;
   const campaign = (overview?.campaign || {}) as Record<string, string>;
   const recent = (overview?.recentSubmissions || []) as Record<string, unknown>[];
+  const recentWinners = (overview?.recentWinners || []) as Record<string, unknown>[];
+  const usedPct = Number(
+    codes.usedPercent || (codes.total ? (Number(codes.used || 0) / Number(codes.total)) * 100 : 0)
+  );
 
   return (
     <S.Shell>
@@ -760,27 +772,57 @@ const AdminDashboard: React.FC = () => {
             <S.KpiGrid>
               <S.Kpi $accent={COLORS.red}>
                 <span>People entered</span>
-                <strong>{Number(overview?.entrants || 0)}</strong>
+                <strong>{Number(overview?.entrants || 0).toLocaleString()}</strong>
                 <small>{Number(overview?.accounts || 0)} registered · {Number(overview?.guests || 0)} guests</small>
               </S.Kpi>
               <S.Kpi $accent={COLORS.gold}>
                 <span>Codes used</span>
-                <strong>{codes.used || 0}</strong>
-                <small>{codes.unused || 0} still available</small>
+                <strong>{Number(codes.used || 0).toLocaleString()}</strong>
+                <small>{Number(codes.unused || 0).toLocaleString()} still available of {Number(codes.total || 0).toLocaleString()}</small>
               </S.Kpi>
               <S.Kpi $accent={COLORS.success}>
                 <span>Draw tickets</span>
-                <strong>{Number(overview?.drawEntries || 0)}</strong>
-                <small>4 valid codes = 1 ticket</small>
+                <strong>{Number(overview?.drawEntries || 0).toLocaleString()}</strong>
+                <small>Expected from used codes: {Number(overview?.expectedTickets || 0)}</small>
               </S.Kpi>
               <S.Kpi $accent={COLORS.redDark}>
                 <span>Last 24 hours</span>
                 <strong>{sub24.total || 0}</strong>
                 <small>
-                  {sub24.success || 0} success · {sub24.duplicate || 0} duplicates
+                  {sub24.success || 0} success · {sub24.duplicate || 0} dupes · {sub24.invalid || 0} invalid
                 </small>
               </S.Kpi>
             </S.KpiGrid>
+
+            <S.Panel>
+              <h2>Crown code pool</h2>
+              <p className="sub">Grand prize inventory loaded for the campaign. 4 validated codes = 1 draw ticket.</p>
+              <S.ProgressTrack>
+                <S.ProgressFill $pct={usedPct} />
+              </S.ProgressTrack>
+              <S.ProgressMeta>
+                <span>{usedPct.toFixed(1)}% redeemed</span>
+                <span>{Number(codes.used || 0).toLocaleString()} used · {Number(codes.unused || 0).toLocaleString()} unused</span>
+              </S.ProgressMeta>
+            </S.Panel>
+
+            <S.StatGrid>
+              <S.StatCard type="button" onClick={() => goModule("codes")}>
+                <span>Inventory</span>
+                <strong>{Number(codes.total || 0).toLocaleString()}</strong>
+                <small>Total unique crown codes in MongoDB</small>
+              </S.StatCard>
+              <S.StatCard type="button" onClick={() => { goModule("codes"); setCodesTab("flagged"); }}>
+                <span>Needs review</span>
+                <strong>{Number(codes.flagged || 0).toLocaleString()}</strong>
+                <small>Flagged codes or duplicate-attempt rows</small>
+              </S.StatCard>
+              <S.StatCard type="button" onClick={() => { goModule("tools"); setToolsTab("contact"); }}>
+                <span>Support inbox</span>
+                <strong>{Number(overview?.unreadMessages || 0).toLocaleString()}</strong>
+                <small>Unread contact messages</small>
+              </S.StatCard>
+            </S.StatGrid>
 
             <S.Split>
               <S.Panel>
@@ -831,6 +873,7 @@ const AdminDashboard: React.FC = () => {
 
               <S.Panel>
                 <h2>Top by codes</h2>
+                <p className="sub">People closest to extra tickets</p>
                 {(overview?.topEntrants as Record<string, unknown>[] | undefined)?.length ? (
                   <S.TableWrap>
                     <S.Table>
@@ -902,15 +945,54 @@ const AdminDashboard: React.FC = () => {
               </S.Panel>
             </S.Split>
 
-            <S.Panel style={{ marginTop: 8 }}>
-              <h2>Quick status</h2>
-              <p className="sub">Launch readiness at a glance</p>
-              <S.MetaRow>
-                <S.Chip>Flagged codes · {codes.flagged || 0}</S.Chip>
-                <S.Chip>Published winners · {win.published || 0}</S.Chip>
-                <S.Chip>Pending verify · {win.pending || 0}</S.Chip>
-                <S.Chip>Unread messages · {Number(overview?.unreadMessages || 0)}</S.Chip>
-              </S.MetaRow>
+            <S.Panel>
+                <h2>Winners &amp; draw</h2>
+                <p className="sub">Published showcase vs pending verification</p>
+                {recentWinners.length === 0 ? (
+                  <S.Empty>
+                    <strong>No winners recorded yet</strong>
+                    Instant-win claims and the electronic draw will appear here.
+                  </S.Empty>
+                ) : (
+                  <S.TableWrap>
+                    <S.Table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Prize</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {recentWinners.map((w) => (
+                          <tr key={String(w._id)}>
+                            <td>
+                              <strong>{String(w.displayName)}</strong>
+                            </td>
+                            <td>
+                              <S.Muted>{String(w.prizeLabel)}</S.Muted>
+                            </td>
+                            <td>
+                              <S.Badge $tone={String(w.status) === "published" ? "ok" : "warn"}>
+                                {String(w.status).replace(/_/g, " ")}
+                              </S.Badge>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </S.Table>
+                  </S.TableWrap>
+                )}
+                <S.MetaRow>
+                  <S.Chip>Published · {win.published || 0}</S.Chip>
+                  <S.Chip>Pending verify · {win.pending || 0}</S.Chip>
+                  <S.Chip>7-day attempts · {Number(overview?.submissions7d || 0)}</S.Chip>
+                </S.MetaRow>
+              </S.Panel>
+
+            <S.Panel>
+              <h2>Quick actions</h2>
+              <p className="sub">Jump to the work you do most during the campaign</p>
               <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
                 <S.Action
                   onClick={() => {
@@ -932,6 +1014,9 @@ const AdminDashboard: React.FC = () => {
                 </S.Action>
                 <S.Action $ghost onClick={() => download("entries")}>
                   <FaDownload /> Export tickets
+                </S.Action>
+                <S.Action $ghost onClick={() => goModule("users")}>
+                  <FaUsers /> People
                 </S.Action>
               </div>
             </S.Panel>
@@ -989,9 +1074,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
-              <S.Summary>
-                {usersMeta.totalCount} people · page {usersMeta.page} of {usersMeta.totalPages}
-              </S.Summary>
+              {renderPager(usersMeta, setPage, "people")}
               {loading ? (
                 usersShimmer()
               ) : (
@@ -1122,7 +1205,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(usersMeta, setPage)}
             </S.Panel>
           </>
         )}
@@ -1190,9 +1272,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setPage(1)}>Apply</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
-              <S.Summary>
-                {usersMeta.totalCount} people · page {usersMeta.page} of {usersMeta.totalPages}
-              </S.Summary>
+              {renderPager(usersMeta, setPage, "people")}
               {loading ? (
                 leaderboardShimmer()
               ) : (
@@ -1270,7 +1350,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(usersMeta, setPage)}
             </S.Panel>
           </>
         )}
@@ -1312,6 +1391,7 @@ const AdminDashboard: React.FC = () => {
                   </S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(entriesMeta, setEntriesPage, "tickets")}
               {loading ? (
                 entriesShimmer()
               ) : (
@@ -1367,7 +1447,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(entriesMeta, setEntriesPage)}
             </S.Panel>
           </>
         )}
@@ -1407,6 +1486,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setSubPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(subMeta, setSubPage, "attempts")}
               {loading ? (
                 submissionsShimmer()
               ) : (
@@ -1460,7 +1540,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(subMeta, setSubPage)}
             </S.Panel>
           </>
         )}
@@ -1525,6 +1604,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setCodesPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(codesMeta, setCodesPage, "codes")}
               {loading ? (
                 codesShimmer()
               ) : (
@@ -1588,7 +1668,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(codesMeta, setCodesPage)}
             </S.Panel>
           </>
         )}
@@ -1627,6 +1706,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setFlaggedPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(flaggedMeta, setFlaggedPage, "codes")}
               {loading ? (
                 flaggedShimmer()
               ) : flagged.length === 0 ? (
@@ -1664,7 +1744,6 @@ const AdminDashboard: React.FC = () => {
                   </S.Table>
                 </S.TableWrap>
               )}
-              {renderPager(flaggedMeta, setFlaggedPage)}
             </S.Panel>
           </>
         )}
@@ -1721,6 +1800,7 @@ const AdminDashboard: React.FC = () => {
                   </S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(winnersMeta, setWinnersPage, "winners")}
               {loading ? (
                 winnersShimmer()
               ) : (
@@ -1842,7 +1922,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(winnersMeta, setWinnersPage)}
             </S.Panel>
           </>
         )}
@@ -1980,6 +2059,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setSocialPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(socialMeta, setSocialPage, "posts")}
               {socialPosts.length === 0 ? (
                 <S.Empty>
                   <strong>No posts yet</strong>
@@ -2031,7 +2111,6 @@ const AdminDashboard: React.FC = () => {
                   </S.Table>
                 </S.TableWrap>
               )}
-              {renderPager(socialMeta, setSocialPage)}
             </S.Panel>
           </>
         )}
@@ -2068,6 +2147,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setContactPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(contactMeta, setContactPage, "messages")}
               {messages.length === 0 ? (
                 <S.Empty>
                   <strong>Inbox empty</strong>
@@ -2097,7 +2177,6 @@ const AdminDashboard: React.FC = () => {
                   </S.MsgCard>
                 ))
               )}
-              {renderPager(contactMeta, setContactPage)}
             </S.Panel>
           </>
         )}
@@ -2148,6 +2227,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Action onClick={() => setAuditPage(1)}>Search</S.Action>
                 </S.ToolbarActions>
               </S.Toolbar>
+              {renderPager(auditMeta, setAuditPage, "events")}
               {loading ? (
                 auditShimmer()
               ) : (
@@ -2224,7 +2304,6 @@ const AdminDashboard: React.FC = () => {
                 </S.Table>
               </S.TableWrap>
               )}
-              {renderPager(auditMeta, setAuditPage)}
             </S.Panel>
           </>
         )}

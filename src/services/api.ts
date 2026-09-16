@@ -54,7 +54,7 @@ export const apiService = {
     request("/contact", { method: "POST", body: JSON.stringify(body) }),
   adminLogin: (identifier: string, password: string) =>
     request("/admin/login", { method: "POST", body: JSON.stringify({ identifier, password }) }),
-  adminEntrants: (page = 1, limit = 50, search = "", accountType = "", status = "", sortBy = "codes", minCodes = 0) =>
+  adminEntrants: (page = 1, limit = 100, search = "", accountType = "", status = "", sortBy = "codes", minCodes = 0) =>
     request(
       `/admin/entrants?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
         accountType ? `&accountType=${encodeURIComponent(accountType)}` : ""
@@ -71,19 +71,19 @@ export const apiService = {
   adminImportCodes: (csv: string, batch?: string) =>
     request("/admin/codes/import", { method: "POST", body: JSON.stringify({ csv, batch }) }, true),
   adminCodeStats: () => request("/admin/codes/stats", {}, true),
-  adminCodes: (page = 1, search = "", status = "", limit = 50) =>
+  adminCodes: (page = 1, search = "", status = "", limit = 100) =>
     request(
       `/admin/codes?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${status ? `&status=${encodeURIComponent(status)}` : ""}`,
       {},
       true
     ),
-  adminSubmissions: (page = 1, result = "", search = "", limit = 50) =>
+  adminSubmissions: (page = 1, result = "", search = "", limit = 100) =>
     request(
       `/admin/submissions?page=${page}&limit=${limit}${result ? `&result=${encodeURIComponent(result)}` : ""}&search=${encodeURIComponent(search)}`,
       {},
       true
     ),
-  adminFlagged: (page = 1, search = "", kind = "", limit = 50) =>
+  adminFlagged: (page = 1, search = "", kind = "", limit = 100) =>
     request(
       `/admin/codes/flagged?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
         kind ? `&kind=${encodeURIComponent(kind)}` : ""
@@ -91,7 +91,7 @@ export const apiService = {
       {},
       true
     ),
-  adminWinners: (page = 1, search = "", status = "", limit = 50, tier = "") =>
+  adminWinners: (page = 1, search = "", status = "", limit = 100, tier = "") =>
     request(
       `/admin/winners?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
         status ? `&status=${encodeURIComponent(status)}` : ""
@@ -104,13 +104,13 @@ export const apiService = {
     request(`/admin/winners/${id}/action`, { method: "POST", body: JSON.stringify({ action, notes }) }, true),
   adminDeleteWinner: (id: string) => request(`/admin/winners/${id}`, { method: "DELETE" }, true),
   adminRunDraw: () => request("/admin/draw/run", { method: "POST" }, true),
-  adminContact: (page = 1, search = "", unread = false, limit = 50) =>
+  adminContact: (page = 1, search = "", unread = false, limit = 100) =>
     request(
       `/admin/contact?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${unread ? "&unread=1" : ""}`,
       {},
       true
     ),
-  adminSocial: (page = 1, search = "", limit = 50, platform = "") =>
+  adminSocial: (page = 1, search = "", limit = 100, platform = "") =>
     request(
       `/admin/social?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
         platform ? `&platform=${encodeURIComponent(platform)}` : ""
@@ -122,7 +122,7 @@ export const apiService = {
     request("/admin/social", { method: "POST", body: JSON.stringify(body) }, true),
   adminDeleteSocial: (id: string) => request(`/admin/social/${id}`, { method: "DELETE" }, true),
   adminOverview: () => request("/admin/overview", {}, true),
-  adminAudit: (page = 1, search = "", limit = 50, actorType = "") =>
+  adminAudit: (page = 1, search = "", limit = 100, actorType = "") =>
     request(
       `/admin/audit?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
         actorType ? `&actorType=${encodeURIComponent(actorType)}` : ""
@@ -131,7 +131,7 @@ export const apiService = {
       true
     ),
   adminDrawPreview: () => request("/admin/draw/preview", {}, true),
-  adminDrawEntries: (page = 1, search = "", limit = 50, winner = "") =>
+  adminDrawEntries: (page = 1, search = "", limit = 100, winner = "") =>
     request(
       `/admin/draw/entries?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
         winner ? `&winner=${encodeURIComponent(winner)}` : ""

@@ -18,9 +18,7 @@ const spin = keyframes`
 export const Shell = styled.div`
   display: flex;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 1px 1px, rgba(0, 107, 63, 0.055) 1px, transparent 0) 0 0 / 22px 22px,
-    linear-gradient(145deg, #eef8f1 0%, ${COLORS.paper} 52%, #e4f2e9 100%);
+  background: #f3f5f4;
   width: 100%;
   overflow-x: hidden;
   font-size: 13px;
@@ -191,7 +189,7 @@ export const MobileToggle = styled.button`
 export const Main = styled.main`
   flex: 1;
   margin-left: 200px;
-  padding: 8px 12px 12px;
+  padding: 16px 18px 28px;
   min-height: 100vh;
   width: calc(100% - 200px);
   box-sizing: border-box;
@@ -200,7 +198,7 @@ export const Main = styled.main`
   @media (max-width: 900px) {
     margin-left: 0;
     width: 100%;
-    padding: 46px 8px 12px;
+    padding: 52px 12px 20px;
   }
 `;
 
@@ -209,8 +207,8 @@ export const PageHead = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 14px;
 
   h1 {
     font-size: 15px;
@@ -221,15 +219,18 @@ export const PageHead = styled.div`
   }
 
   p {
-    display: none;
+    font-size: 12px;
+    color: #5c6b62;
+    margin-top: 2px;
+    font-weight: 500;
   }
 `;
 
 export const KpiGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  margin-bottom: 6px;
+  gap: 12px;
+  margin-bottom: 16px;
 
   @media (max-width: 1100px) {
     grid-template-columns: repeat(2, 1fr);
@@ -286,14 +287,12 @@ export const Kpi = styled.div<{ $accent?: string }>`
 `;
 
 export const Panel = styled.section`
-  background: linear-gradient(155deg, ${COLORS.white} 0%, #f9fcfa 100%);
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin-bottom: 6px;
-  border: 1px solid rgba(0, 107, 63, 0.13);
-  box-shadow:
-    0 8px 22px rgba(0, 56, 32, 0.065),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px solid #e4ebe6;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
 
   h2 {
     font-size: 12.5px;
@@ -304,20 +303,28 @@ export const Panel = styled.section`
   }
 
   .sub {
-    display: none;
+    font-size: 12px;
+    color: #6a7a72;
+    margin: 2px 0 10px;
+    line-height: 1.4;
   }
 `;
 
 export const Split = styled.div`
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: 6px;
+  gap: 16px;
+  margin-bottom: 16px;
   @media (max-width: 1100px) {
     grid-template-columns: 1fr;
   }
 
   table {
     min-width: 420px;
+  }
+
+  > section {
+    margin-bottom: 0;
   }
 `;
 
@@ -346,12 +353,36 @@ export const ToolbarActions = styled.div`
 
 export const Pager = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px solid ${COLORS.line};
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 10px;
+  padding: 0;
+  border: none;
+  min-height: 32px;
+  overflow-x: auto;
+
+  @media (max-width: 720px) {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+`;
+
+export const PagerMeta = styled.span`
+  font-size: 12px;
+  color: #5c6b62;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-right: auto;
+`;
+
+export const PagerControls = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 `;
 
 export const SearchInput = styled.input`
@@ -507,71 +538,65 @@ export const Summary = styled.p`
 `;
 
 export const TableWrap = styled.div`
-  overflow: auto;
-  max-height: min(78vh, 820px);
+  overflow-x: auto;
+  overflow-y: visible;
   border-radius: 6px;
-  border: 1px solid rgba(0, 107, 63, 0.14);
-  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e2e8e4;
   background: #fff;
-  box-shadow:
-    0 6px 18px rgba(0, 56, 32, 0.055),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92);
 `;
 
 export const Table = styled.table`
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   font-size: 12px;
-  min-width: 560px;
+  min-width: 720px;
 
   thead th {
-    position: sticky;
-    top: 0;
-    z-index: 2;
     text-align: left;
-    padding: 5px 8px;
-    background: linear-gradient(180deg, #edf7f0 0%, #e4f1e8 100%);
-    color: ${COLORS.redDeep};
+    padding: 6px 10px;
+    background: #f7faf8;
+    color: #3d4a43;
     font-size: 10px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 700;
     white-space: nowrap;
-    border-bottom: 1px solid rgba(0, 107, 63, 0.18);
+    border-bottom: 1px solid #e2e8e4;
   }
 
   td {
-    padding: 3px 8px;
-    border-bottom: 1px solid #e7f0ea;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eef2ef;
     vertical-align: middle;
     background: #fff;
     color: ${COLORS.ink};
     max-width: 280px;
-    line-height: 1.25;
+    line-height: 1.2;
+    white-space: nowrap;
   }
 
   tbody tr:nth-child(even) td {
-    background: #f8fbf9;
+    background: #fbfcfc;
   }
 
   td strong {
     font-size: 12px;
-    font-weight: 700;
-    color: ${COLORS.redDeep};
+    font-weight: 650;
+    color: #122018;
   }
 
   td code {
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     font-size: 11px;
-    background: #eaf5ee;
-    padding: 1px 4px;
+    background: #f1f5f2;
+    padding: 1px 5px;
     border-radius: 3px;
-    color: ${COLORS.redDeep};
+    color: #163127;
+    font-weight: 650;
   }
 
   tbody tr:hover td {
-    background: #ecf7f0;
+    background: #f3f8f5;
   }
 
   tbody tr:last-child td {
@@ -979,4 +1004,153 @@ export const ModuleBar = styled.div`
 `;
 export const ModuleTab = styled.button`
   display: none;
+`;
+
+export const CampaignBanner = styled.div<{ $tone?: "upcoming" | "live" | "ended" }>`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid ${({ $tone }) =>
+    $tone === "live" ? "rgba(0, 107, 63, 0.22)" : $tone === "ended" ? "rgba(180, 35, 24, 0.2)" : "rgba(243, 112, 33, 0.28)"};
+  background: ${({ $tone }) =>
+    $tone === "live"
+      ? "linear-gradient(135deg, #e8f7ee, #f7fcf9)"
+      : $tone === "ended"
+        ? "linear-gradient(135deg, #fdeeee, #fff8f7)"
+        : "linear-gradient(135deg, #fff6ea, #fffdf8)"};
+
+  strong {
+    display: block;
+    font-size: 15px;
+    color: ${COLORS.redDeep};
+    font-weight: 800;
+  }
+
+  span {
+    display: block;
+    margin-top: 3px;
+    font-size: 12.5px;
+    color: #5c6b62;
+  }
+`;
+
+export const ProgressTrack = styled.div`
+  height: 10px;
+  border-radius: 999px;
+  background: #e6f0ea;
+  overflow: hidden;
+  margin: 8px 0 6px;
+`;
+
+export const ProgressFill = styled.i<{ $pct: number; $tone?: string }>`
+  display: block;
+  height: 100%;
+  width: ${({ $pct }) => `${Math.min(100, Math.max(0, $pct))}%`};
+  background: ${({ $tone }) => $tone || `linear-gradient(90deg, ${COLORS.red}, ${COLORS.gold})`};
+  border-radius: 999px;
+`;
+
+export const ProgressMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: #5c6b62;
+  font-weight: 600;
+`;
+
+export const StatGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0 0 16px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const StatCard = styled.button`
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 107, 63, 0.12);
+  background: linear-gradient(160deg, #fff, #f7fbf8);
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(0, 107, 63, 0.28);
+    box-shadow: 0 8px 18px rgba(0, 56, 32, 0.08);
+  }
+
+  span {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: ${COLORS.muted};
+  }
+
+  strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 22px;
+    font-weight: 800;
+    color: ${COLORS.redDeep};
+    font-variant-numeric: tabular-nums;
+  }
+
+  small {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #5c6b62;
+    line-height: 1.35;
+  }
+`;
+
+export const CheckList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #122018;
+    line-height: 1.35;
+  }
+
+  b {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .ok {
+    background: #d8f0e0;
+    color: ${COLORS.red};
+  }
+
+  .wait {
+    background: #fff0d8;
+    color: #a85500;
+  }
 `;
