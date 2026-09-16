@@ -71,7 +71,7 @@ const Dashboard: React.FC = () => {
       <PageHero
         kicker="My entries"
         title="Your campaign dashboard"
-        lead="Track valid codes, draw entries, and progress toward the next ticket. Guests can look up with name + phone or email."
+        lead="Track submitted codes, entries accumulated, and progress toward the next entry. Guests can look up with name + phone or email."
       />
       <S.Page>
         <S.Wrap>
@@ -121,7 +121,7 @@ const Dashboard: React.FC = () => {
               <S.HeroCard>
                 <h2>{data.fullName}</h2>
                 <p className="sub">
-                  {auth.isLoggedIn ? "Signed-in dashboard" : "Guest lookup"} · Every 4 valid codes = 1 draw entry
+                  {auth.isLoggedIn ? "Signed-in dashboard" : "Guest lookup"} · Every 4 validated codes = 1 entry
                 </p>
                 <S.Stats>
                   <S.Stat>
@@ -130,7 +130,7 @@ const Dashboard: React.FC = () => {
                   </S.Stat>
                   <S.Stat>
                     <strong>{data.drawEntryCount}</strong>
-                    <span>Draw entries</span>
+                    <span>Entries</span>
                   </S.Stat>
                   <S.Stat>
                     <strong>
@@ -141,7 +141,7 @@ const Dashboard: React.FC = () => {
                 </S.Stats>
                 <S.ProgressWrap>
                   <div className="label">
-                    <span>Progress to next draw ticket</span>
+                    <span>Progress to next entry</span>
                     <span>
                       {codesToNext === 0 ? "Ready — next code unlocks another entry" : `${codesToNext} more code${codesToNext === 1 ? "" : "s"}`}
                     </span>
@@ -193,13 +193,13 @@ const Dashboard: React.FC = () => {
 
                 <S.Card>
                   <h3>
-                    <FaTrophy /> Draw entries
+                    <FaTrophy /> Entries
                   </h3>
-                  <p className="hint">Tickets in the Nov 23 electronic draw pool</p>
+                  <p className="hint">Entries in the Grand Prize and Secondary Prize draws</p>
                   {data.entries.length === 0 ? (
                     <S.Empty>
-                      <strong>No draw entries yet</strong>
-                      Submit 4 valid codes to earn your first ticket.
+                      <strong>No entries yet</strong>
+                      Submit 4 validated codes to earn your first entry.
                     </S.Empty>
                   ) : (
                     <S.List>

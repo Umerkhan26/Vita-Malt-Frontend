@@ -13,35 +13,69 @@ export const Hero = styled.section`
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  /* Match official banner ratio so desktop/laptop never crop WIN THE / prizes */
   aspect-ratio: 1920 / 700;
-  background: ${COLORS.redDeep};
+  padding-bottom: 16px;
+  box-sizing: content-box;
+  background: linear-gradient(
+    90deg,
+    #b4e0ea 0%,
+    #b6e0e6 5%,
+    #b6dee5 10%,
+    #bde0e4 15%,
+    #c0e0e0 20%,
+    #c7e2e0 25%,
+    #cae1dc 30%,
+    #d4e3d9 35%,
+    #e3eadc 40%,
+    #dcdfce 45%,
+    #e0ddc5 50%,
+    #e6e0c2 55%,
+    #e7daac 60%,
+    #e9d49d 65%,
+    #e9c984 70%,
+    #ebc678 75%,
+    #ecbd64 80%,
+    #f1b857 85%,
+    #f4b244 90%,
+    #f4ab3d 95%,
+    #f9a534 100%
+  );
   color: ${COLORS.white};
   overflow: hidden;
+
+  @media (min-width: 901px) and (max-width: 1535px) {
+    padding-bottom: 24px;
+  }
+
+  @media (min-width: 1536px) {
+    padding-bottom: 16px;
+  }
 
   @media (max-width: 900px) {
     aspect-ratio: auto;
     height: auto;
     min-height: 0;
+    padding-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    background: ${COLORS.redDeep};
   }
 `;
 
 export const HeroImage = styled.img`
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 0;
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: none;
-  min-height: 100%;
-  /* contain + matching aspect = full creative visible, no crop */
+  aspect-ratio: 1920 / 700;
   object-fit: contain;
-  object-position: center center;
-  /* No zoom on desktop — scale shifts the green prize box onto the CTAs */
+  object-position: center top;
   transform: none;
   animation: none;
 
@@ -52,7 +86,6 @@ export const HeroImage = styled.img`
     height: auto;
     min-height: 0;
     max-width: 100%;
-    /* Show full creative on phones — no crop */
     aspect-ratio: 1920 / 700;
     object-fit: contain;
     object-position: center center;
@@ -92,8 +125,8 @@ export const HeroContent = styled.div`
 export const HeroTop = styled.div`
   pointer-events: auto;
   position: absolute;
-  /* Sit in the sky band above “WIN THE” (~8% from top in banner art) */
-  top: 1.8%;
+  /* Sit in the sky band above “WIN THE” */
+  top: 1.05%;
   left: 10.6%;
   right: auto;
   width: auto;
@@ -103,9 +136,13 @@ export const HeroTop = styled.div`
   box-sizing: border-box;
   z-index: 3;
 
-  /* Laptop: pull badge up + keep clear air above WIN THE */
+  /* Laptop: keep a little air under the badge above WIN THE */
   @media (min-width: 901px) and (max-width: 1535px) {
-    top: 0.35%;
+    top: 0.2%;
+  }
+
+  @media (min-width: 1536px) {
+    top: 1.05%;
   }
 
   @media (max-width: 900px) {
@@ -120,12 +157,8 @@ export const HeroTop = styled.div`
 export const HeroBottom = styled.div`
   pointer-events: auto;
   position: absolute;
-  /*
-    Banner green prize box ends ~90.6% from top (image geometry).
-    Pin CTAs just under it — same % on laptop + desktop so they never sit on the card.
-  */
-  top: 91.45%;
-  bottom: auto;
+  top: auto;
+  bottom: 10px;
   left: 10.6%;
   right: auto;
   width: auto;
@@ -134,37 +167,66 @@ export const HeroBottom = styled.div`
   padding: 0;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
+  align-items: stretch;
+  gap: 10px;
   box-sizing: border-box;
   z-index: 3;
+  background: transparent;
 
   a {
-    padding: 10px 18px;
-    font-size: 0.8rem;
-    line-height: 1.05;
-    min-height: 0;
+    box-sizing: border-box;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 16px;
+    font-size: 0.74rem;
+    line-height: 1;
+    border: 2px solid ${COLORS.gold};
     white-space: nowrap;
   }
 
-  /* Laptop / mid screens: more gap under green box (buttons were flush) */
+  a:last-of-type {
+    background: #00613a;
+    border-color: #00613a;
+    color: #ffffff;
+    backdrop-filter: none;
+  }
+
   @media (min-width: 901px) and (max-width: 1535px) {
-    top: 93.1%;
+    top: auto;
+    bottom: 8px;
     gap: 8px;
 
     a {
-      padding: 7px 12px;
-      font-size: 0.68rem;
+      height: 32px;
+      min-height: 32px;
+      padding: 0 14px;
+      font-size: 0.72rem;
       line-height: 1;
     }
   }
 
   @media (min-width: 1280px) and (max-width: 1535px) {
-    top: 92.7%;
+    top: auto;
+    bottom: 8px;
 
     a {
-      padding: 8px 14px;
-      font-size: 0.72rem;
+      height: 34px;
+      min-height: 34px;
+      padding: 0 16px;
+      font-size: 0.74rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    top: auto;
+    bottom: 10px;
+    gap: 10px;
+
+    a {
+      height: 36px;
+      min-height: 36px;
+      padding: 0 18px;
+      font-size: 0.78rem;
     }
   }
 
@@ -769,7 +831,7 @@ export const HowEnterHead = styled.div`
   text-align: left;
   width: 100%;
   max-width: 840px;
-  margin: 0 auto 20px;
+  margin: 0 auto 48px;
 
   h2 {
     margin: 0 0 8px;
@@ -817,6 +879,7 @@ export const HowEnterHead = styled.div`
 
   @media (max-width: 900px) {
     text-align: left;
+    margin-bottom: 44px;
 
     p {
       margin-left: 0;
@@ -826,10 +889,16 @@ export const HowEnterHead = styled.div`
 
   @media (min-width: 901px) and (max-width: 1535px) {
     max-width: 1090px;
+    margin-bottom: 48px;
+
+    p {
+      max-width: none;
+      white-space: nowrap;
+    }
   }
 
   @media (max-width: 640px) {
-    margin-bottom: 18px;
+    margin-bottom: 42px;
 
     h2 {
       font-size: clamp(1.85rem, 8.5vw, 2.25rem);
@@ -849,7 +918,7 @@ export const HowEnterHead = styled.div`
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 28px;
+    margin-bottom: 56px;
 
     h2 {
       font-size: 4rem;
@@ -883,20 +952,21 @@ export const HowEnterGrid = styled.div`
   }
 
   > * > * {
-    flex: 1;
+    flex: 1 1 auto;
     height: 100%;
   }
 
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
-    max-width: 300px;
+    max-width: 100%;
+    width: 100%;
     margin: 0 auto;
     gap: 28px;
   }
 
   @media (max-width: 640px) {
     width: 100%;
-    max-width: 360px;
+    max-width: 100%;
   }
 
   @media (min-width: 901px) and (max-width: 1535px) {
@@ -915,9 +985,10 @@ export const HowEnterCard = styled.article`
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  height: 220px;
+  align-items: stretch;
+  text-align: left;
+  height: 100%;
+  min-height: 0;
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -925,7 +996,7 @@ export const HowEnterCard = styled.article`
   border: none;
   border-top: 4px solid #f15a24;
   border-radius: 16px;
-  padding: 44px 18px 10px;
+  padding: 42px 20px 16px;
   box-shadow: 0 10px 24px rgba(0, 40, 24, 0.12);
   font-family: "Montserrat", system-ui, sans-serif;
   transition:
@@ -947,9 +1018,9 @@ export const HowEnterCard = styled.article`
   .badge {
     position: absolute;
     top: 0;
-    left: 50%;
+    left: 22px;
     z-index: 2;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
     width: 58px;
     height: 58px;
     border-radius: 50%;
@@ -985,7 +1056,7 @@ export const HowEnterCard = styled.article`
     margin: 3px 0 8px;
     width: 100%;
     padding: 0 4px;
-    text-align: center;
+    text-align: left;
     font-family: "Montserrat", system-ui, sans-serif;
     font-size: clamp(1rem, 1.55vw, 1.12rem);
     font-weight: 800;
@@ -999,7 +1070,7 @@ export const HowEnterCard = styled.article`
     width: 100%;
     padding: 0 4px;
     flex: 0 0 auto;
-    text-align: center;
+    text-align: left;
     color: #333333;
     font-family: "Montserrat", system-ui, sans-serif;
     font-size: clamp(0.76rem, 1.15vw, 0.86rem);
@@ -1010,14 +1081,15 @@ export const HowEnterCard = styled.article`
 
   @media (max-width: 640px) {
     height: auto;
-    min-height: 230px;
-    padding: 34px 16px 16px;
+    min-height: 0;
+    padding: 32px 16px 14px;
     border-radius: 14px;
 
     .badge {
       width: 48px;
       height: 48px;
       font-size: 0.92rem;
+      left: 20px;
     }
 
     h3 {
@@ -1031,9 +1103,8 @@ export const HowEnterCard = styled.article`
   }
 
   @media (max-width: 360px) {
-    min-height: 220px;
-    padding-left: 14px;
-    padding-right: 14px;
+    min-height: 0;
+    padding: 32px 14px 12px;
 
     h3 {
       font-size: 1rem;
@@ -1045,8 +1116,8 @@ export const HowEnterCard = styled.article`
   }
 
   @media (min-width: 1536px) {
-    height: 280px;
-    padding: 54px 26px 18px;
+    min-height: 0;
+    padding: 48px 26px 16px;
     border-top-width: 5px;
     border-radius: 19px;
 
@@ -1054,6 +1125,7 @@ export const HowEnterCard = styled.article`
       width: 64px;
       height: 64px;
       font-size: 1.25rem;
+      left: 30px;
     }
 
     .badge::after {
@@ -1068,7 +1140,6 @@ export const HowEnterCard = styled.article`
     }
 
     p {
-      max-width: 20rem;
       font-size: 0.94rem;
       line-height: 1.42;
     }
@@ -1076,94 +1147,165 @@ export const HowEnterCard = styled.article`
 `;
 
 export const HowEnterIcon = styled.div`
-  margin-top: auto;
-  padding-top: 8px;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
-  height: 54px;
-  flex: 0 0 54px;
+  max-width: 100%;
+  height: auto;
+  margin-top: auto;
+  padding-top: 8px;
+  pointer-events: none;
+
+  .icon-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 120px;
+    margin: 0 auto;
+  }
 
   img {
     display: block;
     width: auto;
-    max-width: none;
+    max-width: 100%;
+    height: 56px;
     object-fit: contain;
+    object-position: center;
+    filter: drop-shadow(0 6px 10px rgba(0, 45, 27, 0.12));
   }
 
-  /* Icons ~1/4–1/3 of card height like image 1 */
   img.cart {
-    width: 52px;
-    height: auto;
+    height: 64px;
   }
 
   img.crown {
-    width: 126px;
-    height: auto;
-    transform: translateY(-6px);
+    height: 54px;
   }
 
   img.ticket {
-    width: 92px;
-    height: auto;
+    height: 50px;
   }
 
   img.upload {
-    width: 44px;
-    height: auto;
+    height: 44px;
   }
 
-  @media (max-width: 640px) {
-    height: 50px;
-    flex-basis: 50px;
-    padding-top: 8px;
+  @media (max-width: 900px) {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0 2px;
 
-    img.cart,
-    img.crown {
-      height: auto;
+    .icon-cluster {
+      width: 112px;
+      gap: 8px;
+      margin: 0 auto;
+    }
+
+    img {
+      flex: 0 0 auto;
+      min-width: 0;
+      width: auto;
+      max-width: 72px;
+      height: 48px;
+      margin: 0;
+      object-fit: contain;
+      object-position: center;
     }
 
     img.cart {
-      width: 48px;
+      height: 48px;
+      max-width: 72px;
+      /* rays sit on the left of the file — shift so the cart body hits the slot center */
+      object-position: 68% 50%;
     }
 
     img.crown {
-      width: 110px;
+      height: 44px;
+      max-width: 88px;
     }
 
     img.ticket {
-      width: 82px;
-      height: auto;
+      height: 42px;
+      max-width: 52px;
     }
 
     img.upload {
-      width: 40px;
-      height: auto;
+      height: 38px;
+      max-width: 38px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    margin-top: auto;
+    padding-top: 8px;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+
+    .icon-cluster {
+      width: 112px;
+    }
+
+    img {
+      height: 48px;
+      max-width: 72px;
+    }
+
+    img.cart {
+      height: 48px;
+      max-width: 72px;
+    }
+
+    img.crown {
+      height: 44px;
+      max-width: 88px;
+    }
+
+    img.ticket {
+      height: 42px;
+      max-width: 52px;
+    }
+
+    img.upload {
+      height: 38px;
+      max-width: 38px;
     }
   }
 
   @media (min-width: 1536px) {
-    height: 64px;
-    flex-basis: 64px;
+    margin-top: auto;
     padding-top: 10px;
-    gap: 10px;
+    gap: 12px;
+
+    .icon-cluster {
+      width: 132px;
+      gap: 12px;
+    }
+
+    img {
+      height: 60px;
+    }
 
     img.cart {
-      width: 62px;
+      height: 70px;
     }
 
     img.crown {
-      width: 148px;
+      height: 58px;
     }
 
     img.ticket {
-      width: 108px;
+      height: 54px;
     }
 
     img.upload {
-      width: 52px;
+      height: 48px;
     }
   }
 `;
@@ -1756,8 +1898,13 @@ export const EnterProductArt = styled.figure`
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
+  align-self: flex-start;
   position: relative;
+  width: 100%;
+  max-width: 42rem;
   margin: clamp(20px, 2.5vw, 30px) 0 0;
+  margin-left: 0;
+  margin-right: auto;
   overflow: visible;
 
   &::after {
@@ -1780,18 +1927,22 @@ export const EnterProductArt = styled.figure`
     width: 100%;
     max-width: 100%;
     height: auto;
+    margin: 0;
     object-fit: contain;
     object-position: left bottom;
   }
 
   @media (max-width: 820px) {
     flex: none;
-    justify-content: center;
-    
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 42rem;
+
     img {
-      width: min(100%, 700px);
+      width: 100%;
+      max-width: 100%;
       height: auto;
-      object-position: center;
+      object-position: left bottom;
     }
   }
 

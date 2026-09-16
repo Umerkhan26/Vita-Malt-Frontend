@@ -11,7 +11,7 @@ import { trackEvent } from "../../utils/analytics";
 import heroSmall from "../../assets/vita-malt-hero-banner-1280.webp";
 import heroLarge from "../../assets/vita-malt-hero-banner-2560.webp";
 import howEnterBg from "../../assets/Howtoenterbg.jpg";
-import stepIconCart from "../../assets/icon1-clear.png";
+import stepIconCart from "../../assets/icon1-cart-clear.png";
 import stepIconCrown from "../../assets/icon2-clear.png";
 import stepIconTicket from "../../assets/icon3-clear.png";
 import stepIconUpload from "../../assets/icon4-clear.png";
@@ -192,8 +192,8 @@ const Home: React.FC = () => {
     <Layout>
       <Hero>
         <HeroImage
-          src={heroLarge}
-          srcSet={`${heroSmall} 1280w, ${heroLarge} 2560w`}
+          src={`${heroLarge}?v=lapdesk`}
+          srcSet={`${heroSmall}?v=lapdesk 1280w, ${heroLarge}?v=lapdesk 2560w`}
           sizes="100vw"
           alt="Vitalize Your Game — Win the ultimate entertainment package"
         />
@@ -251,7 +251,7 @@ const Home: React.FC = () => {
                   <span className="how">How to </span>
                   <span className="enter">enter</span>
                 </h2>
-                <p>Three steps from shelf to draw entry. Submit one code or several codes together.</p>
+                <p>Three steps from shelf to entry. Submit one code or several codes together.</p>
               </HowEnterHead>
             </Reveal>
             <HowEnterGrid>
@@ -263,7 +263,9 @@ const Home: React.FC = () => {
                     Pick up participating Ginger, Classic, Ginseng, or Coconut Hibiscus during the promotion period.
                   </p>
                   <HowEnterIcon>
-                    <img className="cart" src={stepIconCart} alt="" aria-hidden />
+                    <span className="icon-cluster">
+                      <img className="cart" src={stepIconCart} alt="" aria-hidden />
+                    </span>
                   </HowEnterIcon>
                 </HowEnterCard>
               </Reveal>
@@ -271,23 +273,27 @@ const Home: React.FC = () => {
                 <HowEnterCard>
                   <span className="badge">02</span>
                   <h3>Check under the crown</h3>
-                  <p>Find either an Instant Win prize or a promotional alphanumeric code.</p>
+                  <p>Find either an Instant Win or an alphanumeric code.</p>
                   <HowEnterIcon>
-                    <img className="crown" src={stepIconCrown} alt="" aria-hidden />
+                    <span className="icon-cluster">
+                      <img className="crown" src={stepIconCrown} alt="" aria-hidden />
+                    </span>
                   </HowEnterIcon>
                 </HowEnterCard>
               </Reveal>
               <Reveal delay={200}>
                 <HowEnterCard>
                   <span className="badge">03</span>
-                  <h3>Upload 4 codes for the Grand Prize</h3>
+                  <h3>Submit your codes</h3>
                   <p>
-                    Every 4 valid codes = 1 draw entry. Codes can be entered separately. No need to submit all four at
-                    once.
+                    Every 4 validated codes = 1 entry into the Grand Prize draw and Secondary Prizes. Codes can be
+                    submitted separately. No need to submit all four at once.
                   </p>
                   <HowEnterIcon>
-                    <img className="ticket" src={stepIconTicket} alt="" aria-hidden />
-                    <img className="upload" src={stepIconUpload} alt="" aria-hidden />
+                    <span className="icon-cluster">
+                      <img className="ticket" src={stepIconTicket} alt="" aria-hidden />
+                      <img className="upload" src={stepIconUpload} alt="" aria-hidden />
+                    </span>
                   </HowEnterIcon>
                 </HowEnterCard>
               </Reveal>
@@ -321,8 +327,8 @@ const Home: React.FC = () => {
             <Reveal delay={110}>
               <HowWorksCard>
                 <span className="step">02</span>
-                <h3>Uncap &amp; scan</h3>
-                <p>Check under the crown for a promotional code or an Instant Win.</p>
+                <h3>Check under the crown</h3>
+                <p>Find either an Instant Win or an alphanumeric code.</p>
                 <HowWorksIcon $kind="uncap">
                   <img src={howWorksUncap} alt="" aria-hidden />
                 </HowWorksIcon>
@@ -331,10 +337,10 @@ const Home: React.FC = () => {
             <Reveal delay={220}>
               <HowWorksCard>
                 <span className="step">03</span>
-                <h3>Register your entries</h3>
+                <h3>Submit your code</h3>
                 <ul>
-                  <li>Complete registration with name and contact details.</li>
-                  <li>Upload codes on this website for registration and submission.</li>
+                  <li>First-time submit asks for name, phone, optional email, and 18+ confirmation.</li>
+                  <li>Submit your alphanumeric code on this website. No account required.</li>
                 </ul>
                 <HowWorksIcon $kind="register">
                   <img src={howWorksRegister} alt="" aria-hidden />
@@ -431,7 +437,7 @@ const Home: React.FC = () => {
                   <Progress>
                     {result.message}
                     <br />
-                    Valid codes: {result.validCodeCount} · Draw entries: {result.drawEntryCount} · Progress:{" "}
+                    Valid codes: {result.validCodeCount} · Entries: {result.drawEntryCount} · Progress:{" "}
                     {result.progressTowardNextEntry}/4
                     {result.codesUntilNextEntry > 0 ? ` · ${result.codesUntilNextEntry} more to your next entry` : ""}
                   </Progress>

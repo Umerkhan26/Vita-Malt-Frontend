@@ -77,6 +77,13 @@ const LogoLink = styled(Link)`
     object-fit: contain;
   }
 
+  @media (min-width: 1536px) {
+    img {
+      height: 62px;
+      max-width: 176px;
+    }
+  }
+
   @media (max-width: 900px) {
     img {
       height: 40px;
