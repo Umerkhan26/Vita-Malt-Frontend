@@ -166,7 +166,10 @@ const Home: React.FC = () => {
         codeCount: acceptedCount,
         createdDrawEntry: (latestData as { createdDrawEntry?: boolean }).createdDrawEntry,
       });
-      if (latestData.promptCreateAccount) setShowAccount(true);
+      if (latestData.promptCreateAccount) {
+        document.getElementById("enter")?.scrollIntoView({ behavior: "auto", block: "start" });
+        setShowAccount(true);
+      }
     }
 
     if (!failedCodes.length) {

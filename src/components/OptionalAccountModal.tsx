@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { COLORS } from "../constants/colors";
@@ -11,17 +12,22 @@ const Overlay = styled.div`
   inset: 0;
   background: rgba(29, 15, 8, 0.7);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 2100;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 16px;
-  padding-top: max(16px, env(safe-area-inset-top));
+  padding-top: calc(72px + 16px);
   padding-bottom: max(16px, env(safe-area-inset-bottom));
 
+  @media (max-width: 900px) {
+    padding-top: calc(56px + 12px);
+  }
+
   @media (max-width: 640px) {
-    align-items: flex-start;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    padding-top: calc(54px + 10px);
   }
 `;
 
@@ -93,6 +99,19 @@ const OptionalAccountModal: React.FC<Props> = ({
   const [step, setStep] = useState<"form" | "otp">("form");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const pinEnter = () => {
+      document.getElementById("enter")?.scrollIntoView({ behavior: "auto", block: "start" });
+    };
+    pinEnter();
+    const frame = window.requestAnimationFrame(pinEnter);
+    const later = window.setTimeout(pinEnter, 200);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(later);
+    };
+  }, []);
+
   const skip = () => {
     trackEvent("optional_account_skip");
     onClose();
@@ -145,7 +164,7 @@ const OptionalAccountModal: React.FC<Props> = ({
     }
   };
 
-  return (
+  return createPortal(
     <Overlay>
       <Card>
         <h3>Create an account? Optional.</h3>
@@ -195,7 +214,8 @@ const OptionalAccountModal: React.FC<Props> = ({
           </>
         )}
       </Card>
-    </Overlay>
+    </Overlay>,
+    document.body
   );
 };
 

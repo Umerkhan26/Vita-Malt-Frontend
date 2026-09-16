@@ -7,7 +7,6 @@ import Winners from "../pages/Winners/Winners";
 import Social from "../pages/Social/Social";
 import Faq from "../pages/Faq/Faq";
 import Terms from "../pages/Terms/Terms";
-import Privacy from "../pages/Privacy/Privacy";
 import Contact from "../pages/Contact/Contact";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword/ResetPassword";
@@ -25,7 +24,6 @@ const AppRoutes: React.FC = () => (
     <Route path="/social" element={<Social />} />
     <Route path="/faq" element={<Faq />} />
     <Route path="/terms" element={<Terms />} />
-    <Route path="/privacy" element={<Privacy />} />
     <Route path="/contact" element={<Contact />} />
     <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/reset-password" element={<ResetPassword />} />

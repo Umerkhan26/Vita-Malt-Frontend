@@ -567,7 +567,6 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <FooterCol>
             <h4>Legal</h4>
             <Link to="/terms">Terms & Conditions</Link>
-            <Link to="/privacy">Privacy</Link>
             <p>18+ · Saint Vincent and the Grenadines residents only.</p>
           </FooterCol>
         </FooterGrid>

@@ -691,11 +691,13 @@ export const Section = styled.section<{ $tone?: "white" | "paper" | "blush" | "i
   @media (max-width: 900px) {
     padding-top: 40px;
     padding-bottom: 40px;
+    scroll-margin-top: 56px;
   }
 
   @media (max-width: 640px) {
     padding-top: 36px;
     padding-bottom: 36px;
+    scroll-margin-top: 54px;
   }
 
   @media (max-width: 380px) {
