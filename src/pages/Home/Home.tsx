@@ -33,9 +33,7 @@ import {
   DateBar,
   DateInner,
   Section,
-  PrizeSection,
   SectionInner,
-  SectionHead,
   HowEnterSection,
   HowEnterInner,
   HowEnterStage,
@@ -49,8 +47,6 @@ import {
   HowWorksGrid,
   HowWorksCard,
   HowWorksIcon,
-  PrizeGrid,
-  PrizeCard,
   EnterWrap,
   EnterCopy,
   EnterProductArt,
@@ -74,11 +70,6 @@ import {
   SplitBandSubTitle,
   SplitBandLead,
   WhiteBtn,
-  FaqList,
-  FaqItem,
-  MoreLink,
-  LegalBand,
-  LegalNote,
 } from "./Home.styles";
 
 const Home: React.FC = () => {
@@ -298,7 +289,10 @@ const Home: React.FC = () => {
         <HowWorksInner>
           <Reveal>
             <HowWorksHead>
-              <h2>How it works</h2>
+              <h2>
+                <span className="how">How it </span>
+                <span className="works">works</span>
+              </h2>
               <p>Built for quick entry after a store purchase — from phone, no friction.</p>
             </HowWorksHead>
           </Reveal>
@@ -437,57 +431,6 @@ const Home: React.FC = () => {
         </SectionInner>
       </Section>
 
-      <PrizeSection id="prizes">
-        <SectionInner>
-          <Reveal>
-            <SectionHead $light>
-              <h2>Prizes worth showing up for</h2>
-              <p>
-                Instant wins are redeemed in person at SVBL. Grand and secondary prizes are drawn electronically after
-                the campaign closes.
-              </p>
-            </SectionHead>
-          </Reveal>
-          <PrizeGrid>
-            <Reveal delay={0} variant="up">
-              <PrizeCard $featured>
-                <small>Grand prize · 1 winner</small>
-                <h3>Ultimate entertainment package</h3>
-                <ul>
-                  <li>85&quot; smart TV</li>
-                  <li>PS5 Pro</li>
-                  <li>Surround sound system</li>
-                  <li>Entertainment TV stand</li>
-                </ul>
-              </PrizeCard>
-            </Reveal>
-            <Reveal delay={140} variant="up">
-              <PrizeCard>
-                <small>Secondary · 2 winners</small>
-                <h3>Play + sip all year</h3>
-                <ul>
-                  <li>One (1) year’s supply of Vita Malt — two (2) cases per month for 12 months</li>
-                  <li>One (1) Nintendo Switch</li>
-                </ul>
-              </PrizeCard>
-            </Reveal>
-            <Reveal delay={240} variant="up">
-              <PrizeCard>
-                <small>Instant win · under the crown</small>
-                <h3>Redeem in person</h3>
-                <ul>
-                  <li>Vita Malt 4-packs</li>
-                  <li>Vita Malt merch</li>
-                  <li>Mobile phone credit</li>
-                  <li>Amazon gift cards</li>
-                  <li>Apple AirPods</li>
-                </ul>
-              </PrizeCard>
-            </Reveal>
-          </PrizeGrid>
-        </SectionInner>
-      </PrizeSection>
-
       <SplitBand>
         <SplitInner>
           <Reveal variant="left">
@@ -512,56 +455,6 @@ const Home: React.FC = () => {
           </Reveal>
         </SplitInner>
       </SplitBand>
-
-      <Section $tone="soft">
-        <SectionInner>
-          <Reveal>
-            <SectionHead>
-              <h2>Quick answers</h2>
-              <p>Everything you need before you type a code.</p>
-            </SectionHead>
-          </Reveal>
-          <FaqList>
-            <Reveal delay={0}>
-              <FaqItem>
-                <summary>Do I need an account?</summary>
-                <p>
-                  Not for your first entry. You can submit your first promotional code without an account. After that,
-                  you will need to create an account to submit more codes and track your entries.
-                </p>
-              </FaqItem>
-            </Reveal>
-            <Reveal delay={100}>
-              <FaqItem>
-                <summary>How do draw entries work?</summary>
-                <p>
-                  Every four (4) valid codes = one (1) entry into both the Grand Prize draw and the Secondary Prize draw.
-                </p>
-              </FaqItem>
-            </Reveal>
-            <Reveal delay={180}>
-              <FaqItem>
-                <summary>Can a code be reused?</summary>
-                <p>No. Each promotional code can only be used once. Duplicate codes will be rejected.</p>
-              </FaqItem>
-            </Reveal>
-          </FaqList>
-          <Reveal delay={220}>
-            <MoreLink href="/faq">Read the full FAQ →</MoreLink>
-          </Reveal>
-        </SectionInner>
-      </Section>
-
-      <Reveal variant="fade">
-        <LegalBand>
-          <LegalNote>
-            Must be 18+ and reside in Saint Vincent and the Grenadines. Employees of SVBL, affiliates, agencies, their
-            immediate family, and household members are not eligible. Keep promotional crowns until draws are complete.
-            Instant Win crowns must be presented at Campden Park. Registrant data is used only to verify entries, contact
-            winners, and arrange prizes. See full Terms &amp; Conditions for details.
-          </LegalNote>
-        </LegalBand>
-      </Reveal>
 
       {showAccount && result && (
         <OptionalAccountModal

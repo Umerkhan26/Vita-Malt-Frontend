@@ -516,91 +516,10 @@ export const Section = styled.section<{ $tone?: "white" | "paper" | "blush" | "i
       : ""}
 `;
 
-export const PrizeSection = styled(Section).attrs({ $tone: "ink" as const })`
-  overflow: hidden;
-  isolation: isolate;
-  background:
-    radial-gradient(ellipse 42% 80% at 0% 55%, rgba(243, 112, 33, 0.24), transparent 68%),
-    radial-gradient(ellipse 45% 75% at 100% 25%, rgba(255, 166, 67, 0.2), transparent 68%),
-    linear-gradient(140deg, #003820 0%, #004d2c 54%, #006b3f 100%);
-
-  &::after {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    top: -20%;
-    right: -5%;
-    width: 45%;
-    height: 140%;
-    max-width: 100%;
-    background: radial-gradient(ellipse, rgba(243, 112, 33, 0.28), transparent 65%);
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.12;
-    background-image:
-      linear-gradient(115deg, transparent 46%, rgba(255,255,255,0.28) 47%, transparent 48%),
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.35) 1px, transparent 0);
-    background-size: 100% 100%, 26px 26px;
-  }
-`;
-
 export const SectionInner = styled.div`
   position: relative;
   z-index: 1;
   ${contentWidth}
-`;
-
-export const SectionHead = styled.div<{ $light?: boolean }>`
-  max-width: 760px;
-  margin-bottom: 36px;
-
-  h2 {
-    font-size: clamp(1.65rem, 3.8vw, 3rem);
-    letter-spacing: -0.035em;
-    margin-bottom: 12px;
-    position: relative;
-  }
-
-  h2::after {
-    content: "";
-    display: block;
-    width: 56px;
-    height: 3px;
-    margin-top: 12px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, ${COLORS.gold}, transparent);
-  }
-
-  p {
-    color: ${({ $light }) => ($light ? "rgba(255,255,255,0.82)" : COLORS.muted)};
-    font-size: clamp(0.95rem, 2.5vw, 1.08rem);
-    line-height: 1.65;
-  }
-
-  @media (max-width: 640px) {
-    margin-bottom: 20px;
-
-    h2 {
-      font-size: clamp(1.35rem, 6.5vw, 1.75rem);
-      margin-bottom: 8px;
-      line-height: 1.15;
-    }
-
-    h2::after {
-      margin-top: 10px;
-      width: 44px;
-    }
-
-    p {
-      font-size: 0.9rem;
-      line-height: 1.55;
-    }
-  }
 `;
 
 export const StepGrid = styled.div`
@@ -786,9 +705,9 @@ export const HowEnterHead = styled.div`
   }
 
   @media (min-width: 1536px) {
-    max-width: 1180px;
-    margin-left: 0;
-    margin-right: 0;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 28px;
 
     h2 {
@@ -844,9 +763,9 @@ export const HowEnterGrid = styled.div`
   }
 
   @media (min-width: 1536px) {
-    max-width: 1180px;
-    margin-left: 0;
-    margin-right: 0;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     gap: 36px;
   }
 `;
@@ -1199,61 +1118,95 @@ export const HowWorksHead = styled.div`
   text-align: left;
 
   h2 {
-    display: inline-block;
-    position: relative;
-    margin: 0 0 15px;
-    color: #15352a;
+    margin: 0 0 8px;
+    color: #004b23;
     font-family: "Montserrat", system-ui, sans-serif;
-    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    font-size: clamp(2.2rem, 4.8vw, 3rem);
     font-weight: 900;
-    line-height: 1;
     letter-spacing: -0.04em;
+    line-height: 0.95;
   }
 
-  h2::after {
+  .how {
+    color: #004b23;
+    font-weight: 900;
+  }
+
+  .works {
+    position: relative;
+    display: inline-block;
+    color: #f26522;
+    font-weight: 900;
+    padding-bottom: 6px;
+  }
+
+  .works::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -8px;
-    height: 5px;
-    border-radius: 4px;
-    background: #f37021;
+    bottom: 0;
+    height: 6px;
+    border-radius: 3px 8px 3px 6px / 4px 6px 3px 5px;
+    background: #004b23;
+    transform: rotate(-1deg);
   }
 
   p {
     margin: 0;
-    color: #52645a;
-    font-size: clamp(0.85rem, 1.4vw, 0.98rem);
+    max-width: 34rem;
+    color: #1a2e22;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(0.8rem, 1.4vw, 0.92rem);
     font-weight: 500;
-    line-height: 1.45;
+    line-height: 1.4;
   }
 
   @media (max-width: 900px) {
     max-width: 660px;
+    text-align: left;
+
+    p {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 
   @media (max-width: 640px) {
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 
     h2 {
-      font-size: 2rem;
+      font-size: clamp(1.85rem, 8.5vw, 2.25rem);
+    }
+
+    .works::after {
+      height: 5px;
+    }
+
+    p {
+      font-size: 0.82rem;
     }
   }
 
   @media (min-width: 1536px) {
-    max-width: 1160px;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 30px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 28px;
 
     h2 {
-      font-size: 3.5rem;
+      font-size: 4rem;
+      margin-bottom: 12px;
+    }
+
+    .works::after {
+      height: 8px;
     }
 
     p {
-      font-size: 1.05rem;
+      max-width: 42rem;
+      font-size: 1rem;
     }
   }
 `;
@@ -1283,9 +1236,9 @@ export const HowWorksGrid = styled.div`
   }
 
   @media (min-width: 1536px) {
-    max-width: 1160px;
-    margin-left: 0;
-    margin-right: 0;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     gap: 36px;
   }
 `;
@@ -1369,20 +1322,22 @@ export const HowWorksCard = styled.article`
 
   h3 {
     margin: 0 0 9px;
-    color: #006b3f;
-    font-size: clamp(1.02rem, 1.55vw, 1.18rem);
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(1rem, 1.55vw, 1.12rem);
     font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    color: #004b23;
+    line-height: 1.08;
+    letter-spacing: -0.015em;
   }
 
   p,
   ul {
     margin: 0;
-    color: #526158;
-    font-size: clamp(0.77rem, 1.12vw, 0.88rem);
-    font-weight: 500;
-    line-height: 1.45;
+    color: #333333;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(0.76rem, 1.15vw, 0.86rem);
+    font-weight: 400;
+    line-height: 1.35;
     overflow-wrap: anywhere;
   }
 
@@ -1399,6 +1354,17 @@ export const HowWorksCard = styled.article`
     padding: 22px 18px 148px;
   }
 
+  @media (max-width: 640px) {
+    h3 {
+      font-size: 1.05rem;
+    }
+
+    p,
+    ul {
+      font-size: 0.82rem;
+    }
+  }
+
   @media (max-width: 360px) {
     min-height: 310px;
     padding: 20px 16px 142px;
@@ -1409,7 +1375,7 @@ export const HowWorksCard = styled.article`
 
     p,
     ul {
-      font-size: 0.8rem;
+      font-size: 0.79rem;
     }
   }
 
@@ -1429,7 +1395,8 @@ export const HowWorksCard = styled.article`
 
     p,
     ul {
-      font-size: 0.92rem;
+      font-size: 0.94rem;
+      line-height: 1.42;
     }
   }
 `;
@@ -1562,136 +1529,6 @@ export const StepCard = styled.article`
   }
 `;
 
-export const PrizeGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1.25fr 1fr 1fr;
-  gap: clamp(18px, 2.4vw, 28px);
-  align-items: stretch;
-
-  > * {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  > * > * {
-    flex: 1;
-    height: 100%;
-  }
-
-  @media (max-width: 1000px) {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  @media (max-width: 380px) {
-    gap: 10px;
-  }
-`;
-
-export const PrizeCard = styled.article<{ $featured?: boolean }>`
-  position: relative;
-  overflow: hidden;
-  background: ${({ $featured }) =>
-    $featured
-      ? "linear-gradient(145deg, rgba(0,35,20,0.78), rgba(0,77,44,0.74))"
-      : "linear-gradient(155deg, #ffffff 0%, #f5fbf7 100%)"};
-  color: ${({ $featured }) => ($featured ? COLORS.white : COLORS.ink)};
-  border: 1px solid ${({ $featured }) => ($featured ? "rgba(243,112,33,0.75)" : "rgba(255,255,255,0.72)")};
-  border-top: 5px solid ${COLORS.gold};
-  border-radius: 18px;
-  padding: clamp(24px, 3vw, 32px);
-  min-height: 310px;
-  height: 100%;
-  min-width: 0;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  box-shadow: ${({ $featured }) =>
-    $featured ? "0 24px 58px rgba(0,0,0,0.3)" : "0 18px 42px rgba(0,0,0,0.18)"};
-  transition:
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease,
-    border-color 0.2s ease;
-  backdrop-filter: ${({ $featured }) => ($featured ? "blur(12px)" : "none")};
-
-  &::after {
-    content: "";
-    position: absolute;
-    right: -58px;
-    bottom: -62px;
-    width: 190px;
-    height: 190px;
-    border-radius: 50%;
-    background: ${({ $featured }) =>
-      $featured
-        ? "radial-gradient(circle, rgba(243,112,33,0.34), transparent 68%)"
-        : "radial-gradient(circle, rgba(0,107,63,0.12), transparent 68%)"};
-    pointer-events: none;
-  }
-
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: ${({ $featured }) =>
-      $featured ? "0 28px 60px rgba(0,0,0,0.35)" : "0 20px 44px rgba(0,0,0,0.18)"};
-    border-color: ${({ $featured }) => ($featured ? "rgba(243,112,33,0.7)" : "rgba(243,112,33,0.25)")};
-  }
-
-  @media (hover: none) {
-    &:hover {
-      transform: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    min-height: 0;
-    padding: 20px 18px;
-    border-radius: 16px;
-
-    h3 {
-      font-size: 1.15rem;
-    }
-
-    ul {
-      margin-left: 16px;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-  }
-
-  small {
-    display: inline-block;
-    background: ${({ $featured }) => ($featured ? COLORS.gold : COLORS.paper)};
-    color: ${COLORS.redDeep};
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    padding: 6px 10px;
-    border-radius: 999px;
-    margin-bottom: 14px;
-  }
-
-  h3 {
-    position: relative;
-    z-index: 1;
-    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
-    margin-bottom: 12px;
-    letter-spacing: -0.02em;
-  }
-
-  ul {
-    position: relative;
-    z-index: 1;
-    margin-left: 18px;
-    line-height: 1.75;
-    color: ${({ $featured }) => ($featured ? "rgba(255,255,255,0.9)" : COLORS.muted)};
-    flex: 1;
-  }
-`;
-
 export const EnterWrap = styled.div`
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(380px, 0.9fr);
@@ -1723,9 +1560,11 @@ export const EnterCopy = styled.div`
   h2 {
     display: inline-block;
     position: relative;
-    font-size: clamp(2rem, 3.8vw, 2.9rem);
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(2.2rem, 4.8vw, 3rem);
     font-weight: 900;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
     margin-bottom: 24px;
     color: ${COLORS.redDeep};
   }
@@ -1742,22 +1581,35 @@ export const EnterCopy = styled.div`
   }
 
   p {
-    color: ${COLORS.muted};
-    line-height: 1.7;
     margin-bottom: 14px;
-    font-size: 1.02rem;
+    max-width: 42rem;
+    color: #1a2e22;
+    font-family: "Montserrat", system-ui, sans-serif;
+    font-size: clamp(0.8rem, 1.4vw, 0.92rem);
+    font-weight: 500;
+    line-height: 1.4;
   }
 
   @media (max-width: 640px) {
     h2 {
-      font-size: clamp(1.4rem, 6.5vw, 1.85rem);
+      font-size: clamp(1.85rem, 8.5vw, 2.25rem);
       margin-bottom: 20px;
-      line-height: 1.15;
+      line-height: 0.95;
     }
     p {
-      font-size: 0.9rem;
-      line-height: 1.55;
+      font-size: 0.82rem;
+      line-height: 1.4;
       margin-bottom: 10px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    h2 {
+      font-size: 4rem;
+    }
+
+    p {
+      font-size: 1rem;
     }
   }
 `;
@@ -2134,38 +1986,55 @@ export const SplitInner = styled.div`
 `;
 
 export const SplitBandTitle = styled.h2`
-  font-size: clamp(1.9rem, 3.6vw, 2.7rem);
-  letter-spacing: -0.03em;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(2.2rem, 4.8vw, 3rem);
+  letter-spacing: -0.04em;
   margin-bottom: 16px;
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 0.95;
 
   @media (max-width: 640px) {
-    font-size: clamp(1.35rem, 6.5vw, 1.75rem);
+    font-size: clamp(1.85rem, 8.5vw, 2.25rem);
     margin-bottom: 8px;
+  }
+
+  @media (min-width: 1536px) {
+    font-size: 4rem;
   }
 `;
 
 export const SplitBandSubTitle = styled.h3`
   color: ${COLORS.gold};
   margin-bottom: 10px;
-  font-size: clamp(1.35rem, 2.3vw, 1.75rem);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(2.2rem, 4.8vw, 3rem);
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
 
   @media (max-width: 640px) {
-    font-size: 1.05rem;
+    font-size: clamp(1.85rem, 8.5vw, 2.25rem);
+  }
+
+  @media (min-width: 1536px) {
+    font-size: 4rem;
   }
 `;
 
 export const SplitBandLead = styled.p`
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 1.02rem;
+  margin: 0;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(0.8rem, 1.4vw, 0.92rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
 
   @media (max-width: 640px) {
-    font-size: 0.9rem;
-    line-height: 1.55;
+    font-size: 0.82rem;
+  }
+
+  @media (min-width: 1536px) {
+    font-size: 1rem;
   }
 `;
 
@@ -2201,163 +2070,5 @@ export const WhiteBtn = styled.a`
     &:hover {
       transform: none;
     }
-  }
-`;
-
-export const FaqList = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-
-  @media (max-width: 800px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-export const FaqItem = styled.details`
-  background: linear-gradient(145deg, #ffffff, #f8fcf9);
-  border: 1px solid rgba(0, 107, 63, 0.12);
-  border-radius: 14px;
-  border-left: 5px solid ${COLORS.gold};
-  padding: 20px 22px;
-  box-shadow: 0 10px 26px rgba(0, 56, 32, 0.07);
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-  min-width: 0;
-  max-width: 100%;
-
-  &[open] {
-    border-color: ${COLORS.line};
-    border-left-color: ${COLORS.red};
-    box-shadow: 0 18px 38px rgba(0, 56, 32, 0.13);
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(0, 56, 32, 0.08);
-    }
-  }
-
-  summary {
-    font-weight: 800;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    min-height: 44px;
-    list-style: none;
-
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &::after {
-      content: "+";
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(243, 112, 33, 0.12);
-      color: ${COLORS.gold};
-      font-weight: 800;
-      font-size: 1.15rem;
-      line-height: 1;
-      transition: transform 0.2s ease;
-    }
-  }
-
-  &[open] summary::after {
-    content: "–";
-    color: ${COLORS.red};
-  }
-
-  p {
-    margin-top: 8px;
-    color: ${COLORS.muted};
-    line-height: 1.55;
-  }
-
-  @media (max-width: 640px) {
-    padding: 16px 16px;
-
-    summary {
-      font-size: 0.92rem;
-      line-height: 1.35;
-    }
-
-    p {
-      font-size: 0.88rem;
-      overflow-wrap: anywhere;
-    }
-  }
-`;
-
-export const MoreLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  margin-top: 22px;
-  color: ${COLORS.red};
-  font-weight: 800;
-  text-decoration: none;
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid rgba(0, 107, 63, 0.2);
-  border-radius: 999px;
-  transition: color 0.2s ease, transform 0.2s ease, gap 0.2s ease;
-  gap: 4px;
-
-  &:hover {
-    color: ${COLORS.redDark};
-    transform: translateX(4px);
-  }
-
-  @media (max-width: 640px) {
-    margin-top: 16px;
-    font-size: 0.95rem;
-    width: 100%;
-    justify-content: center;
-  }
-`;
-
-export const LegalBand = styled.div`
-  background:
-    linear-gradient(90deg, rgba(243,112,33,0.08), transparent 24%, transparent 76%, rgba(0,107,63,0.08)),
-    #f5efe8;
-  padding-top: 28px;
-  padding-bottom: 56px;
-  ${contentPadX}
-
-  @media (max-width: 640px) {
-    padding-top: 20px;
-    padding-bottom: 40px;
-  }
-
-  @media (max-width: 380px) {
-    padding-top: 16px;
-    padding-bottom: 32px;
-  }
-`;
-
-export const LegalNote = styled.p`
-  ${contentWidth}
-  color: ${COLORS.muted};
-  font-size: 0.9rem;
-  line-height: 1.65;
-  padding: 20px 22px;
-  border-left: 4px solid ${COLORS.gold};
-  border-radius: 0 12px 12px 0;
-  background: rgba(255, 255, 255, 0.58);
-
-  @media (max-width: 640px) {
-    font-size: 0.84rem;
-    line-height: 1.55;
-    padding: 16px;
   }
 `;
