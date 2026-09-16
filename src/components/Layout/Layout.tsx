@@ -13,8 +13,11 @@ import { PageEnter } from "../Reveal/Reveal";
 import logo from "../../assets/vita-malt-logo.png";
 
 const TopBar = styled.header`
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1000;
   background: ${COLORS.white};
   border-bottom: 1px solid ${COLORS.line};
@@ -34,7 +37,7 @@ const TopBar = styled.header`
 const TopInner = styled.div`
   ${contentWidth}
   ${contentPadX}
-  height: 62px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -68,9 +71,9 @@ const LogoLink = styled(Link)`
   flex-shrink: 0;
 
   img {
-    height: 48px;
+    height: 52px;
     width: auto;
-    max-width: 140px;
+    max-width: 150px;
     object-fit: contain;
   }
 
@@ -85,15 +88,15 @@ const LogoLink = styled(Link)`
 const NavLinks = styled.nav<{ $open: boolean }>`
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 22px;
   flex: 1;
   justify-content: center;
 
   a {
     text-decoration: none;
     color: ${COLORS.ink};
-    font-size: 0.88rem;
-    font-weight: 700;
+    font-size: 1.05rem;
+    font-weight: 800;
     white-space: nowrap;
   }
 
@@ -144,6 +147,14 @@ const NavLinks = styled.nav<{ $open: boolean }>`
       align-items: center;
     }
   }
+
+  @media (min-width: 1536px) {
+    gap: 28px;
+
+    a {
+      font-size: 1.12rem;
+    }
+  }
 `;
 
 const Right = styled.div`
@@ -154,12 +165,12 @@ const Right = styled.div`
 `;
 
 const Ghost = styled.button`
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 4px;
   border: 1.5px solid ${COLORS.red};
   color: ${COLORS.red};
   font-weight: 800;
-  font-size: 0.84rem;
+  font-size: 0.95rem;
   cursor: pointer;
   background: transparent;
   transition:
@@ -175,12 +186,12 @@ const Ghost = styled.button`
 `;
 
 const Primary = styled.button`
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 4px;
   background: ${COLORS.red};
   color: ${COLORS.white};
   font-weight: 800;
-  font-size: 0.84rem;
+  font-size: 0.95rem;
   cursor: pointer;
   transition:
     background 0.2s ease,
@@ -232,7 +243,7 @@ const MobileAuth = styled.div`
 const Welcome = styled.span`
   font-weight: 700;
   color: ${COLORS.ink};
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -258,6 +269,19 @@ const Burger = styled.button`
 
   @media (max-width: 900px) {
     display: inline-flex;
+  }
+`;
+
+const HeaderSpacer = styled.div`
+  height: 72px;
+  flex-shrink: 0;
+
+  @media (max-width: 900px) {
+    height: 56px;
+  }
+
+  @media (max-width: 640px) {
+    height: 54px;
   }
 `;
 
@@ -503,6 +527,7 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </Right>
         </TopInner>
       </TopBar>
+      <HeaderSpacer />
 
       <Page>
         {isAdminRoute ? children : <PageEnter key={location.pathname}>{children}</PageEnter>}

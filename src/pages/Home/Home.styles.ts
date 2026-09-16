@@ -376,86 +376,227 @@ export const GhostBtn = styled.a`
 `;
 
 export const DateBar = styled.section`
-  background:
-    linear-gradient(90deg, rgba(243, 112, 33, 0.18), transparent 40%, transparent 60%, rgba(243, 112, 33, 0.12)),
-    ${COLORS.red};
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   color: ${COLORS.white};
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: "Montserrat", system-ui, sans-serif;
+  border-top: 4px solid ${COLORS.gold};
+  background:
+    radial-gradient(ellipse 42% 140% at 0% 50%, rgba(243, 112, 33, 0.32), transparent 62%),
+    radial-gradient(ellipse 40% 140% at 100% 50%, rgba(255, 196, 90, 0.14), transparent 64%),
+    linear-gradient(180deg, #0a7a4a 0%, ${COLORS.red} 46%, ${COLORS.redDark} 100%);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    height: 100%;
+  }
+
+  &::before {
+    left: -36px;
+    top: 0;
+    width: min(28vw, 280px);
+    transform: rotate(-11deg);
+    opacity: 0.7;
+    background:
+      linear-gradient(166deg, transparent 0 28%, #ffb138 29% 42%, transparent 43%),
+      linear-gradient(172deg, transparent 0 54%, ${COLORS.gold} 55% 68%, transparent 69%);
+    clip-path: polygon(0 8%, 100% 0, 86% 28%, 100% 48%, 70% 62%, 94% 86%, 0 100%);
+  }
+
+  &::after {
+    right: -40px;
+    bottom: 0;
+    width: min(26vw, 260px);
+    transform: rotate(10deg);
+    opacity: 0.65;
+    background:
+      linear-gradient(166deg, transparent 0 24%, #31a36d 25% 40%, transparent 41%),
+      linear-gradient(173deg, transparent 0 52%, #ffc65a 53% 66%, transparent 67%);
+    clip-path: polygon(18% 0, 100% 8%, 100% 100%, 0 92%, 22% 68%, 4% 48%, 28% 28%);
+  }
 `;
 
 export const DateInner = styled.div`
   ${contentWidth}
   ${contentPadX}
-  padding-top: 22px;
-  padding-bottom: 22px;
+  position: relative;
+  z-index: 1;
+  padding-top: 28px;
+  padding-bottom: 28px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
   text-align: center;
 
-  strong {
-    display: block;
-    color: ${COLORS.gold};
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    text-align: left;
   }
 
-  > div {
-    position: relative;
-    transition: transform 0.25s ease;
+  @media (max-width: 380px) {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
 
-    &:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      right: -8px;
-      top: 12%;
-      bottom: 12%;
-      width: 1px;
-      background: rgba(255, 255, 255, 0.18);
+  @media (min-width: 1536px) {
+    padding-top: 34px;
+    padding-bottom: 34px;
+    gap: 20px;
+  }
+`;
+
+export const DateItem = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 4px 18px;
+
+  &:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 18%;
+    bottom: 18%;
+    width: 2px;
+    border-radius: 99px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(243, 112, 33, 0.2) 18%,
+      ${COLORS.gold} 50%,
+      rgba(243, 112, 33, 0.2) 82%,
+      transparent 100%
+    );
+  }
+
+  strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    color: ${COLORS.gold};
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-bottom: 7px;
+
+    svg {
+      flex-shrink: 0;
+      font-size: 0.95rem;
     }
 
-    @media (hover: hover) {
-      &:hover {
-        transform: translateY(-2px);
-      }
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 36px;
+      height: 3px;
+      border-radius: 3px;
+      background: ${COLORS.gold};
+      transform: translateX(-50%) rotate(-1deg);
+    }
+  }
+
+  span {
+    color: #ffffff;
+    font-size: clamp(0.92rem, 1.35vw, 1.08rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+  }
+
+  @media (hover: hover) {
+    strong {
+      transition: color 0.2s ease;
+    }
+
+    &:hover strong {
+      color: ${COLORS.goldSoft};
     }
   }
 
   @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    text-align: left;
+    align-items: flex-start;
+    padding: 14px 4px 14px 14px;
+    gap: 6px;
 
-    strong {
-      font-size: 0.7rem;
-      margin-bottom: 2px;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
-    > div {
-      padding: 12px 14px;
-      background: rgba(0, 0, 0, 0.12);
-      border-radius: 4px;
-      font-size: 0.9rem;
-      line-height: 1.4;
+    &:not(:last-child)::after {
+      display: none;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 16px;
+      bottom: 16px;
+      width: 3px;
+      border-radius: 99px;
+      background: ${COLORS.gold};
+    }
+
+    strong {
+      justify-content: flex-start;
+      font-size: 0.68rem;
+      padding-bottom: 6px;
 
       &::after {
-        display: none;
+        left: 0;
+        transform: rotate(-1deg);
       }
+    }
+
+    span {
+      font-size: 0.92rem;
     }
   }
 
   @media (max-width: 380px) {
-    padding-top: 14px;
-    padding-bottom: 14px;
-    gap: 8px;
+    padding: 12px 4px 12px 12px;
 
-    > div {
-      padding: 10px 12px;
+    span {
       font-size: 0.86rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    padding: 6px 24px;
+    gap: 10px;
+
+    strong {
+      font-size: 0.8rem;
+
+      svg {
+        font-size: 1.05rem;
+      }
+
+      &::after {
+        width: 42px;
+        height: 4px;
+      }
+    }
+
+    span {
+      font-size: 1.12rem;
     }
   }
 `;
@@ -1533,11 +1674,10 @@ export const EnterWrap = styled.div`
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(380px, 0.9fr);
   gap: clamp(28px, 3.5vw, 52px);
-  align-items: stretch;
+  align-items: start;
 
   > * {
     min-width: 0;
-    height: 100%;
   }
 
   @media (max-width: 820px) {
@@ -1553,9 +1693,7 @@ export const EnterWrap = styled.div`
 export const EnterCopy = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
   min-width: 0;
-  min-height: 0;
 
   h2 {
     display: inline-block;
@@ -1615,12 +1753,10 @@ export const EnterCopy = styled.div`
 `;
 
 export const EnterProductArt = styled.figure`
-  flex: 1 1 0;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
   position: relative;
-  min-height: 0;
   margin: clamp(20px, 2.5vw, 30px) 0 0;
   overflow: visible;
 
@@ -1643,7 +1779,7 @@ export const EnterProductArt = styled.figure`
     display: block;
     width: 100%;
     max-width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: contain;
     object-position: left bottom;
   }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { FaCalendarAlt, FaTrophy, FaMapMarkerAlt } from "react-icons/fa";
 import Layout from "../../components/Layout/Layout";
 import OptionalAccountModal from "../../components/OptionalAccountModal";
 import Reveal from "../../components/Reveal/Reveal";
@@ -32,6 +33,7 @@ import {
   GhostBtn,
   DateBar,
   DateInner,
+  DateItem,
   Section,
   SectionInner,
   HowEnterSection,
@@ -212,18 +214,27 @@ const Home: React.FC = () => {
       <Reveal variant="up" delay={60}>
         <DateBar>
           <DateInner>
-            <div>
-              <strong>Campaign window</strong>
-              September 18 – November 20, 2026
-            </div>
-            <div>
-              <strong>Winner draw</strong>
-              Within 14 days after campaign close
-            </div>
-            <div>
-              <strong>Eligibility</strong>
-              18+ · Saint Vincent and the Grenadines
-            </div>
+            <DateItem>
+              <strong>
+                <FaCalendarAlt aria-hidden />
+                Campaign window
+              </strong>
+              <span>September 18 – November 20, 2026</span>
+            </DateItem>
+            <DateItem>
+              <strong>
+                <FaTrophy aria-hidden />
+                Winner draw
+              </strong>
+              <span>Within 14 days after campaign close</span>
+            </DateItem>
+            <DateItem>
+              <strong>
+                <FaMapMarkerAlt aria-hidden />
+                Eligibility
+              </strong>
+              <span>18+ · Saint Vincent and the Grenadines</span>
+            </DateItem>
           </DateInner>
         </DateBar>
       </Reveal>
@@ -240,7 +251,7 @@ const Home: React.FC = () => {
                   <span className="how">How to </span>
                   <span className="enter">enter</span>
                 </h2>
-                <p>Three steps from shelf to draw entry — submit one code or several codes together.</p>
+                <p>Three steps from shelf to draw entry. Submit one code or several codes together.</p>
               </HowEnterHead>
             </Reveal>
             <HowEnterGrid>
@@ -271,7 +282,7 @@ const Home: React.FC = () => {
                   <span className="badge">03</span>
                   <h3>Upload 4 codes for the Grand Prize</h3>
                   <p>
-                    Every 4 valid codes = 1 draw entry. Codes can be entered separately — no need to submit all four at
+                    Every 4 valid codes = 1 draw entry. Codes can be entered separately. No need to submit all four at
                     once.
                   </p>
                   <HowEnterIcon>
@@ -293,7 +304,7 @@ const Home: React.FC = () => {
                 <span className="how">How it </span>
                 <span className="works">works</span>
               </h2>
-              <p>Built for quick entry after a store purchase — from phone, no friction.</p>
+              <p>Built for quick entry after a store purchase, from phone, no friction.</p>
             </HowWorksHead>
           </Reveal>
           <HowWorksGrid>
@@ -342,7 +353,7 @@ const Home: React.FC = () => {
                 <h2>Submit your crown code</h2>
                 <p>
                   First-time entry asks for your full name, phone, optional email, date of birth, and 18+ confirmation.
-                  Name + phone keep your entries together — no login required.
+                  Name + phone keep your entries together. No login required.
                 </p>
                 <p>
                   After a successful first code you can optionally create a password so next time you only enter the
