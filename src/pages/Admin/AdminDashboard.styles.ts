@@ -537,6 +537,15 @@ export const Summary = styled.p`
   font-weight: 600;
 `;
 
+export const Check = styled.input.attrs({ type: "checkbox" })`
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: ${COLORS.red};
+  cursor: pointer;
+  vertical-align: middle;
+`;
+
 export const TableWrap = styled.div`
   overflow-x: auto;
   overflow-y: visible;

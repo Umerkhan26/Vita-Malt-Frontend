@@ -26,6 +26,7 @@ import { logout } from "../../redux/slices/auth";
 import { apiService } from "../../services/api";
 import { COLORS } from "../../constants/colors";
 import { parseCodesFromCsv } from "../../utils/parseCodesCsv";
+import { detectSocialPlatform } from "../../utils/socialEmbed";
 import * as S from "./AdminDashboard.styles";
 
 type View =
@@ -118,6 +119,7 @@ const AdminDashboard: React.FC = () => {
     danger?: boolean;
     onConfirm: () => Promise<void>;
   } | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const [overview, setOverview] = useState<Record<string, unknown> | null>(null);
   const [entrants, setEntrants] = useState<Record<string, unknown>[]>([]);
@@ -194,6 +196,10 @@ const AdminDashboard: React.FC = () => {
               : module === "prizes"
                 ? prizesTab
                 : toolsTab;
+
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [view, page, socialPage, contactPage, auditPage]);
 
   useEffect(() => {
     if (!auth.isLoggedIn || auth.role !== "admin") {
@@ -274,6 +280,77 @@ const AdminDashboard: React.FC = () => {
     onConfirm: () => Promise<void>;
   }) => setConfirmDlg(opts);
 
+  const selectableIds = (rows: Record<string, unknown>[]) =>
+    rows.filter((row) => row.role !== "admin").map((row) => String(row._id));
+
+  const pageSelected = (ids: string[]) => ids.length > 0 && ids.every((id) => selectedIds.includes(id));
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+  };
+
+  const togglePage = (ids: string[]) => {
+    setSelectedIds((cur) => {
+      if (ids.length > 0 && ids.every((id) => cur.includes(id))) {
+        return cur.filter((id) => !ids.includes(id));
+      }
+      return [...new Set([...cur, ...ids])];
+    });
+  };
+
+  const checkTh = (ids: string[]) => (
+    <th style={{ width: 28 }}>
+      <S.Check
+        checked={pageSelected(ids)}
+        onChange={() => togglePage(ids)}
+        aria-label="Select all on this page"
+      />
+    </th>
+  );
+
+  const checkTd = (id: string, disabled = false) => (
+    <td>
+      <S.Check
+        checked={selectedIds.includes(id)}
+        disabled={disabled}
+        onChange={() => toggleSelected(id)}
+        aria-label="Select row"
+      />
+    </td>
+  );
+
+  const bulkDeleteBtn = (
+    title: string,
+    message: string,
+    run: (ids: string[]) => Promise<unknown>,
+    after: () => Promise<void>
+  ) =>
+    selectedIds.length > 0 ? (
+      <S.Action
+        $danger
+        onClick={() =>
+          askConfirm({
+            title,
+            message: `${message} ${selectedIds.length} selected. This cannot be undone.`,
+            confirmLabel: `Delete ${selectedIds.length}`,
+            danger: true,
+            onConfirm: async () => {
+              const ids = [...selectedIds];
+              setConfirmDlg(null);
+              await withBusy("Deleting…", async () => {
+                const result = (await run(ids)) as { deleted?: number };
+                setSelectedIds([]);
+                await after();
+                toast.success(`Deleted ${result?.deleted ?? ids.length}`);
+              });
+            },
+          })
+        }
+      >
+        <FaTrash /> Delete {selectedIds.length} selected
+      </S.Action>
+    ) : null;
+
   const renderTableShimmer = (
     cols: { label: string; width?: string; kind?: "text" | "badge" | "num" | "rank" | "actions" | "action" | "code" }[],
     rows = 10
@@ -322,6 +399,7 @@ const AdminDashboard: React.FC = () => {
 
   const usersShimmer = () =>
     renderTableShimmer([
+      { label: "Select" },
       { label: "Name", width: "52%" },
       { label: "Phone", width: "78%" },
       { label: "Email", width: "85%" },
@@ -332,6 +410,7 @@ const AdminDashboard: React.FC = () => {
 
   const leaderboardShimmer = () =>
     renderTableShimmer([
+      { label: "Select" },
       { label: "Rank", kind: "rank" },
       { label: "Name", width: "55%" },
       { label: "Phone", width: "78%" },
@@ -340,7 +419,7 @@ const AdminDashboard: React.FC = () => {
       { label: "Tickets", kind: "num" },
       { label: "Next ticket", width: "40px" },
       { label: "Status", kind: "badge" },
-      { label: "View", kind: "action" },
+      { label: "Actions", kind: "actions" },
     ]);
 
   const codesShimmer = () =>
@@ -387,6 +466,7 @@ const AdminDashboard: React.FC = () => {
 
   const auditShimmer = () =>
     renderTableShimmer([
+      { label: "Select" },
       { label: "Event", width: "50%" },
       { label: "Actor", width: "50%" },
       { label: "Role", kind: "badge" },
@@ -395,6 +475,18 @@ const AdminDashboard: React.FC = () => {
       { label: "Tier", kind: "badge" },
       { label: "Detail", width: "70%" },
       { label: "When", width: "55%" },
+      { label: "Actions", kind: "action" },
+    ]);
+
+  const contactShimmer = () =>
+    renderTableShimmer([
+      { label: "Select" },
+      { label: "Name", width: "50%" },
+      { label: "Email", width: "70%" },
+      { label: "Message", width: "85%" },
+      { label: "Status", kind: "badge" },
+      { label: "When", width: "55%" },
+      { label: "Actions", kind: "actions" },
     ]);
 
   const loadOverview = useCallback(async () => {
@@ -1072,6 +1164,12 @@ const AdminDashboard: React.FC = () => {
                 </S.Select>
                 <S.ToolbarActions>
                   <S.Action onClick={() => setPage(1)}>Search</S.Action>
+                  {bulkDeleteBtn(
+                    "Delete selected users?",
+                    "Used codes stay redeemed.",
+                    (ids) => apiService.adminBulkDeleteEntrants(ids),
+                    loadEntrants
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(usersMeta, setPage, "people")}
@@ -1082,6 +1180,7 @@ const AdminDashboard: React.FC = () => {
                 <S.Table>
                   <thead>
                     <tr>
+                      {checkTh(selectableIds(entrants))}
                       <th>Name</th>
                       <th>Phone</th>
                       <th>Email</th>
@@ -1093,7 +1192,7 @@ const AdminDashboard: React.FC = () => {
                   <tbody>
                     {entrants.length === 0 ? (
                       <tr>
-                        <td colSpan={6}>
+                        <td colSpan={7}>
                           <S.Empty>
                             <strong>No users found</strong>
                             Try another search or clear filters.
@@ -1103,6 +1202,7 @@ const AdminDashboard: React.FC = () => {
                     ) : (
                       entrants.map((e) => (
                         <tr key={String(e._id)}>
+                          {checkTd(String(e._id), e.role === "admin")}
                           <td>
                             <strong>{String(e.fullName)}</strong>
                           </td>
@@ -1270,6 +1370,12 @@ const AdminDashboard: React.FC = () => {
                 </S.Select>
                 <S.ToolbarActions>
                   <S.Action onClick={() => setPage(1)}>Apply</S.Action>
+                  {bulkDeleteBtn(
+                    "Delete selected users?",
+                    "Used codes stay redeemed.",
+                    (ids) => apiService.adminBulkDeleteEntrants(ids),
+                    loadEntrants
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(usersMeta, setPage, "people")}
@@ -1280,6 +1386,7 @@ const AdminDashboard: React.FC = () => {
                 <S.Table>
                   <thead>
                     <tr>
+                      {checkTh(selectableIds(entrants))}
                       <th>Rank</th>
                       <th>Name</th>
                       <th>Phone</th>
@@ -1288,13 +1395,13 @@ const AdminDashboard: React.FC = () => {
                       <th>Tickets</th>
                       <th>Next ticket</th>
                       <th>Status</th>
-                      <th>View</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {entrants.length === 0 ? (
                       <tr>
-                        <td colSpan={9}>
+                        <td colSpan={11}>
                           <S.Empty>
                             <strong>No matches</strong>
                             Clear filters or wait for code submissions.
@@ -1304,6 +1411,7 @@ const AdminDashboard: React.FC = () => {
                     ) : (
                       entrants.map((e) => (
                         <tr key={String(e._id)}>
+                          {checkTd(String(e._id), e.role === "admin")}
                           <td>
                             <S.Rank $top={Number(e.rank) > 0 && Number(e.rank) <= 3}>
                               {String(e.rank ?? "—")}
@@ -1335,13 +1443,38 @@ const AdminDashboard: React.FC = () => {
                             </S.Badge>
                           </td>
                           <td>
-                            <S.IconBtn
-                              $tone="view"
-                              title="View"
-                              onClick={() => navigate(`/admin/entrants/${String(e._id)}`)}
-                            >
-                              <FaEye />
-                            </S.IconBtn>
+                            <S.Actions>
+                              <S.IconBtn
+                                $tone="view"
+                                title="View"
+                                onClick={() => navigate(`/admin/entrants/${String(e._id)}`)}
+                              >
+                                <FaEye />
+                              </S.IconBtn>
+                              {e.role !== "admin" && (
+                                <S.IconBtn
+                                  $tone="delete"
+                                  title="Delete"
+                                  onClick={() =>
+                                    askConfirm({
+                                      title: "Delete user?",
+                                      message: "Used codes stay redeemed. This cannot be undone.",
+                                      confirmLabel: "Delete",
+                                      danger: true,
+                                      onConfirm: async () => {
+                                        setConfirmDlg(null);
+                                        await withBusy("Deleting…", async () => {
+                                          await apiService.adminDeleteEntrant(String(e._id));
+                                          await loadEntrants();
+                                        });
+                                      },
+                                    })
+                                  }
+                                >
+                                  <FaTrash />
+                                </S.IconBtn>
+                              )}
+                            </S.Actions>
                           </td>
                         </tr>
                       ))
@@ -2057,6 +2190,12 @@ const AdminDashboard: React.FC = () => {
                 </S.Select>
                 <S.ToolbarActions>
                   <S.Action onClick={() => setSocialPage(1)}>Search</S.Action>
+                  {bulkDeleteBtn(
+                    "Remove selected posts?",
+                    "These embeds will be removed from the public Social page.",
+                    (ids) => apiService.adminBulkDeleteSocial(ids),
+                    loadSocial
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(socialMeta, setSocialPage, "posts")}
@@ -2070,6 +2209,7 @@ const AdminDashboard: React.FC = () => {
                   <S.Table>
                     <thead>
                       <tr>
+                        {checkTh(selectableIds(socialPosts))}
                         <th>Post</th>
                         <th>Caption</th>
                         <th></th>
@@ -2078,6 +2218,7 @@ const AdminDashboard: React.FC = () => {
                     <tbody>
                       {socialPosts.map((p) => (
                         <tr key={String(p._id)}>
+                          {checkTd(String(p._id))}
                           <td style={{ maxWidth: 320, wordBreak: "break-all" }}>
                             <S.Muted>{String(p.embedUrl)}</S.Muted>
                             {p.platform ? <S.CellMeta>{String(p.platform)}</S.CellMeta> : null}
@@ -2145,37 +2286,95 @@ const AdminDashboard: React.FC = () => {
                 </S.Select>
                 <S.ToolbarActions>
                   <S.Action onClick={() => setContactPage(1)}>Search</S.Action>
+                  {bulkDeleteBtn(
+                    "Delete selected messages?",
+                    "These contact messages will be removed.",
+                    (ids) => apiService.adminBulkDeleteContact(ids),
+                    loadContact
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(contactMeta, setContactPage, "messages")}
-              {messages.length === 0 ? (
+              {loading ? (
+                contactShimmer()
+              ) : messages.length === 0 ? (
                 <S.Empty>
                   <strong>Inbox empty</strong>
                   New contact form submissions will land here.
                 </S.Empty>
               ) : (
-                messages.map((m) => (
-                  <S.MsgCard key={String(m._id)} $unread={!m.isRead}>
-                    <header>
-                      <strong>{String(m.name)}</strong>
-                      <S.Badge $tone={m.isRead ? "neutral" : "warn"}>{m.isRead ? "Read" : "New"}</S.Badge>
-                      <span style={{ color: COLORS.muted, fontSize: "0.85rem" }}>{String(m.email)}</span>
-                      <time>{fmtWhen(m.createdAt)}</time>
-                    </header>
-                    <p>{String(m.message)}</p>
-                    {!m.isRead && (
-                      <S.Action
-                        $ghost
-                        style={{ marginTop: 8 }}
-                        onClick={() =>
-                          apiService.adminMarkContactRead(String(m._id)).then(loadContact)
-                        }
-                      >
-                        Mark read
-                      </S.Action>
-                    )}
-                  </S.MsgCard>
-                ))
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
+                      <tr>
+                        {checkTh(selectableIds(messages))}
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                        <th>When</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {messages.map((m) => (
+                        <tr key={String(m._id)}>
+                          {checkTd(String(m._id))}
+                          <td>
+                            <strong>{String(m.name)}</strong>
+                          </td>
+                          <td>
+                            <S.Muted>{String(m.email || "—")}</S.Muted>
+                          </td>
+                          <td style={{ whiteSpace: "normal", maxWidth: 360 }}>
+                            {String(m.message)}
+                          </td>
+                          <td>
+                            <S.Badge $tone={m.isRead ? "neutral" : "warn"}>{m.isRead ? "Read" : "New"}</S.Badge>
+                          </td>
+                          <td>
+                            <S.Muted>{fmtWhen(m.createdAt)}</S.Muted>
+                          </td>
+                          <td>
+                            <S.Actions>
+                              {!m.isRead && (
+                                <S.Action
+                                  $ghost
+                                  onClick={() =>
+                                    apiService.adminMarkContactRead(String(m._id)).then(loadContact)
+                                  }
+                                >
+                                  Mark read
+                                </S.Action>
+                              )}
+                              <S.IconBtn
+                                $tone="delete"
+                                title="Delete"
+                                onClick={() =>
+                                  askConfirm({
+                                    title: "Delete message?",
+                                    message: "This contact message will be removed.",
+                                    confirmLabel: "Delete",
+                                    danger: true,
+                                    onConfirm: async () => {
+                                      setConfirmDlg(null);
+                                      await withBusy("Deleting…", async () => {
+                                        await apiService.adminDeleteContact(String(m._id));
+                                        await loadContact();
+                                      });
+                                    },
+                                  })
+                                }
+                              >
+                                <FaTrash />
+                              </S.IconBtn>
+                            </S.Actions>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -2225,6 +2424,12 @@ const AdminDashboard: React.FC = () => {
                 </S.Select>
                 <S.ToolbarActions>
                   <S.Action onClick={() => setAuditPage(1)}>Search</S.Action>
+                  {bulkDeleteBtn(
+                    "Delete selected events?",
+                    "These audit log rows will be removed.",
+                    (ids) => apiService.adminBulkDeleteAudit(ids),
+                    loadAudit
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(auditMeta, setAuditPage, "events")}
@@ -2235,6 +2440,7 @@ const AdminDashboard: React.FC = () => {
                 <S.Table>
                   <thead>
                     <tr>
+                      {checkTh(selectableIds(audit))}
                       <th>Event</th>
                       <th>Actor</th>
                       <th>Role</th>
@@ -2243,12 +2449,13 @@ const AdminDashboard: React.FC = () => {
                       <th>Tier</th>
                       <th>Detail</th>
                       <th>When</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     {audit.length === 0 ? (
                       <tr>
-                        <td colSpan={8}>
+                        <td colSpan={10}>
                           <S.Empty>
                             <strong>No audit events</strong>
                             Admin actions will appear here.
@@ -2258,6 +2465,7 @@ const AdminDashboard: React.FC = () => {
                     ) : (
                       audit.map((a) => (
                         <tr key={String(a._id)}>
+                          {checkTd(String(a._id))}
                           <td>
                             <strong>{String(a.eventLabel || a.action)}</strong>
                           </td>
@@ -2296,6 +2504,29 @@ const AdminDashboard: React.FC = () => {
                           </td>
                           <td>
                             <S.Muted>{fmtWhen(a.createdAt)}</S.Muted>
+                          </td>
+                          <td>
+                            <S.IconBtn
+                              $tone="delete"
+                              title="Delete"
+                              onClick={() =>
+                                askConfirm({
+                                  title: "Delete event?",
+                                  message: "This audit log row will be removed.",
+                                  confirmLabel: "Delete",
+                                  danger: true,
+                                  onConfirm: async () => {
+                                    setConfirmDlg(null);
+                                    await withBusy("Deleting…", async () => {
+                                      await apiService.adminDeleteAudit(String(a._id));
+                                      await loadAudit();
+                                    });
+                                  },
+                                })
+                              }
+                            >
+                              <FaTrash />
+                            </S.IconBtn>
                           </td>
                         </tr>
                       ))
@@ -2458,11 +2689,13 @@ const AdminDashboard: React.FC = () => {
         <S.ModalBackdrop onClick={() => setModal(null)}>
           <S.ModalCard onClick={(e) => e.stopPropagation()}>
             <h2>Add post</h2>
-            <p className="sub">Instagram / Facebook embed URL for the public Social page.</p>
+            <p className="sub">
+              Paste a public post URL (Share → Copy link is fine, including facebook.com/share/p/…). It appears on the site Social feed.
+            </p>
             <S.FormGrid style={{ gridTemplateColumns: "1fr" }}>
               <S.Input
                 style={{ width: "100%", flex: "1 1 auto", minWidth: 0 }}
-                placeholder="Post URL (Instagram / Facebook)"
+                placeholder="https://www.instagram.com/p/…"
                 value={socialUrl}
                 onChange={(e) => setSocialUrl(e.target.value)}
               />
@@ -2473,6 +2706,11 @@ const AdminDashboard: React.FC = () => {
                 onChange={(e) => setSocialCaption(e.target.value)}
               />
             </S.FormGrid>
+            {socialUrl.trim() ? (
+              <p className="sub" style={{ marginTop: 8 }}>
+                Detected: {detectSocialPlatform(socialUrl)}
+              </p>
+            ) : null}
             <S.ModalActions>
               <S.Action $ghost onClick={() => setModal(null)}>
                 Cancel
@@ -2484,7 +2722,7 @@ const AdminDashboard: React.FC = () => {
                     return;
                   }
                   const payload = {
-                    platform: "instagram",
+                    platform: detectSocialPlatform(socialUrl),
                     embedUrl: socialUrl.trim(),
                     caption: socialCaption.trim(),
                   };

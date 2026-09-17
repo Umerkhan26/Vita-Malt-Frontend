@@ -432,6 +432,7 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <a href="/#how-to-enter">How to enter</a>
             <a href="/#how-it-works">How it works</a>
             <NavLink to="/winners">Winners</NavLink>
+            <NavLink to="/social">Social</NavLink>
             <NavLink to="/dashboard">My entries</NavLink>
             <MobileAuth onClick={(e) => e.stopPropagation()}>
               {auth.isLoggedIn ? (

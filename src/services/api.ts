@@ -68,6 +68,8 @@ export const apiService = {
   adminBlock: (id: string) => request(`/admin/entrants/${id}/block`, { method: "PATCH" }, true),
   adminUnblock: (id: string) => request(`/admin/entrants/${id}/unblock`, { method: "PATCH" }, true),
   adminDeleteEntrant: (id: string) => request(`/admin/entrants/${id}`, { method: "DELETE" }, true),
+  adminBulkDeleteEntrants: (ids: string[]) =>
+    request("/admin/entrants/bulk-delete", { method: "POST", body: JSON.stringify({ ids }) }, true),
   adminImportCodes: (csv: string, batch?: string) =>
     request("/admin/codes/import", { method: "POST", body: JSON.stringify({ csv, batch }) }, true),
   adminCodeStats: () => request("/admin/codes/stats", {}, true),
@@ -121,6 +123,8 @@ export const apiService = {
   adminCreateSocial: (body: Record<string, unknown>) =>
     request("/admin/social", { method: "POST", body: JSON.stringify(body) }, true),
   adminDeleteSocial: (id: string) => request(`/admin/social/${id}`, { method: "DELETE" }, true),
+  adminBulkDeleteSocial: (ids: string[]) =>
+    request("/admin/social/bulk-delete", { method: "POST", body: JSON.stringify({ ids }) }, true),
   adminOverview: () => request("/admin/overview", {}, true),
   adminAudit: (page = 1, search = "", limit = 100, actorType = "") =>
     request(
@@ -140,6 +144,12 @@ export const apiService = {
       true
     ),
   adminMarkContactRead: (id: string) => request(`/admin/contact/${id}/read`, { method: "PATCH" }, true),
+  adminDeleteContact: (id: string) => request(`/admin/contact/${id}`, { method: "DELETE" }, true),
+  adminBulkDeleteContact: (ids: string[]) =>
+    request("/admin/contact/bulk-delete", { method: "POST", body: JSON.stringify({ ids }) }, true),
+  adminDeleteAudit: (id: string) => request(`/admin/audit/${id}`, { method: "DELETE" }, true),
+  adminBulkDeleteAudit: (ids: string[]) =>
+    request("/admin/audit/bulk-delete", { method: "POST", body: JSON.stringify({ ids }) }, true),
   exportEntriesUrl: () => `${API_URL}/admin/export/entries`,
   exportWinnersUrl: () => `${API_URL}/admin/export/winners`,
   exportEntrantsUrl: () => `${API_URL}/admin/export/entrants`,
