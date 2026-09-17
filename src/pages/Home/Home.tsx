@@ -19,7 +19,7 @@ import howWorksBg from "../../assets/how-works-bg.jpg";
 import howWorksPurchase from "../../assets/how-works-purchase.webp";
 import howWorksUncap from "../../assets/how-works-uncap.webp";
 import howWorksRegister from "../../assets/how-works-register.webp";
-import wetBottles from "../../assets/vita-malt-wet-bottles.webp";
+import classicBottle from "../../assets/vita-malt-classic-bottle.webp";
 import {
   Hero,
   HeroImage,
@@ -52,6 +52,7 @@ import {
   EnterWrap,
   EnterCopy,
   EnterProductArt,
+  ClassicBottleArt,
   EnterCard,
   Label,
   Input,
@@ -442,10 +443,9 @@ const Home: React.FC = () => {
                   official master list.
                 </p>
                 <EnterProductArt>
-                  <img
-                    src={wetBottles}
-                    alt="Vita Malt Classic, Ginger, Ginseng, and Coconut and Hibiscus bottles"
-                  />
+                  <ClassicBottleArt>
+                    <img src={classicBottle} alt="Vita Malt Classic bottle" />
+                  </ClassicBottleArt>
                 </EnterProductArt>
               </EnterCopy>
             </Reveal>

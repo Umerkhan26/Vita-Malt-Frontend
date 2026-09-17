@@ -1827,6 +1827,7 @@ export const EnterWrap = styled.div`
   @media (max-width: 820px) {
     grid-template-columns: 1fr;
     gap: 28px;
+    align-items: start;
   }
 
   @media (max-width: 480px) {
@@ -1838,6 +1839,8 @@ export const EnterCopy = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: auto;
+  justify-content: flex-start;
 
   h2 {
     display: inline-block;
@@ -1898,16 +1901,18 @@ export const EnterCopy = styled.div`
 
 export const EnterProductArt = styled.figure`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-start;
   align-self: flex-start;
   position: relative;
   width: 100%;
   max-width: 42rem;
-  margin: clamp(20px, 2.5vw, 30px) 0 0;
+  margin-top: 0;
+  margin-bottom: 0;
   margin-left: 0;
   margin-right: auto;
   overflow: visible;
+  padding-bottom: 2px;
 
   &::after {
     content: "";
@@ -1921,38 +1926,39 @@ export const EnterProductArt = styled.figure`
     background: radial-gradient(ellipse, rgba(0, 53, 31, 0.2) 0%, rgba(0, 53, 31, 0) 72%);
     filter: blur(4px);
   }
+`;
+
+export const ClassicBottleArt = styled.div`
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: min(170px, 23vw);
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
 
   img {
-    position: relative;
-    z-index: 1;
     display: block;
     width: 100%;
-    max-width: 100%;
     height: auto;
-    margin: 0;
+    max-width: 100%;
     object-fit: contain;
-    object-position: left bottom;
+    object-position: left center;
+    transform: scale(0.92);
+    transform-origin: left center;
   }
 
   @media (max-width: 820px) {
-    flex: none;
-    justify-content: flex-start;
-    width: 100%;
-    max-width: 42rem;
+    width: min(180px, 50vw);
+    justify-content: center;
+    margin: 8px 0 6px;
 
     img {
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      object-position: left bottom;
-    }
-  }
-
-  @media (max-width: 640px) {
-    margin-top: 16px;
-
-    img {
-      width: 100%;
+      object-position: center;
+      transform-origin: center;
     }
   }
 `;
