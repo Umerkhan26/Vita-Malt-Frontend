@@ -199,7 +199,7 @@ const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     setSelectedIds([]);
-  }, [view, page, socialPage, contactPage, auditPage]);
+  }, [view, page, socialPage, contactPage, auditPage, subPage, entriesPage]);
 
   useEffect(() => {
     if (!auth.isLoggedIn || auth.role !== "admin") {
@@ -1522,6 +1522,12 @@ const AdminDashboard: React.FC = () => {
                   <S.Action $ghost onClick={() => download("entries")}>
                     <FaDownload /> Export CSV
                   </S.Action>
+                  {bulkDeleteBtn(
+                    "Delete selected tickets?",
+                    "These tickets will leave the draw pool. Winning tickets are kept. Redeemed codes stay used.",
+                    (ids) => apiService.adminBulkDeleteDrawEntries(ids),
+                    loadDrawEntries
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(entriesMeta, setEntriesPage, "tickets")}
@@ -1532,16 +1538,18 @@ const AdminDashboard: React.FC = () => {
                 <S.Table>
                   <thead>
                     <tr>
+                      {checkTh(selectableIds(drawEntries.filter((row) => !row.isWinner)))}
                       <th>Ticket ID</th>
                       <th>Person</th>
                       <th>Status</th>
                       <th>Created</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     {drawEntries.length === 0 ? (
                       <tr>
-                        <td colSpan={4}>
+                        <td colSpan={6}>
                           <S.Empty>
                             <strong>No tickets yet</strong>
                             Tickets appear once someone banks 4 valid codes.
@@ -1557,6 +1565,7 @@ const AdminDashboard: React.FC = () => {
                         } | null;
                         return (
                           <tr key={String(e._id)}>
+                            {checkTd(String(e._id), Boolean(e.isWinner))}
                             <td>
                               <code>…{String(e._id).slice(-8)}</code>
                             </td>
@@ -1571,6 +1580,31 @@ const AdminDashboard: React.FC = () => {
                             </td>
                             <td>
                               <S.Muted>{fmtWhen(e.createdAt)}</S.Muted>
+                            </td>
+                            <td>
+                              {!e.isWinner ? (
+                                <S.IconBtn
+                                  $tone="delete"
+                                  title="Delete"
+                                  onClick={() =>
+                                    askConfirm({
+                                      title: "Delete ticket?",
+                                      message: "This ticket will leave the draw pool. Redeemed codes stay used.",
+                                      confirmLabel: "Delete",
+                                      danger: true,
+                                      onConfirm: async () => {
+                                        setConfirmDlg(null);
+                                        await withBusy("Deleting…", async () => {
+                                          await apiService.adminDeleteDrawEntry(String(e._id));
+                                          await loadDrawEntries();
+                                        });
+                                      },
+                                    })
+                                  }
+                                >
+                                  <FaTrash />
+                                </S.IconBtn>
+                              ) : null}
                             </td>
                           </tr>
                         );
@@ -1617,6 +1651,12 @@ const AdminDashboard: React.FC = () => {
                 </S.Select>
                 <S.ToolbarActions>
                   <S.Action onClick={() => setSubPage(1)}>Search</S.Action>
+                  {bulkDeleteBtn(
+                    "Delete selected attempts?",
+                    "These log rows will be removed. Redeemed codes stay used.",
+                    (ids) => apiService.adminBulkDeleteSubmissions(ids),
+                    loadSubmissions
+                  )}
                 </S.ToolbarActions>
               </S.Toolbar>
               {renderPager(subMeta, setSubPage, "attempts")}
@@ -1627,17 +1667,19 @@ const AdminDashboard: React.FC = () => {
                 <S.Table>
                   <thead>
                     <tr>
+                      {checkTh(selectableIds(submissions))}
                       <th>Code</th>
                       <th>Person</th>
                       <th>Result</th>
                       <th>Note</th>
                       <th>When</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     {submissions.length === 0 ? (
                       <tr>
-                        <td colSpan={5}>
+                        <td colSpan={7}>
                           <S.Empty>
                             <strong>No attempts yet</strong>
                             Submissions will show up as codes are entered.
@@ -1649,6 +1691,7 @@ const AdminDashboard: React.FC = () => {
                         const entrant = s.entrant as { fullName?: string; phone?: string } | null;
                         return (
                           <tr key={String(s._id)}>
+                            {checkTd(String(s._id))}
                             <td>
                               <code>{String(s.codeAttempted)}</code>
                             </td>
@@ -1664,6 +1707,29 @@ const AdminDashboard: React.FC = () => {
                             </td>
                             <td>
                               <S.Muted>{fmtWhen(s.createdAt)}</S.Muted>
+                            </td>
+                            <td>
+                              <S.IconBtn
+                                $tone="delete"
+                                title="Delete"
+                                onClick={() =>
+                                  askConfirm({
+                                    title: "Delete attempt?",
+                                    message: "This log row will be removed. Redeemed codes stay used.",
+                                    confirmLabel: "Delete",
+                                    danger: true,
+                                    onConfirm: async () => {
+                                      setConfirmDlg(null);
+                                      await withBusy("Deleting…", async () => {
+                                        await apiService.adminDeleteSubmission(String(s._id));
+                                        await loadSubmissions();
+                                      });
+                                    },
+                                  })
+                                }
+                              >
+                                <FaTrash />
+                              </S.IconBtn>
                             </td>
                           </tr>
                         );

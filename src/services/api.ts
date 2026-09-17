@@ -85,6 +85,9 @@ export const apiService = {
       {},
       true
     ),
+  adminDeleteSubmission: (id: string) => request(`/admin/submissions/${id}`, { method: "DELETE" }, true),
+  adminBulkDeleteSubmissions: (ids: string[]) =>
+    request("/admin/submissions/bulk-delete", { method: "POST", body: JSON.stringify({ ids }) }, true),
   adminFlagged: (page = 1, search = "", kind = "", limit = 100) =>
     request(
       `/admin/codes/flagged?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}${
@@ -143,6 +146,9 @@ export const apiService = {
       {},
       true
     ),
+  adminDeleteDrawEntry: (id: string) => request(`/admin/draw/entries/${id}`, { method: "DELETE" }, true),
+  adminBulkDeleteDrawEntries: (ids: string[]) =>
+    request("/admin/draw/entries/bulk-delete", { method: "POST", body: JSON.stringify({ ids }) }, true),
   adminMarkContactRead: (id: string) => request(`/admin/contact/${id}/read`, { method: "PATCH" }, true),
   adminDeleteContact: (id: string) => request(`/admin/contact/${id}`, { method: "DELETE" }, true),
   adminBulkDeleteContact: (ids: string[]) =>
