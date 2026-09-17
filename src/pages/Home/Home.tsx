@@ -94,23 +94,34 @@ const Home: React.FC = () => {
     entrant: { _id: string; email?: string };
   } | null>(null);
   const [showAccount, setShowAccount] = useState(false);
-  const [submissionProgress, setSubmissionProgress] = useState<{ current: number; total: number } | null>(null);
+  const [submissionProgress, setSubmissionProgress] = useState<{
+    current: number;
+    total: number;
+  } | null>(null);
 
   const filledCodeCount = codes.filter((value) => value.trim()).length;
 
   const updateCode = (index: number, value: string) => {
-    setCodes((current) => current.map((code, codeIndex) => (codeIndex === index ? value.toUpperCase() : code)));
+    setCodes((current) =>
+      current.map((code, codeIndex) =>
+        codeIndex === index ? value.toUpperCase() : code,
+      ),
+    );
   };
 
   const increaseCodeCount = () => setCodes((current) => [...current, ""]);
 
   const decreaseCodeCount = () => {
-    setCodes((current) => (current.length === 1 ? current : current.slice(0, -1)));
+    setCodes((current) =>
+      current.length === 1 ? current : current.slice(0, -1),
+    );
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const submittedCodes = codes.map((value) => value.trim().toUpperCase()).filter(Boolean);
+    const submittedCodes = codes
+      .map((value) => value.trim().toUpperCase())
+      .filter(Boolean);
     if (!submittedCodes.length) {
       toast.error("Enter at least one crown code");
       return;
@@ -128,7 +139,10 @@ const Home: React.FC = () => {
 
     for (let index = 0; index < submittedCodes.length; index += 1) {
       const submittedCode = submittedCodes[index];
-      setSubmissionProgress({ current: index + 1, total: submittedCodes.length });
+      setSubmissionProgress({
+        current: index + 1,
+        total: submittedCodes.length,
+      });
       const payload: Record<string, unknown> = { code: submittedCode };
       if (!auth.isLoggedIn) {
         payload.fullName = fullName;
@@ -139,7 +153,9 @@ const Home: React.FC = () => {
       }
 
       try {
-        const data = (await apiService.submitCode(payload)) as NonNullable<typeof result>;
+        const data = (await apiService.submitCode(payload)) as NonNullable<
+          typeof result
+        >;
         latestData = data;
         acceptedCount += 1;
       } catch (error) {
@@ -164,26 +180,31 @@ const Home: React.FC = () => {
       }
       trackEvent("submit_success", {
         codeCount: acceptedCount,
-        createdDrawEntry: (latestData as { createdDrawEntry?: boolean }).createdDrawEntry,
+        createdDrawEntry: (latestData as { createdDrawEntry?: boolean })
+          .createdDrawEntry,
       });
       if (latestData.promptCreateAccount) {
-        document.getElementById("enter")?.scrollIntoView({ behavior: "auto", block: "start" });
+        document
+          .getElementById("enter")
+          ?.scrollIntoView({ behavior: "auto", block: "start" });
         setShowAccount(true);
       }
     }
 
     if (!failedCodes.length) {
-      toast.success(`${acceptedCount} code${acceptedCount === 1 ? "" : "s"} accepted`);
+      toast.success(
+        `${acceptedCount} code${acceptedCount === 1 ? "" : "s"} accepted`,
+      );
     } else if (acceptedCount) {
       toast.warning(
-        `${acceptedCount} accepted, ${failedCodes.length} failed. Failed codes remain in the form.`
+        `${acceptedCount} accepted, ${failedCodes.length} failed. Failed codes remain in the form.`,
       );
     } else {
       trackEvent("submit_fail");
       toast.error(
         failedCodes.length === 1
           ? failedCodes[0].message
-          : `All ${failedCodes.length} codes failed. Please review and try again.`
+          : `All ${failedCodes.length} codes failed. Please review and try again.`,
       );
     }
 
@@ -254,7 +275,10 @@ const Home: React.FC = () => {
                   <span className="how">How to </span>
                   <span className="enter">enter</span>
                 </h2>
-                <p>Three steps from shelf to entry. Submit one code or several codes together.</p>
+                <p>
+                  Three steps from shelf to entry. Submit one code or several
+                  codes together.
+                </p>
               </HowEnterHead>
             </Reveal>
             <HowEnterGrid>
@@ -262,12 +286,24 @@ const Home: React.FC = () => {
                 <HowEnterCard>
                   <span className="badge">01</span>
                   <h3>Buy Vita Malt</h3>
+
+                  {/* <p>
+                    Pick up participating Ginger, Classic, Ginseng, or Coconut
+                    Hibiscus during the promotion period.
+                  </p> */}
+
                   <p>
-                    Pick up participating Ginger, Classic, Ginseng, or Coconut Hibiscus during the promotion period.
+                    Pick up participating Classic during the promotion period.
                   </p>
+
                   <HowEnterIcon>
                     <span className="icon-cluster">
-                      <img className="cart" src={stepIconCart} alt="" aria-hidden />
+                      <img
+                        className="cart"
+                        src={stepIconCart}
+                        alt=""
+                        aria-hidden
+                      />
                     </span>
                   </HowEnterIcon>
                 </HowEnterCard>
@@ -279,7 +315,12 @@ const Home: React.FC = () => {
                   <p>Find either an Instant Win or an alphanumeric code.</p>
                   <HowEnterIcon>
                     <span className="icon-cluster">
-                      <img className="crown" src={stepIconCrown} alt="" aria-hidden />
+                      <img
+                        className="crown"
+                        src={stepIconCrown}
+                        alt=""
+                        aria-hidden
+                      />
                     </span>
                   </HowEnterIcon>
                 </HowEnterCard>
@@ -289,13 +330,24 @@ const Home: React.FC = () => {
                   <span className="badge">03</span>
                   <h3>Submit your codes</h3>
                   <p>
-                    Every 4 validated codes = 1 entry into the Grand Prize draw and Secondary Prizes. Codes can be
-                    submitted separately. No need to submit all four at once.
+                    Every 4 validated codes = 1 entry into the Grand Prize draw
+                    and Secondary Prizes. Codes can be submitted separately. No
+                    need to submit all four at once.
                   </p>
                   <HowEnterIcon>
                     <span className="icon-cluster">
-                      <img className="ticket" src={stepIconTicket} alt="" aria-hidden />
-                      <img className="upload" src={stepIconUpload} alt="" aria-hidden />
+                      <img
+                        className="ticket"
+                        src={stepIconTicket}
+                        alt=""
+                        aria-hidden
+                      />
+                      <img
+                        className="upload"
+                        src={stepIconUpload}
+                        alt=""
+                        aria-hidden
+                      />
                     </span>
                   </HowEnterIcon>
                 </HowEnterCard>
@@ -305,7 +357,10 @@ const Home: React.FC = () => {
         </HowEnterInner>
       </HowEnterSection>
 
-      <HowWorksSection id="how-it-works" style={{ backgroundImage: `url(${howWorksBg})` }}>
+      <HowWorksSection
+        id="how-it-works"
+        style={{ backgroundImage: `url(${howWorksBg})` }}
+      >
         <HowWorksInner>
           <Reveal>
             <HowWorksHead>
@@ -313,7 +368,10 @@ const Home: React.FC = () => {
                 <span className="how">How it </span>
                 <span className="works">works</span>
               </h2>
-              <p>Built for quick entry after a store purchase, from phone, no friction.</p>
+              <p>
+                Built for quick entry after a store purchase, from phone, no
+                friction.
+              </p>
             </HowWorksHead>
           </Reveal>
           <HowWorksGrid>
@@ -321,7 +379,10 @@ const Home: React.FC = () => {
               <HowWorksCard>
                 <span className="step">01</span>
                 <h3>Purchase</h3>
-                <p>Buy participating Vita Malt at any supermarket, shop, or retailer during the promotion period.</p>
+                <p>
+                  Buy participating Vita Malt at any supermarket, shop, or
+                  retailer during the promotion period.
+                </p>
                 <HowWorksIcon $kind="purchase">
                   <img src={howWorksPurchase} alt="" aria-hidden />
                 </HowWorksIcon>
@@ -342,8 +403,14 @@ const Home: React.FC = () => {
                 <span className="step">03</span>
                 <h3>Submit your code</h3>
                 <ul>
-                  <li>First-time submit asks for name, phone, optional email, and 18+ confirmation.</li>
-                  <li>Submit your alphanumeric code on this website. No account required.</li>
+                  <li>
+                    First-time submit asks for name, phone, optional email, and
+                    18+ confirmation.
+                  </li>
+                  <li>
+                    Submit your alphanumeric code on this website. No account
+                    required.
+                  </li>
                 </ul>
                 <HowWorksIcon $kind="register">
                   <img src={howWorksRegister} alt="" aria-hidden />
@@ -361,14 +428,19 @@ const Home: React.FC = () => {
               <EnterCopy>
                 <h2>Submit your crown code</h2>
                 <p>
-                  First-time entry asks for your full name, phone, optional email, date of birth, and 18+ confirmation.
-                  Name + phone keep your entries together. No login required.
+                  First-time entry asks for your full name, phone, optional
+                  email, date of birth, and 18+ confirmation. Name + phone keep
+                  your entries together. No login required.
                 </p>
                 <p>
-                  After a successful first code you can optionally create a password so next time you only enter the
-                  code. Skipping is fully supported.
+                  After a successful first code you can optionally create a
+                  password so next time you only enter the code. Skipping is
+                  fully supported.
                 </p>
-                <p>Codes are single-use and checked instantly against the official master list.</p>
+                <p>
+                  Codes are single-use and checked instantly against the
+                  official master list.
+                </p>
                 <EnterProductArt>
                   <img
                     src={wetBottles}
@@ -391,8 +463,14 @@ const Home: React.FC = () => {
                     >
                       −
                     </StepperButton>
-                    <StepperValue aria-live="polite">{codes.length}</StepperValue>
-                    <StepperButton type="button" onClick={increaseCodeCount} aria-label="Add one code field">
+                    <StepperValue aria-live="polite">
+                      {codes.length}
+                    </StepperValue>
+                    <StepperButton
+                      type="button"
+                      onClick={increaseCodeCount}
+                      aria-label="Add one code field"
+                    >
                       +
                     </StepperButton>
                   </CodeStepper>
@@ -418,31 +496,59 @@ const Home: React.FC = () => {
                 {!auth.isLoggedIn && (
                   <>
                     <Label>Full name</Label>
-                    <Input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+                    <Input
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                    />
                     <Label>Phone</Label>
-                    <Input value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                    <Input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
                     <Label>Email (optional)</Label>
-                    <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
                     <Label>Date of birth</Label>
-                    <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
+                    <Input
+                      type="date"
+                      value={dob}
+                      onChange={(e) => setDob(e.target.value)}
+                      required
+                    />
                     <Check>
-                      <input type="checkbox" checked={isOver18} onChange={(e) => setIsOver18(e.target.checked)} />
-                      I confirm I am 18 or older and agree to the Terms & Conditions.
+                      <input
+                        type="checkbox"
+                        checked={isOver18}
+                        onChange={(e) => setIsOver18(e.target.checked)}
+                      />
+                      I confirm I am 18 or older and agree to the Terms &
+                      Conditions.
                     </Check>
                   </>
                 )}
                 <Submit type="submit" disabled={loading}>
                   {submissionProgress
                     ? `Submitting ${submissionProgress.current} of ${submissionProgress.total}…`
-                    : `Submit ${filledCodeCount || ""} code${filledCodeCount === 1 ? "" : "s"}`.replace("  ", " ")}
+                    : `Submit ${filledCodeCount || ""} code${filledCodeCount === 1 ? "" : "s"}`.replace(
+                        "  ",
+                        " ",
+                      )}
                 </Submit>
                 {result && (
                   <Progress>
                     {result.message}
                     <br />
-                    Valid codes: {result.validCodeCount} · Entries: {result.drawEntryCount} · Progress:{" "}
+                    Valid codes: {result.validCodeCount} · Entries:{" "}
+                    {result.drawEntryCount} · Progress:{" "}
                     {result.progressTowardNextEntry}/4
-                    {result.codesUntilNextEntry > 0 ? ` · ${result.codesUntilNextEntry} more to your next entry` : ""}
+                    {result.codesUntilNextEntry > 0
+                      ? ` · ${result.codesUntilNextEntry} more to your next entry`
+                      : ""}
                   </Progress>
                 )}
               </EnterCard>
@@ -457,8 +563,9 @@ const Home: React.FC = () => {
             <div>
               <SplitBandTitle>Found an instant win?</SplitBandTitle>
               <SplitBandLead>
-                Do not enter it on the website. Bring the winning crown and a valid photo ID to the SVBL head office.
-                Instant win winners may be featured on the winners page after prize handover.
+                Do not enter it on the website. Bring the winning crown and a
+                valid photo ID to the SVBL head office. Instant win winners may
+                be featured on the winners page after prize handover.
               </SplitBandLead>
               <WhiteBtn href="/instant-win">How to redeem</WhiteBtn>
             </div>
@@ -467,8 +574,8 @@ const Home: React.FC = () => {
             <div>
               <SplitBandSubTitle>Track your entries</SplitBandSubTitle>
               <SplitBandLead>
-                Signed-in users see a dashboard automatically. Guests can look up submitted codes and entry counts with
-                name + phone, or email.
+                Signed-in users see a dashboard automatically. Guests can look
+                up submitted codes and entry counts with name + phone, or email.
               </SplitBandLead>
               <WhiteBtn href="/dashboard">View my entries</WhiteBtn>
             </div>
