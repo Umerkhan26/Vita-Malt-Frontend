@@ -41,7 +41,10 @@ const Item = styled.details`
   border-radius: 4px;
   border-left: 4px solid ${COLORS.gold};
   padding: 16px 18px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.22s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.22s ease;
 
   &[open] {
     border-color: ${COLORS.line};
@@ -173,25 +176,27 @@ const faqs: { q: string; body: ReactNode }[] = [
       <>
         <p>Buy a participating Vita Malt and check under the crown.</p>
         <p>
-          If the crown shows an Instant Win prize, keep the crown and redeem the prize at the St. Vincent Brewery Ltd.
-          office in Campden Park.
+          If the crown shows an Instant Win prize, keep the crown and redeem the
+          prize at the St. Vincent Brewery Ltd. office in Campden Park.
         </p>
-        <p>If the crown shows a promotional code, enter the code on the official promotion website.</p>
+        <p>
+          If the crown shows a promotional code, enter the code on the official
+          promotion website.
+        </p>
       </>
     ),
   },
   {
     q: "2. Which Vita Malt flavours are included?",
-    body: (
-      <p>Ginger, Classic, Ginseng and Coconut Hibiscus. Other Vita Malt products are not included.</p>
-    ),
+    body: <p> Classic. Other Vita Malt products are not included.</p>,
   },
   {
     q: "3. Do I need to create an account to participate?",
     body: (
       <p>
-        Not for your first entry. You can submit your first promotional code without an account. After that, you will
-        need to create an account to submit more codes and track your entries.
+        Not for your first entry. You can submit your first promotional code
+        without an account. After that, you will need to create an account to
+        submit more codes and track your entries.
       </p>
     ),
   },
@@ -211,7 +216,8 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "5. How many codes can I enter?",
     body: (
       <p>
-        There is no limit to the number of valid promotional codes you may submit during the Promotion Period.
+        There is no limit to the number of valid promotional codes you may
+        submit during the Promotion Period.
       </p>
     ),
   },
@@ -220,7 +226,8 @@ const faqs: { q: string; body: ReactNode }[] = [
     body: (
       <>
         <p>
-          Every four (4) valid codes = one (1) entry into both the Grand Prize draw and the Secondary Prize draw.
+          Every four (4) valid codes = one (1) entry into both the Grand Prize
+          draw and the Secondary Prize draw.
         </p>
         <table>
           <thead>
@@ -249,14 +256,20 @@ const faqs: { q: string; body: ReactNode }[] = [
   },
   {
     q: "7. Can I use the same code more than once?",
-    body: <p>No. Each promotional code can only be used once. Duplicate codes will be rejected.</p>,
+    body: (
+      <p>
+        No. Each promotional code can only be used once. Duplicate codes will be
+        rejected.
+      </p>
+    ),
   },
   {
     q: "8. How can I check my entries?",
     body: (
       <p>
-        Entrants may view their submitted codes, total valid codes, and total draw entries by logging into their online
-        account, or by searching using their full name together with their phone number or email address.
+        Entrants may view their submitted codes, total valid codes, and total
+        draw entries by logging into their online account, or by searching using
+        their full name together with their phone number or email address.
       </p>
     ),
   },
@@ -279,7 +292,10 @@ const faqs: { q: string; body: ReactNode }[] = [
         </p>
         <p>Each Secondary Prize winner will receive:</p>
         <ul>
-          <li>One (1) year’s supply of Vita Malt — two (2) cases per month for 12 months</li>
+          <li>
+            One (1) year’s supply of Vita Malt — two (2) cases per month for 12
+            months
+          </li>
           <li>One (1) Nintendo Switch</li>
         </ul>
         <p>
@@ -297,8 +313,9 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "10. How do I claim an Instant Win prize?",
     body: (
       <p>
-        Bring the winning crown and a valid government-issued ID to the St. Vincent Brewery Ltd. office in Campden Park.
-        Instant Win prizes must be claimed by the redemption deadline stated by the Promoter.
+        Bring the winning crown and a valid government-issued ID to the St.
+        Vincent Brewery Ltd. office in Campden Park. Instant Win prizes must be
+        claimed by the redemption deadline stated by the Promoter.
       </p>
     ),
   },
@@ -306,9 +323,10 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "11. When will the draw take place and winners be announced?",
     body: (
       <p>
-        The Grand Prize and Secondary Prize draws will take place within 14 days after the Promotion ends. Winners will
-        be announced on the official campaign website, SVBL&apos;s official social media pages and/or selected media
-        outlets.
+        The Grand Prize and Secondary Prize draws will take place within 14 days
+        after the Promotion ends. Winners will be announced on the official
+        campaign website, SVBL&apos;s official social media pages and/or
+        selected media outlets.
       </p>
     ),
   },
@@ -316,9 +334,10 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "12. How will winners be contacted?",
     body: (
       <p>
-        Winners may be contacted by phone or email using the details submitted with their entry. The Promoter will make
-        at least three (3) attempts to contact a winner over two (2) business days. If the winner cannot be reached within
-        that period, an alternate winner may be selected.
+        Winners may be contacted by phone or email using the details submitted
+        with their entry. The Promoter will make at least three (3) attempts to
+        contact a winner over two (2) business days. If the winner cannot be
+        reached within that period, an alternate winner may be selected.
       </p>
     ),
   },
@@ -326,9 +345,11 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "13. Where do Grand Prize and Secondary Prize winners collect their prizes?",
     body: (
       <p>
-        Prizes must be collected in person at the St. Vincent Brewery Ltd. office in Campden Park. Winners must present
-        valid government-issued ID and collect their prize within fourteen (14) calendar days of notification. Unclaimed
-        prizes may be forfeited and an alternate winner may be selected.
+        Prizes must be collected in person at the St. Vincent Brewery Ltd.
+        office in Campden Park. Winners must present valid government-issued ID
+        and collect their prize within fourteen (14) calendar days of
+        notification. Unclaimed prizes may be forfeited and an alternate winner
+        may be selected.
       </p>
     ),
   },
@@ -349,8 +370,9 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "15. What if my code is rejected?",
     body: (
       <p>
-        Check that the code was entered correctly. A code may also be rejected if it has already been used or is not in
-        the promotional database. If you believe there is an error, contact Campaign Support.
+        Check that the code was entered correctly. A code may also be rejected
+        if it has already been used or is not in the promotional database. If
+        you believe there is an error, contact Campaign Support.
       </p>
     ),
   },
@@ -358,15 +380,20 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "16. Do I need to keep my crowns?",
     body: (
       <>
-        <p>Yes. Please keep all promotional crowns until the Promotion and prize draws are complete.</p>
+        <p>
+          Yes. Please keep all promotional crowns until the Promotion and prize
+          draws are complete.
+        </p>
         <p>Instant Win crowns must be presented when collecting your prize.</p>
         <p>
-          Crowns with promotional codes should also be kept, as you may be asked to present them to verify your entries
-          if you are selected as a winner.
+          Crowns with promotional codes should also be kept, as you may be asked
+          to present them to verify your entries if you are selected as a
+          winner.
         </p>
         <p>
-          <strong className="important">Important:</strong> Failure to present a qualifying crown when requested may
-          result in the related entry being disqualified.
+          <strong className="important">Important:</strong> Failure to present a
+          qualifying crown when requested may result in the related entry being
+          disqualified.
         </p>
       </>
     ),
@@ -375,8 +402,9 @@ const faqs: { q: string; body: ReactNode }[] = [
     q: "17. How is my personal information used?",
     body: (
       <p>
-        Your personal information will only be used to verify your entries, contact you if you win, and arrange your
-        prize. Your information will be kept secure.
+        Your personal information will only be used to verify your entries,
+        contact you if you win, and arrange your prize. Your information will be
+        kept secure.
       </p>
     ),
   },
@@ -385,7 +413,10 @@ const faqs: { q: string; body: ReactNode }[] = [
     body: (
       <p>
         Campaign Support:{" "}
-        <a href="mailto:drinkvitamalt@gmail.com" style={{ color: COLORS.red, fontWeight: 800 }}>
+        <a
+          href="mailto:drinkvitamalt@gmail.com"
+          style={{ color: COLORS.red, fontWeight: 800 }}
+        >
           drinkvitamalt@gmail.com
         </a>
       </p>
@@ -403,24 +434,30 @@ const Faq: React.FC = () => (
     <PageBody>
       <Reveal>
         <Intro>
-          These FAQs and Terms &amp; Conditions (&quot;Terms&quot;) apply to the Vita Malt &quot;Vitalize Your Game&quot;
-          promotion conducted by St. Vincent Brewery Ltd. (&quot;SVBL&quot; or &quot;the Promoter&quot;). By entering, you
-          agree to these Terms.
+          These FAQs and Terms &amp; Conditions (&quot;Terms&quot;) apply to the
+          Vita Malt &quot;Vitalize Your Game&quot; promotion conducted by St.
+          Vincent Brewery Ltd. (&quot;SVBL&quot; or &quot;the Promoter&quot;).
+          By entering, you agree to these Terms.
         </Intro>
       </Reveal>
       <Reveal delay={60}>
-        <Intro style={{ marginBottom: 8, fontWeight: 700, color: COLORS.ink }}>Participating Vita Malt flavours:</Intro>
+        <Intro style={{ marginBottom: 8, fontWeight: 700, color: COLORS.ink }}>
+          Participating Vita Malt flavours:
+        </Intro>
       </Reveal>
       <Reveal delay={100}>
         <Flavours>
-          <li>Ginger</li>
+          {/* <li>Ginger</li> */}
           <li>Classic</li>
-          <li>Ginseng</li>
-          <li>Coconut Hibiscus</li>
+          {/* <li>Ginseng</li> */}
+          {/* <li>Coconut Hibiscus</li> */}
         </Flavours>
       </Reveal>
       <Reveal delay={120}>
-        <Intro style={{ marginTop: -8 }}>Only specially marked crowns on these flavours are included in the Promotion.</Intro>
+        <Intro style={{ marginTop: -8 }}>
+          Only specially marked crowns on these flavours are included in the
+          Promotion.
+        </Intro>
       </Reveal>
       <List>
         {faqs.map((item, i) => (
