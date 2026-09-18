@@ -76,6 +76,11 @@ const Btn = styled.button<{ $primary?: boolean }>`
   min-height: 48px;
   background: ${({ $primary }) => ($primary ? COLORS.red : COLORS.line)};
   color: ${({ $primary }) => ($primary ? COLORS.white : COLORS.ink)};
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.8;
+  }
 `;
 
 interface Props {
@@ -208,7 +213,7 @@ const OptionalAccountModal: React.FC<Props> = ({
             <Row>
               <Btn onClick={skip}>Later</Btn>
               <Btn $primary disabled={loading} onClick={verify}>
-                Verify
+                {loading ? "Verifying…" : "Verify"}
               </Btn>
             </Row>
           </>

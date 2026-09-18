@@ -554,6 +554,13 @@ export const TableWrap = styled.div`
   background: #fff;
 `;
 
+export const OverviewTableWrap = styled(TableWrap)`
+  @media (max-width: 560px) {
+    overflow-x: hidden;
+    border-radius: 5px;
+  }
+`;
+
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -610,6 +617,73 @@ export const Table = styled.table`
 
   tbody tr:last-child td {
     border-bottom: none;
+  }
+`;
+
+export const OverviewTable = styled(Table)`
+  min-width: 0;
+
+  @media (max-width: 560px) {
+    display: block;
+    width: 100%;
+    min-width: 0;
+
+    thead {
+      display: none;
+    }
+
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    tbody {
+      display: flex;
+      flex-direction: column;
+    }
+
+    tr {
+      display: block;
+      padding: 6px 8px;
+      border-bottom: 1px solid #eef2ef;
+    }
+
+    td {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 2px 0;
+      border-bottom: none;
+      white-space: normal;
+      max-width: none;
+      line-height: 1.25;
+    }
+
+    td::before {
+      content: attr(data-label);
+      display: block;
+      flex: 0 0 32%;
+      font-size: 9px;
+      color: #6a7a72;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding-top: 1px;
+    }
+
+    td > * {
+      flex: 1;
+      min-width: 0;
+    }
+
+    tbody tr:nth-child(even) td,
+    tbody tr:hover td {
+      background: transparent;
+    }
   }
 `;
 

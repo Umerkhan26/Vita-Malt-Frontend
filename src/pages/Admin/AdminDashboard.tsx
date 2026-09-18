@@ -926,8 +926,8 @@ const AdminDashboard: React.FC = () => {
                     Attempts appear here once codes are submitted.
                   </S.Empty>
                 ) : (
-                  <S.TableWrap>
-                    <S.Table>
+                  <S.OverviewTableWrap>
+                    <S.OverviewTable>
                       <thead>
                         <tr>
                           <th>Code</th>
@@ -941,25 +941,25 @@ const AdminDashboard: React.FC = () => {
                           const entrant = s.entrant as { fullName?: string; phone?: string } | null;
                           return (
                             <tr key={String(s._id)}>
-                              <td>
+                              <td data-label="Code">
                                 <code>{String(s.codeAttempted)}</code>
                               </td>
-                              <td>
+                              <td data-label="Person">
                                 <strong>{entrant?.fullName || "—"}</strong>
                                 {entrant?.phone ? <S.CellMeta>{entrant.phone}</S.CellMeta> : null}
                               </td>
-                              <td>
+                              <td data-label="Result">
                                 <S.Badge $tone={resultTone(String(s.result))}>{String(s.result)}</S.Badge>
                               </td>
-                              <td>
+                              <td data-label="When">
                                 <S.Muted>{fmtWhen(s.createdAt)}</S.Muted>
                               </td>
                             </tr>
                           );
                         })}
                       </tbody>
-                    </S.Table>
-                  </S.TableWrap>
+                    </S.OverviewTable>
+                  </S.OverviewTableWrap>
                 )}
               </S.Panel>
 
@@ -967,8 +967,8 @@ const AdminDashboard: React.FC = () => {
                 <h2>Top by codes</h2>
                 <p className="sub">People closest to extra tickets</p>
                 {(overview?.topEntrants as Record<string, unknown>[] | undefined)?.length ? (
-                  <S.TableWrap>
-                    <S.Table>
+                  <S.OverviewTableWrap>
+                    <S.OverviewTable>
                       <thead>
                         <tr>
                           <th>Rank</th>
@@ -986,31 +986,31 @@ const AdminDashboard: React.FC = () => {
                             style={{ cursor: "pointer" }}
                             onClick={() => navigate(`/admin/entrants/${String(e._id)}`)}
                           >
-                            <td>
+                            <td data-label="Rank">
                               <S.Rank $top={Number(e.rank) <= 3}>{String(e.rank)}</S.Rank>
                             </td>
-                            <td>
+                            <td data-label="Name">
                               <strong>{String(e.fullName)}</strong>
                             </td>
-                            <td>
+                            <td data-label="Phone">
                               <S.Muted>{String(e.phone || "—")}</S.Muted>
                             </td>
-                            <td>
+                            <td data-label="Type">
                               <S.Badge $tone={e.hasAccount ? "ok" : "neutral"}>
                                 {e.hasAccount ? "Account" : "Guest"}
                               </S.Badge>
                             </td>
-                            <td>
+                            <td data-label="Codes">
                               <S.Num>{String(e.validCodeCount ?? 0)}</S.Num>
                             </td>
-                            <td>
+                            <td data-label="Tickets">
                               <S.Num>{String(e.drawEntryCount ?? 0)}</S.Num>
                             </td>
                           </tr>
                         ))}
                       </tbody>
-                    </S.Table>
-                  </S.TableWrap>
+                    </S.OverviewTable>
+                  </S.OverviewTableWrap>
                 ) : (
                   <S.Empty>
                     <strong>No codes yet</strong>

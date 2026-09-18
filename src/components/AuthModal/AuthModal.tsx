@@ -120,6 +120,11 @@ const Submit = styled.button`
   cursor: pointer;
   min-height: 48px;
   font-size: 1rem;
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.8;
+  }
 `;
 
 const Switch = styled.button`
@@ -520,7 +525,7 @@ const AuthModal: React.FC = () => {
               <Label>Verification code</Label>
               <Input value={otp} onChange={(e) => setOtp(e.target.value)} required />
               <Submit type="submit" disabled={loading}>
-                Verify
+                {loading ? "Verifying…" : "Verify"}
               </Submit>
             </form>
           </>
