@@ -29,8 +29,17 @@ export const Shell = styled.div`
 export const Sidebar = styled.aside<{ $open?: boolean }>`
   width: 200px;
   background:
-    radial-gradient(circle at 12% 8%, rgba(243, 112, 33, 0.18), transparent 26%),
-    linear-gradient(165deg, ${COLORS.redDeep} 0%, #082d20 52%, ${COLORS.redDark} 100%);
+    radial-gradient(
+      circle at 12% 8%,
+      rgba(243, 112, 33, 0.18),
+      transparent 26%
+    ),
+    linear-gradient(
+      165deg,
+      ${COLORS.redDeep} 0%,
+      #082d20 52%,
+      ${COLORS.redDark} 100%
+    );
   color: ${COLORS.white};
   display: flex;
   flex-direction: column;
@@ -52,7 +61,11 @@ export const Sidebar = styled.aside<{ $open?: boolean }>`
 export const SidebarHeader = styled.div`
   padding: 14px 12px 12px;
   border-bottom: 1px solid rgba(243, 112, 33, 0.2);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(0, 0, 0, 0.1)
+  );
 
   span {
     display: block;
@@ -95,13 +108,21 @@ export const MenuItem = styled.button<{ $active?: boolean }>`
       ? "linear-gradient(90deg, rgba(243,112,33,0.2), rgba(255,255,255,0.1))"
       : "transparent"};
   border-radius: 6px;
-  border-left: 2px solid ${({ $active }) => ($active ? COLORS.gold : "transparent")};
+  border-left: 2px solid
+    ${({ $active }) => ($active ? COLORS.gold : "transparent")};
   font-weight: ${({ $active }) => ($active ? 700 : 500)};
   font-size: 12.5px;
-  transition: background 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease,
+    box-shadow 0.12s ease;
 
   &:hover {
-    background: linear-gradient(90deg, rgba(243, 112, 33, 0.12), rgba(255, 255, 255, 0.07));
+    background: linear-gradient(
+      90deg,
+      rgba(243, 112, 33, 0.12),
+      rgba(255, 255, 255, 0.07)
+    );
     color: #fff;
   }
 
@@ -249,7 +270,10 @@ export const Kpi = styled.div<{ $accent?: string }>`
   box-shadow:
     0 7px 18px rgba(0, 56, 32, 0.07),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 
   &:hover {
     border-color: rgba(0, 107, 63, 0.24);
@@ -406,7 +430,9 @@ export const SearchInput = styled.input`
     outline: none;
     border-color: ${COLORS.red};
     background: #fff;
-    box-shadow: 0 0 0 2px rgba(0, 107, 63, 0.13), 0 5px 14px rgba(0, 56, 32, 0.08);
+    box-shadow:
+      0 0 0 2px rgba(0, 107, 63, 0.13),
+      0 5px 14px rgba(0, 56, 32, 0.08);
   }
 
   @media (max-width: 520px) {
@@ -448,7 +474,9 @@ export const Select = styled.select`
     outline: none;
     border-color: ${COLORS.red};
     background-color: #fff;
-    box-shadow: 0 0 0 2px rgba(0, 107, 63, 0.13), 0 5px 14px rgba(0, 56, 32, 0.08);
+    box-shadow:
+      0 0 0 2px rgba(0, 107, 63, 0.13),
+      0 5px 14px rgba(0, 56, 32, 0.08);
   }
 
   option {
@@ -702,11 +730,14 @@ export const Rank = styled.span<{ $top?: boolean }>`
   height: 20px;
   border-radius: 4px;
   background: ${({ $top }) =>
-    $top ? "linear-gradient(145deg, #fff4e8, #ffe5c7)" : "linear-gradient(145deg, #eef6f1, #e5efe9)"};
+    $top
+      ? "linear-gradient(145deg, #fff4e8, #ffe5c7)"
+      : "linear-gradient(145deg, #eef6f1, #e5efe9)"};
   color: ${({ $top }) => ($top ? "#a85500" : "#5c6b62")};
   font-weight: 800;
   font-size: 10.5px;
-  border: 1px solid ${({ $top }) => ($top ? "rgba(243,112,33,0.35)" : "rgba(0,107,63,0.08)")};
+  border: 1px solid
+    ${({ $top }) => ($top ? "rgba(243,112,33,0.35)" : "rgba(0,107,63,0.08)")};
 `;
 
 export const CellMeta = styled.span`
@@ -731,7 +762,9 @@ export const Actions = styled.div`
   align-items: center;
 `;
 
-export const Badge = styled.span<{ $tone?: "ok" | "warn" | "bad" | "info" | "neutral" | "gold" }>`
+export const Badge = styled.span<{
+  $tone?: "ok" | "warn" | "bad" | "info" | "neutral" | "gold";
+}>`
   display: inline-flex;
   align-items: center;
   padding: 0 5px;
@@ -774,7 +807,8 @@ export const Action = styled.button<{ $ghost?: boolean; $danger?: boolean }>`
   font-weight: 700;
   height: 28px;
   white-space: nowrap;
-  color: ${({ $ghost, $danger }) => ($ghost ? "#122018" : $danger ? "#fff" : "#fff")};
+  color: ${({ $ghost, $danger }) =>
+    $ghost ? "#122018" : $danger ? "#fff" : "#fff"};
   background: ${({ $ghost, $danger }) =>
     $ghost
       ? "linear-gradient(145deg, #fff, #f3f9f5)"
@@ -782,9 +816,14 @@ export const Action = styled.button<{ $ghost?: boolean; $danger?: boolean }>`
         ? "linear-gradient(135deg, #c62828, #9f1f1f)"
         : `linear-gradient(135deg, ${COLORS.red}, ${COLORS.redDark})`};
   border: 1px solid
-    ${({ $ghost, $danger }) => ($ghost ? COLORS.line : $danger ? "#b42318" : COLORS.red)};
-  box-shadow: ${({ $ghost }) => ($ghost ? "none" : "0 5px 13px rgba(0, 77, 44, 0.14)")};
-  transition: filter 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    ${({ $ghost, $danger }) =>
+      $ghost ? COLORS.line : $danger ? "#b42318" : COLORS.red};
+  box-shadow: ${({ $ghost }) =>
+    $ghost ? "none" : "0 5px 13px rgba(0, 77, 44, 0.14)"};
+  transition:
+    filter 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 
   &:hover {
     filter: brightness(1.03);
@@ -806,13 +845,23 @@ export const IconBtn = styled.button<{ $tone?: "view" | "block" | "delete" }>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: ${({ $tone }) => ($tone === "delete" ? "#b42318" : $tone === "block" ? "#a85500" : COLORS.red)};
+  color: ${({ $tone }) =>
+    $tone === "delete"
+      ? "#b42318"
+      : $tone === "block"
+        ? "#a85500"
+        : COLORS.red};
   font-size: 10px;
   font-weight: 700;
   background: ${({ $tone }) =>
     $tone === "block" ? "#fff1e0" : $tone === "delete" ? "#fdeceb" : "#e6f0eb"};
   border: 1px solid
-    ${({ $tone }) => ($tone === "block" ? "#f0d2a8" : $tone === "delete" ? "#f0c4c2" : "#c5ddd0")};
+    ${({ $tone }) =>
+      $tone === "block"
+        ? "#f0d2a8"
+        : $tone === "delete"
+          ? "#f0c4c2"
+          : "#c5ddd0"};
 
   svg {
     flex-shrink: 0;
@@ -830,7 +879,12 @@ export const Empty = styled.div`
   color: #6a7a72;
   font-size: 12px;
   background:
-    radial-gradient(circle at 1px 1px, rgba(0, 107, 63, 0.06) 1px, transparent 0) 0 0 / 18px 18px,
+    radial-gradient(
+        circle at 1px 1px,
+        rgba(0, 107, 63, 0.06) 1px,
+        transparent 0
+      )
+      0 0 / 18px 18px,
     linear-gradient(145deg, #f5faf6, #edf6f0);
   border-radius: 6px;
   border: 1px dashed rgba(0, 107, 63, 0.22);
@@ -865,9 +919,12 @@ export const MsgCard = styled.div<{ $unread?: boolean }>`
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid rgba(0, 107, 63, 0.12);
-  border-left: 3px solid ${({ $unread }) => ($unread ? COLORS.gold : COLORS.line)};
+  border-left: 3px solid
+    ${({ $unread }) => ($unread ? COLORS.gold : COLORS.line)};
   background: ${({ $unread }) =>
-    $unread ? "linear-gradient(145deg, #fffaf5, #fff4e8)" : "linear-gradient(145deg, #fff, #f7fbf8)"};
+    $unread
+      ? "linear-gradient(145deg, #fffaf5, #fff4e8)"
+      : "linear-gradient(145deg, #fff, #f7fbf8)"};
   margin-bottom: 6px;
   box-shadow: 0 6px 16px rgba(0, 56, 32, 0.055);
 
@@ -895,8 +952,17 @@ export const DrawHero = styled.div`
   padding: 12px 14px;
   color: white;
   background:
-    radial-gradient(circle at 88% 18%, rgba(243, 112, 33, 0.3), transparent 28%),
-    linear-gradient(135deg, ${COLORS.redDeep} 0%, ${COLORS.redDark} 54%, ${COLORS.red} 100%);
+    radial-gradient(
+      circle at 88% 18%,
+      rgba(243, 112, 33, 0.3),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      ${COLORS.redDeep} 0%,
+      ${COLORS.redDark} 54%,
+      ${COLORS.red} 100%
+    );
   margin-bottom: 8px;
   box-shadow:
     inset 0 0 0 1px rgba(243, 112, 33, 0.28),
@@ -938,12 +1004,16 @@ export const SubTab = styled.button<{ $active?: boolean }>`
   cursor: pointer;
   border: none;
   background: ${({ $active }) =>
-    $active ? `linear-gradient(135deg, ${COLORS.redDeep}, ${COLORS.red})` : "transparent"};
+    $active
+      ? `linear-gradient(135deg, ${COLORS.redDeep}, ${COLORS.red})`
+      : "transparent"};
   color: ${({ $active }) => ($active ? "#fff" : "#5c6b62")};
 
   &:hover {
     background: ${({ $active }) =>
-      $active ? `linear-gradient(135deg, ${COLORS.redDeep}, ${COLORS.red})` : "#eaf5ee"};
+      $active
+        ? `linear-gradient(135deg, ${COLORS.redDeep}, ${COLORS.red})`
+        : "#eaf5ee"};
   }
 `;
 
@@ -961,7 +1031,11 @@ export const ModalBackdrop = styled.div`
 export const ModalCard = styled.div`
   width: min(440px, 100%);
   background:
-    radial-gradient(circle at 96% 4%, rgba(243, 112, 33, 0.09), transparent 24%),
+    radial-gradient(
+      circle at 96% 4%,
+      rgba(243, 112, 33, 0.09),
+      transparent 24%
+    ),
     linear-gradient(150deg, ${COLORS.white}, #f7fcf8);
   border-radius: 8px;
   border: 1px solid rgba(0, 107, 63, 0.15);
@@ -996,7 +1070,11 @@ export const ModalActions = styled.div`
   border-top: 1px solid ${COLORS.line};
 `;
 
-export const ShimmerBlock = styled.div<{ $h?: number; $w?: string; $r?: number }>`
+export const ShimmerBlock = styled.div<{
+  $h?: number;
+  $w?: string;
+  $r?: number;
+}>`
   height: ${({ $h }) => $h || 12}px;
   width: ${({ $w }) => $w || "100%"};
   max-width: 100%;
@@ -1055,7 +1133,11 @@ export const Spinner = styled.div`
 export const ConfirmCard = styled.div`
   width: min(400px, 100%);
   background:
-    radial-gradient(circle at 94% 6%, rgba(243, 112, 33, 0.09), transparent 25%),
+    radial-gradient(
+      circle at 94% 6%,
+      rgba(243, 112, 33, 0.09),
+      transparent 25%
+    ),
     linear-gradient(150deg, ${COLORS.white}, #f7fcf8);
   border-radius: 10px;
   border: 1px solid rgba(0, 107, 63, 0.15);
@@ -1089,7 +1171,9 @@ export const ModuleTab = styled.button`
   display: none;
 `;
 
-export const CampaignBanner = styled.div<{ $tone?: "upcoming" | "live" | "ended" }>`
+export const CampaignBanner = styled.div<{
+  $tone?: "upcoming" | "live" | "ended";
+}>`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1098,8 +1182,13 @@ export const CampaignBanner = styled.div<{ $tone?: "upcoming" | "live" | "ended"
   margin-bottom: 10px;
   padding: 14px 16px;
   border-radius: 10px;
-  border: 1px solid ${({ $tone }) =>
-    $tone === "live" ? "rgba(0, 107, 63, 0.22)" : $tone === "ended" ? "rgba(180, 35, 24, 0.2)" : "rgba(243, 112, 33, 0.28)"};
+  border: 1px solid
+    ${({ $tone }) =>
+      $tone === "live"
+        ? "rgba(0, 107, 63, 0.22)"
+        : $tone === "ended"
+          ? "rgba(180, 35, 24, 0.2)"
+          : "rgba(243, 112, 33, 0.28)"};
   background: ${({ $tone }) =>
     $tone === "live"
       ? "linear-gradient(135deg, #e8f7ee, #f7fcf9)"
@@ -1134,7 +1223,8 @@ export const ProgressFill = styled.i<{ $pct: number; $tone?: string }>`
   display: block;
   height: 100%;
   width: ${({ $pct }) => `${Math.min(100, Math.max(0, $pct))}%`};
-  background: ${({ $tone }) => $tone || `linear-gradient(90deg, ${COLORS.red}, ${COLORS.gold})`};
+  background: ${({ $tone }) =>
+    $tone || `linear-gradient(90deg, ${COLORS.red}, ${COLORS.gold})`};
   border-radius: 999px;
 `;
 

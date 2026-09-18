@@ -43,7 +43,14 @@ type View =
   | "contact"
   | "audit";
 
-type Module = "overview" | "users" | "leaderboard" | "codes" | "activity" | "prizes" | "tools";
+type Module =
+  | "overview"
+  | "users"
+  | "leaderboard"
+  | "codes"
+  | "activity"
+  | "prizes"
+  | "tools";
 
 const MODULES: { id: Module; label: string; icon: React.ReactNode }[] = [
   { id: "overview", label: "Overview", icon: <FaChartPie /> },
@@ -73,8 +80,20 @@ const fmtWhen = (v: unknown) => {
     minute: "2-digit",
   });
 };
-type PageMeta = { page: number; totalPages: number; totalCount: number; hasNextPage: boolean; hasPrevPage: boolean };
-const emptyMeta = (): PageMeta => ({ page: 1, totalPages: 1, totalCount: 0, hasNextPage: false, hasPrevPage: false });
+type PageMeta = {
+  page: number;
+  totalPages: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+};
+const emptyMeta = (): PageMeta => ({
+  page: 1,
+  totalPages: 1,
+  totalCount: 0,
+  hasNextPage: false,
+  hasPrevPage: false,
+});
 const PAGE_SIZE = 100;
 
 const pickMeta = (data: Record<string, unknown>): PageMeta => ({
@@ -106,9 +125,13 @@ const AdminDashboard: React.FC = () => {
   })();
   const [module, setModule] = useState<Module>(initialModule);
   const [codesTab, setCodesTab] = useState<"codes" | "flagged">("codes");
-  const [activityTab, setActivityTab] = useState<"submissions" | "entries">("submissions");
+  const [activityTab, setActivityTab] = useState<"submissions" | "entries">(
+    "submissions",
+  );
   const [prizesTab, setPrizesTab] = useState<"winners" | "draw">("winners");
-  const [toolsTab, setToolsTab] = useState<"contact" | "social" | "audit">("audit");
+  const [toolsTab, setToolsTab] = useState<"contact" | "social" | "audit">(
+    "audit",
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
@@ -121,7 +144,9 @@ const AdminDashboard: React.FC = () => {
   } | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  const [overview, setOverview] = useState<Record<string, unknown> | null>(null);
+  const [overview, setOverview] = useState<Record<string, unknown> | null>(
+    null,
+  );
   const [entrants, setEntrants] = useState<Record<string, unknown>[]>([]);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -152,7 +177,9 @@ const AdminDashboard: React.FC = () => {
   const [winnersStatus, setWinnersStatus] = useState("");
   const [winnersTier, setWinnersTier] = useState("");
   const [winnersMeta, setWinnersMeta] = useState<PageMeta>(emptyMeta);
-  const [modal, setModal] = useState<null | "import" | "instant" | "social">(null);
+  const [modal, setModal] = useState<null | "import" | "instant" | "social">(
+    null,
+  );
   const [csv, setCsv] = useState("");
   const [csvFileName, setCsvFileName] = useState("");
   const [instantName, setInstantName] = useState("");
@@ -175,7 +202,10 @@ const AdminDashboard: React.FC = () => {
   const [auditSearch, setAuditSearch] = useState("");
   const [auditActorType, setAuditActorType] = useState("");
   const [auditMeta, setAuditMeta] = useState<PageMeta>(emptyMeta);
-  const [drawPreview, setDrawPreview] = useState<Record<string, unknown> | null>(null);
+  const [drawPreview, setDrawPreview] = useState<Record<
+    string,
+    unknown
+  > | null>(null);
   const [drawEntries, setDrawEntries] = useState<Record<string, unknown>[]>([]);
   const [entriesPage, setEntriesPage] = useState(1);
   const [entriesSearch, setEntriesSearch] = useState("");
@@ -283,10 +313,13 @@ const AdminDashboard: React.FC = () => {
   const selectableIds = (rows: Record<string, unknown>[]) =>
     rows.filter((row) => row.role !== "admin").map((row) => String(row._id));
 
-  const pageSelected = (ids: string[]) => ids.length > 0 && ids.every((id) => selectedIds.includes(id));
+  const pageSelected = (ids: string[]) =>
+    ids.length > 0 && ids.every((id) => selectedIds.includes(id));
 
   const toggleSelected = (id: string) => {
-    setSelectedIds((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+    setSelectedIds((cur) =>
+      cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
+    );
   };
 
   const togglePage = (ids: string[]) => {
@@ -323,7 +356,7 @@ const AdminDashboard: React.FC = () => {
     title: string,
     message: string,
     run: (ids: string[]) => Promise<unknown>,
-    after: () => Promise<void>
+    after: () => Promise<void>,
   ) =>
     selectedIds.length > 0 ? (
       <S.Action
@@ -352,8 +385,12 @@ const AdminDashboard: React.FC = () => {
     ) : null;
 
   const renderTableShimmer = (
-    cols: { label: string; width?: string; kind?: "text" | "badge" | "num" | "rank" | "actions" | "action" | "code" }[],
-    rows = 10
+    cols: {
+      label: string;
+      width?: string;
+      kind?: "text" | "badge" | "num" | "rank" | "actions" | "action" | "code";
+    }[],
+    rows = 10,
   ) => (
     <S.TableWrap>
       <S.Table>
@@ -502,7 +539,7 @@ const AdminDashboard: React.FC = () => {
       accountType,
       userStatus,
       userSortBy,
-      minCodes
+      minCodes,
     )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
@@ -511,7 +548,11 @@ const AdminDashboard: React.FC = () => {
   }, [page, search, accountType, userStatus, userSortBy, userMinCodes]);
 
   const loadSubmissions = useCallback(async () => {
-    const data = (await apiService.adminSubmissions(subPage, resultFilter, subSearch)) as Record<string, unknown> & {
+    const data = (await apiService.adminSubmissions(
+      subPage,
+      resultFilter,
+      subSearch,
+    )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
     setSubmissions(data.items || []);
@@ -523,7 +564,11 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   const loadCodesList = useCallback(async () => {
-    const data = (await apiService.adminCodes(codesPage, codesSearch, codesStatus)) as Record<string, unknown> & {
+    const data = (await apiService.adminCodes(
+      codesPage,
+      codesSearch,
+      codesStatus,
+    )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
     setCodeRows(data.items || []);
@@ -531,10 +576,11 @@ const AdminDashboard: React.FC = () => {
   }, [codesPage, codesSearch, codesStatus]);
 
   const loadFlagged = useCallback(async () => {
-    const data = (await apiService.adminFlagged(flaggedPage, flaggedSearch, flaggedKind)) as Record<
-      string,
-      unknown
-    > & {
+    const data = (await apiService.adminFlagged(
+      flaggedPage,
+      flaggedSearch,
+      flaggedKind,
+    )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
     setFlagged(data.items || []);
@@ -547,22 +593,26 @@ const AdminDashboard: React.FC = () => {
       winnersSearch,
       winnersStatus,
       PAGE_SIZE,
-      winnersTier
+      winnersTier,
     )) as Record<string, unknown> & { items: Record<string, unknown>[] };
     setWinners(data.items || []);
     setWinnersMeta(pickMeta(data));
   }, [winnersPage, winnersSearch, winnersStatus, winnersTier]);
 
   const loadDrawWinners = useCallback(async () => {
-    const data = (await apiService.adminWinners(1, "", "", 100)) as { items: Record<string, unknown>[] };
+    const data = (await apiService.adminWinners(1, "", "", 100)) as {
+      items: Record<string, unknown>[];
+    };
     setWinners(data.items || []);
   }, []);
 
   const loadSocial = useCallback(async () => {
-    const data = (await apiService.adminSocial(socialPage, socialSearch, PAGE_SIZE, socialPlatform)) as Record<
-      string,
-      unknown
-    > & {
+    const data = (await apiService.adminSocial(
+      socialPage,
+      socialSearch,
+      PAGE_SIZE,
+      socialPlatform,
+    )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
     setSocialPosts(data.items || []);
@@ -570,19 +620,22 @@ const AdminDashboard: React.FC = () => {
   }, [socialPage, socialSearch, socialPlatform]);
 
   const loadContact = useCallback(async () => {
-    const data = (await apiService.adminContact(contactPage, contactSearch, contactUnread)) as Record<
-      string,
-      unknown
-    > & { items: Record<string, unknown>[] };
+    const data = (await apiService.adminContact(
+      contactPage,
+      contactSearch,
+      contactUnread,
+    )) as Record<string, unknown> & { items: Record<string, unknown>[] };
     setMessages(data.items || []);
     setContactMeta(pickMeta(data));
   }, [contactPage, contactSearch, contactUnread]);
 
   const loadAudit = useCallback(async () => {
-    const data = (await apiService.adminAudit(auditPage, auditSearch, PAGE_SIZE, auditActorType)) as Record<
-      string,
-      unknown
-    > & {
+    const data = (await apiService.adminAudit(
+      auditPage,
+      auditSearch,
+      PAGE_SIZE,
+      auditActorType,
+    )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
     setAudit(data.items || []);
@@ -590,14 +643,18 @@ const AdminDashboard: React.FC = () => {
   }, [auditPage, auditSearch, auditActorType]);
 
   const loadDrawPreview = useCallback(async () => {
-    setDrawPreview((await apiService.adminDrawPreview()) as Record<string, unknown>);
+    setDrawPreview(
+      (await apiService.adminDrawPreview()) as Record<string, unknown>,
+    );
   }, []);
 
   const loadDrawEntries = useCallback(async () => {
-    const data = (await apiService.adminDrawEntries(entriesPage, entriesSearch, PAGE_SIZE, entriesWinner)) as Record<
-      string,
-      unknown
-    > & {
+    const data = (await apiService.adminDrawEntries(
+      entriesPage,
+      entriesSearch,
+      PAGE_SIZE,
+      entriesWinner,
+    )) as Record<string, unknown> & {
       items: Record<string, unknown>[];
     };
     setDrawEntries(data.items || []);
@@ -661,22 +718,37 @@ const AdminDashboard: React.FC = () => {
     auditActorType,
   ]);
 
-  const renderPager = (meta: PageMeta, setPg: (fn: (p: number) => number) => void, noun = "rows") => (
+  const renderPager = (
+    meta: PageMeta,
+    setPg: (fn: (p: number) => number) => void,
+    noun = "rows",
+  ) => (
     <S.Pager>
       <S.PagerMeta>
-        {meta.totalCount.toLocaleString()} {noun} · page {meta.page} of {meta.totalPages}
+        {meta.totalCount.toLocaleString()} {noun} · page {meta.page} of{" "}
+        {meta.totalPages}
       </S.PagerMeta>
       <S.PagerControls>
-        <S.Action $ghost disabled={!meta.hasPrevPage} onClick={() => setPg((p) => Math.max(1, p - 1))}>
+        <S.Action
+          $ghost
+          disabled={!meta.hasPrevPage}
+          onClick={() => setPg((p) => Math.max(1, p - 1))}
+        >
           Prev
         </S.Action>
         <S.Chip>
           Page {meta.page} / {meta.totalPages}
         </S.Chip>
-        <span style={{ fontSize: "12px", color: "#5c6b62", whiteSpace: "nowrap" }}>
+        <span
+          style={{ fontSize: "12px", color: "#5c6b62", whiteSpace: "nowrap" }}
+        >
           {meta.totalCount.toLocaleString()} total · {PAGE_SIZE} per page
         </span>
-        <S.Action $ghost disabled={!meta.hasNextPage} onClick={() => setPg((p) => p + 1)}>
+        <S.Action
+          $ghost
+          disabled={!meta.hasNextPage}
+          onClick={() => setPg((p) => p + 1)}
+        >
           Next
         </S.Action>
       </S.PagerControls>
@@ -690,7 +762,9 @@ const AdminDashboard: React.FC = () => {
         : kind === "winners"
           ? apiService.exportWinnersUrl()
           : apiService.exportEntrantsUrl();
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     if (!res.ok) {
       toast.error("Export failed");
       return;
@@ -711,15 +785,26 @@ const AdminDashboard: React.FC = () => {
   const sub24 = (overview?.submissions24h || {}) as Record<string, number>;
   const win = (overview?.winners || {}) as Record<string, number>;
   const campaign = (overview?.campaign || {}) as Record<string, string>;
-  const recent = (overview?.recentSubmissions || []) as Record<string, unknown>[];
-  const recentWinners = (overview?.recentWinners || []) as Record<string, unknown>[];
+  const recent = (overview?.recentSubmissions || []) as Record<
+    string,
+    unknown
+  >[];
+  const recentWinners = (overview?.recentWinners || []) as Record<
+    string,
+    unknown
+  >[];
   const usedPct = Number(
-    codes.usedPercent || (codes.total ? (Number(codes.used || 0) / Number(codes.total)) * 100 : 0)
+    codes.usedPercent ||
+      (codes.total ? (Number(codes.used || 0) / Number(codes.total)) * 100 : 0),
   );
 
   return (
     <S.Shell>
-      <S.MobileToggle type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+      <S.MobileToggle
+        type="button"
+        onClick={() => setMenuOpen(true)}
+        aria-label="Open menu"
+      >
         <FaBars />
       </S.MobileToggle>
       <S.Overlay $open={menuOpen} onClick={() => setMenuOpen(false)} />
@@ -763,43 +848,70 @@ const AdminDashboard: React.FC = () => {
       <S.Main>
         {module === "codes" && (
           <S.SubTabs>
-            <S.SubTab $active={codesTab === "codes"} onClick={() => setCodesTab("codes")}>
+            <S.SubTab
+              $active={codesTab === "codes"}
+              onClick={() => setCodesTab("codes")}
+            >
               Inventory
             </S.SubTab>
-            <S.SubTab $active={codesTab === "flagged"} onClick={() => setCodesTab("flagged")}>
+            <S.SubTab
+              $active={codesTab === "flagged"}
+              onClick={() => setCodesTab("flagged")}
+            >
               Flagged
             </S.SubTab>
           </S.SubTabs>
         )}
         {module === "activity" && (
           <S.SubTabs>
-            <S.SubTab $active={activityTab === "submissions"} onClick={() => setActivityTab("submissions")}>
+            <S.SubTab
+              $active={activityTab === "submissions"}
+              onClick={() => setActivityTab("submissions")}
+            >
               Code attempts
             </S.SubTab>
-            <S.SubTab $active={activityTab === "entries"} onClick={() => setActivityTab("entries")}>
+            <S.SubTab
+              $active={activityTab === "entries"}
+              onClick={() => setActivityTab("entries")}
+            >
               Draw tickets
             </S.SubTab>
           </S.SubTabs>
         )}
         {module === "prizes" && (
           <S.SubTabs>
-            <S.SubTab $active={prizesTab === "winners"} onClick={() => setPrizesTab("winners")}>
+            <S.SubTab
+              $active={prizesTab === "winners"}
+              onClick={() => setPrizesTab("winners")}
+            >
               Winners
             </S.SubTab>
-            <S.SubTab $active={prizesTab === "draw"} onClick={() => setPrizesTab("draw")}>
+            <S.SubTab
+              $active={prizesTab === "draw"}
+              onClick={() => setPrizesTab("draw")}
+            >
               Run draw
             </S.SubTab>
           </S.SubTabs>
         )}
         {module === "tools" && (
           <S.SubTabs>
-            <S.SubTab $active={toolsTab === "audit"} onClick={() => setToolsTab("audit")}>
+            <S.SubTab
+              $active={toolsTab === "audit"}
+              onClick={() => setToolsTab("audit")}
+            >
               Audit
             </S.SubTab>
-            <S.SubTab $active={toolsTab === "contact"} onClick={() => setToolsTab("contact")}>
+            <S.SubTab
+              $active={toolsTab === "contact"}
+              onClick={() => setToolsTab("contact")}
+            >
               Inbox
             </S.SubTab>
-            <S.SubTab $active={toolsTab === "social"} onClick={() => setToolsTab("social")}>
+            <S.SubTab
+              $active={toolsTab === "social"}
+              onClick={() => setToolsTab("social")}
+            >
               Social
             </S.SubTab>
           </S.SubTabs>
@@ -811,10 +923,15 @@ const AdminDashboard: React.FC = () => {
               <div>
                 <h1>Overview</h1>
                 <p>
-                  {campaign.start || "Sep 18"} – {campaign.end || "Nov 20"} · Draw {campaign.draw || "Nov 23"}
+                  {campaign.start || "Sep 18"} – {campaign.end || "Nov 20"} ·
+                  Draw {campaign.draw || "Nov 23"}
                 </p>
               </div>
-              <S.Action $ghost onClick={() => withLoad(loadOverview)} disabled={loading}>
+              <S.Action
+                $ghost
+                onClick={() => withLoad(loadOverview)}
+                disabled={loading}
+              >
                 Refresh
               </S.Action>
             </S.PageHead>
@@ -825,8 +942,16 @@ const AdminDashboard: React.FC = () => {
                   {[0, 1, 2, 3].map((i) => (
                     <S.Kpi key={i}>
                       <S.ShimmerBlock $h={10} $w="42%" />
-                      <S.ShimmerBlock $h={28} $w="36%" style={{ marginTop: 10 }} />
-                      <S.ShimmerBlock $h={10} $w="70%" style={{ marginTop: 8 }} />
+                      <S.ShimmerBlock
+                        $h={28}
+                        $w="36%"
+                        style={{ marginTop: 10 }}
+                      />
+                      <S.ShimmerBlock
+                        $h={10}
+                        $w="70%"
+                        style={{ marginTop: 8 }}
+                      />
                     </S.Kpi>
                   ))}
                 </S.KpiGrid>
@@ -840,7 +965,7 @@ const AdminDashboard: React.FC = () => {
                         { label: "Result", kind: "badge" },
                         { label: "When", width: "40%" },
                       ],
-                      5
+                      5,
                     )}
                   </S.Panel>
                   <S.Panel>
@@ -854,264 +979,345 @@ const AdminDashboard: React.FC = () => {
                         { label: "Codes", kind: "num" },
                         { label: "Tickets", kind: "num" },
                       ],
-                      5
+                      5,
                     )}
                   </S.Panel>
                 </S.Split>
               </>
             ) : (
               <>
-            <S.KpiGrid>
-              <S.Kpi $accent={COLORS.red}>
-                <span>People entered</span>
-                <strong>{Number(overview?.entrants || 0).toLocaleString()}</strong>
-                <small>{Number(overview?.accounts || 0)} registered · {Number(overview?.guests || 0)} guests</small>
-              </S.Kpi>
-              <S.Kpi $accent={COLORS.gold}>
-                <span>Codes used</span>
-                <strong>{Number(codes.used || 0).toLocaleString()}</strong>
-                <small>{Number(codes.unused || 0).toLocaleString()} still available of {Number(codes.total || 0).toLocaleString()}</small>
-              </S.Kpi>
-              <S.Kpi $accent={COLORS.success}>
-                <span>Draw tickets</span>
-                <strong>{Number(overview?.drawEntries || 0).toLocaleString()}</strong>
-                <small>Expected from used codes: {Number(overview?.expectedTickets || 0)}</small>
-              </S.Kpi>
-              <S.Kpi $accent={COLORS.redDark}>
-                <span>Last 24 hours</span>
-                <strong>{sub24.total || 0}</strong>
-                <small>
-                  {sub24.success || 0} success · {sub24.duplicate || 0} dupes · {sub24.invalid || 0} invalid
-                </small>
-              </S.Kpi>
-            </S.KpiGrid>
+                <S.KpiGrid>
+                  <S.Kpi $accent={COLORS.red}>
+                    <span>People entered</span>
+                    <strong>
+                      {Number(overview?.entrants || 0).toLocaleString()}
+                    </strong>
+                    <small>
+                      {Number(overview?.accounts || 0)} registered ·{" "}
+                      {Number(overview?.guests || 0)} guests
+                    </small>
+                  </S.Kpi>
+                  <S.Kpi $accent={COLORS.gold}>
+                    <span>Codes used</span>
+                    <strong>{Number(codes.used || 0).toLocaleString()}</strong>
+                    <small>
+                      {Number(codes.unused || 0).toLocaleString()} still
+                      available of {Number(codes.total || 0).toLocaleString()}
+                    </small>
+                  </S.Kpi>
+                  <S.Kpi $accent={COLORS.success}>
+                    <span>Draw tickets</span>
+                    <strong>
+                      {Number(overview?.drawEntries || 0).toLocaleString()}
+                    </strong>
+                    <small>
+                      Expected from used codes:{" "}
+                      {Number(overview?.expectedTickets || 0)}
+                    </small>
+                  </S.Kpi>
+                  <S.Kpi $accent={COLORS.redDark}>
+                    <span>Last 24 hours</span>
+                    <strong>{sub24.total || 0}</strong>
+                    <small>
+                      {sub24.success || 0} success · {sub24.duplicate || 0}{" "}
+                      dupes · {sub24.invalid || 0} invalid
+                    </small>
+                  </S.Kpi>
+                </S.KpiGrid>
 
-            <S.Panel>
-              <h2>Crown code pool</h2>
-              <p className="sub">Grand prize inventory loaded for the campaign. 4 validated codes = 1 draw ticket.</p>
-              <S.ProgressTrack>
-                <S.ProgressFill $pct={usedPct} />
-              </S.ProgressTrack>
-              <S.ProgressMeta>
-                <span>{usedPct.toFixed(1)}% redeemed</span>
-                <span>{Number(codes.used || 0).toLocaleString()} used · {Number(codes.unused || 0).toLocaleString()} unused</span>
-              </S.ProgressMeta>
-            </S.Panel>
+                <S.Panel>
+                  <h2>Crown code pool</h2>
+                  <p className="sub">
+                    Grand prize inventory loaded for the campaign. 4 validated
+                    codes = 1 draw ticket.
+                  </p>
+                  <S.ProgressTrack>
+                    <S.ProgressFill $pct={usedPct} />
+                  </S.ProgressTrack>
+                  <S.ProgressMeta>
+                    <span>{usedPct.toFixed(1)}% redeemed</span>
+                    <span>
+                      {Number(codes.used || 0).toLocaleString()} used ·{" "}
+                      {Number(codes.unused || 0).toLocaleString()} unused
+                    </span>
+                  </S.ProgressMeta>
+                </S.Panel>
 
-            <S.StatGrid>
-              <S.StatCard type="button" onClick={() => goModule("codes")}>
-                <span>Inventory</span>
-                <strong>{Number(codes.total || 0).toLocaleString()}</strong>
-                <small>Total unique crown codes in MongoDB</small>
-              </S.StatCard>
-              <S.StatCard type="button" onClick={() => { goModule("codes"); setCodesTab("flagged"); }}>
-                <span>Needs review</span>
-                <strong>{Number(codes.flagged || 0).toLocaleString()}</strong>
-                <small>Flagged codes or duplicate-attempt rows</small>
-              </S.StatCard>
-              <S.StatCard type="button" onClick={() => { goModule("tools"); setToolsTab("contact"); }}>
-                <span>Support inbox</span>
-                <strong>{Number(overview?.unreadMessages || 0).toLocaleString()}</strong>
-                <small>Unread contact messages</small>
-              </S.StatCard>
-            </S.StatGrid>
-
-            <S.Split>
-              <S.Panel>
-                <h2>Latest code attempts</h2>
-                <p className="sub">Most recent redemptions from the site</p>
-                {recent.length === 0 ? (
-                  <S.Empty>
-                    <strong>No activity yet</strong>
-                    Attempts appear here once codes are submitted.
-                  </S.Empty>
-                ) : (
-                  <S.OverviewTableWrap>
-                    <S.OverviewTable>
-                      <thead>
-                        <tr>
-                          <th>Code</th>
-                          <th>Person</th>
-                          <th>Result</th>
-                          <th>When</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {recent.map((s) => {
-                          const entrant = s.entrant as { fullName?: string; phone?: string } | null;
-                          return (
-                            <tr key={String(s._id)}>
-                              <td data-label="Code">
-                                <code>{String(s.codeAttempted)}</code>
-                              </td>
-                              <td data-label="Person">
-                                <strong>{entrant?.fullName || "—"}</strong>
-                                {entrant?.phone ? <S.CellMeta>{entrant.phone}</S.CellMeta> : null}
-                              </td>
-                              <td data-label="Result">
-                                <S.Badge $tone={resultTone(String(s.result))}>{String(s.result)}</S.Badge>
-                              </td>
-                              <td data-label="When">
-                                <S.Muted>{fmtWhen(s.createdAt)}</S.Muted>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </S.OverviewTable>
-                  </S.OverviewTableWrap>
-                )}
-              </S.Panel>
-
-              <S.Panel>
-                <h2>Top by codes</h2>
-                <p className="sub">People closest to extra tickets</p>
-                {(overview?.topEntrants as Record<string, unknown>[] | undefined)?.length ? (
-                  <S.OverviewTableWrap>
-                    <S.OverviewTable>
-                      <thead>
-                        <tr>
-                          <th>Rank</th>
-                          <th>Name</th>
-                          <th>Phone</th>
-                          <th>Type</th>
-                          <th>Codes</th>
-                          <th>Tickets</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(overview?.topEntrants as Record<string, unknown>[]).map((e) => (
-                          <tr
-                            key={String(e._id)}
-                            style={{ cursor: "pointer" }}
-                            onClick={() => navigate(`/admin/entrants/${String(e._id)}`)}
-                          >
-                            <td data-label="Rank">
-                              <S.Rank $top={Number(e.rank) <= 3}>{String(e.rank)}</S.Rank>
-                            </td>
-                            <td data-label="Name">
-                              <strong>{String(e.fullName)}</strong>
-                            </td>
-                            <td data-label="Phone">
-                              <S.Muted>{String(e.phone || "—")}</S.Muted>
-                            </td>
-                            <td data-label="Type">
-                              <S.Badge $tone={e.hasAccount ? "ok" : "neutral"}>
-                                {e.hasAccount ? "Account" : "Guest"}
-                              </S.Badge>
-                            </td>
-                            <td data-label="Codes">
-                              <S.Num>{String(e.validCodeCount ?? 0)}</S.Num>
-                            </td>
-                            <td data-label="Tickets">
-                              <S.Num>{String(e.drawEntryCount ?? 0)}</S.Num>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </S.OverviewTable>
-                  </S.OverviewTableWrap>
-                ) : (
-                  <S.Empty>
-                    <strong>No codes yet</strong>
-                    Rankings appear after successful submissions.
-                  </S.Empty>
-                )}
-                <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  <S.Action
-                    $ghost
-                    onClick={() => goModule("leaderboard")}
-                  >
-                    Open leaderboard
-                  </S.Action>
-                  <S.Action
-                    $ghost
+                <S.StatGrid>
+                  <S.StatCard type="button" onClick={() => goModule("codes")}>
+                    <span>Inventory</span>
+                    <strong>{Number(codes.total || 0).toLocaleString()}</strong>
+                    <small>Total unique crown codes in MongoDB</small>
+                  </S.StatCard>
+                  <S.StatCard
+                    type="button"
                     onClick={() => {
-                      goModule("prizes");
-                      setPrizesTab("draw");
+                      goModule("codes");
+                      setCodesTab("flagged");
                     }}
                   >
-                    <FaDice /> Draw console
-                  </S.Action>
-                </div>
-              </S.Panel>
-            </S.Split>
+                    <span>Needs review</span>
+                    <strong>
+                      {Number(codes.flagged || 0).toLocaleString()}
+                    </strong>
+                    <small>Flagged codes or duplicate-attempt rows</small>
+                  </S.StatCard>
+                  <S.StatCard
+                    type="button"
+                    onClick={() => {
+                      goModule("tools");
+                      setToolsTab("contact");
+                    }}
+                  >
+                    <span>Support inbox</span>
+                    <strong>
+                      {Number(overview?.unreadMessages || 0).toLocaleString()}
+                    </strong>
+                    <small>Unread contact messages</small>
+                  </S.StatCard>
+                </S.StatGrid>
 
-            <S.Panel>
-                <h2>Winners &amp; draw</h2>
-                <p className="sub">Published showcase vs pending verification</p>
-                {recentWinners.length === 0 ? (
-                  <S.Empty>
-                    <strong>No winners recorded yet</strong>
-                    Instant-win claims and the electronic draw will appear here.
-                  </S.Empty>
-                ) : (
-                  <S.TableWrap>
-                    <S.Table>
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Prize</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {recentWinners.map((w) => (
-                          <tr key={String(w._id)}>
-                            <td>
-                              <strong>{String(w.displayName)}</strong>
-                            </td>
-                            <td>
-                              <S.Muted>{String(w.prizeLabel)}</S.Muted>
-                            </td>
-                            <td>
-                              <S.Badge $tone={String(w.status) === "published" ? "ok" : "warn"}>
-                                {String(w.status).replace(/_/g, " ")}
-                              </S.Badge>
-                            </td>
+                <S.Split>
+                  <S.Panel>
+                    <h2>Latest code attempts</h2>
+                    <p className="sub">Most recent redemptions from the site</p>
+                    {recent.length === 0 ? (
+                      <S.Empty>
+                        <strong>No activity yet</strong>
+                        Attempts appear here once codes are submitted.
+                      </S.Empty>
+                    ) : (
+                      <S.OverviewTableWrap>
+                        <S.OverviewTable>
+                          <thead>
+                            <tr>
+                              <th>Code</th>
+                              <th>Person</th>
+                              <th>Result</th>
+                              <th>When</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {recent.map((s) => {
+                              const entrant = s.entrant as {
+                                fullName?: string;
+                                phone?: string;
+                              } | null;
+                              return (
+                                <tr key={String(s._id)}>
+                                  <td data-label="Code">
+                                    <code>{String(s.codeAttempted)}</code>
+                                  </td>
+                                  <td data-label="Person">
+                                    <strong>{entrant?.fullName || "—"}</strong>
+                                    {entrant?.phone ? (
+                                      <S.CellMeta>{entrant.phone}</S.CellMeta>
+                                    ) : null}
+                                  </td>
+                                  <td data-label="Result">
+                                    <S.Badge
+                                      $tone={resultTone(String(s.result))}
+                                    >
+                                      {String(s.result)}
+                                    </S.Badge>
+                                  </td>
+                                  <td data-label="When">
+                                    <S.Muted>{fmtWhen(s.createdAt)}</S.Muted>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </S.OverviewTable>
+                      </S.OverviewTableWrap>
+                    )}
+                  </S.Panel>
+
+                  <S.Panel>
+                    <h2>Top by codes</h2>
+                    <p className="sub">People closest to extra tickets</p>
+                    {(
+                      overview?.topEntrants as
+                        | Record<string, unknown>[]
+                        | undefined
+                    )?.length ? (
+                      <S.OverviewTableWrap>
+                        <S.OverviewTable>
+                          <thead>
+                            <tr>
+                              <th>Rank</th>
+                              <th>Name</th>
+                              <th>Phone</th>
+                              <th>Type</th>
+                              <th>Codes</th>
+                              <th>Tickets</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(
+                              overview?.topEntrants as Record<string, unknown>[]
+                            ).map((e) => (
+                              <tr
+                                key={String(e._id)}
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  navigate(`/admin/entrants/${String(e._id)}`)
+                                }
+                              >
+                                <td data-label="Rank">
+                                  <S.Rank $top={Number(e.rank) <= 3}>
+                                    {String(e.rank)}
+                                  </S.Rank>
+                                </td>
+                                <td data-label="Name">
+                                  <strong>{String(e.fullName)}</strong>
+                                </td>
+                                <td data-label="Phone">
+                                  <S.Muted>{String(e.phone || "—")}</S.Muted>
+                                </td>
+                                <td data-label="Type">
+                                  <S.Badge
+                                    $tone={e.hasAccount ? "ok" : "neutral"}
+                                  >
+                                    {e.hasAccount ? "Account" : "Guest"}
+                                  </S.Badge>
+                                </td>
+                                <td data-label="Codes">
+                                  <S.Num>{String(e.validCodeCount ?? 0)}</S.Num>
+                                </td>
+                                <td data-label="Tickets">
+                                  <S.Num>{String(e.drawEntryCount ?? 0)}</S.Num>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </S.OverviewTable>
+                      </S.OverviewTableWrap>
+                    ) : (
+                      <S.Empty>
+                        <strong>No codes yet</strong>
+                        Rankings appear after successful submissions.
+                      </S.Empty>
+                    )}
+                    <div
+                      style={{
+                        marginTop: 8,
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 6,
+                      }}
+                    >
+                      <S.Action $ghost onClick={() => goModule("leaderboard")}>
+                        Open leaderboard
+                      </S.Action>
+                      <S.Action
+                        $ghost
+                        onClick={() => {
+                          goModule("prizes");
+                          setPrizesTab("draw");
+                        }}
+                      >
+                        <FaDice /> Draw console
+                      </S.Action>
+                    </div>
+                  </S.Panel>
+                </S.Split>
+
+                <S.Panel>
+                  <h2>Winners &amp; draw</h2>
+                  <p className="sub">
+                    Published showcase vs pending verification
+                  </p>
+                  {recentWinners.length === 0 ? (
+                    <S.Empty>
+                      <strong>No winners recorded yet</strong>
+                      Instant-win claims and the electronic draw will appear
+                      here.
+                    </S.Empty>
+                  ) : (
+                    <S.TableWrap>
+                      <S.Table>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Prize</th>
+                            <th>Status</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </S.Table>
-                  </S.TableWrap>
-                )}
-                <S.MetaRow>
-                  <S.Chip>Published · {win.published || 0}</S.Chip>
-                  <S.Chip>Pending verify · {win.pending || 0}</S.Chip>
-                  <S.Chip>7-day attempts · {Number(overview?.submissions7d || 0)}</S.Chip>
-                </S.MetaRow>
-              </S.Panel>
+                        </thead>
+                        <tbody>
+                          {recentWinners.map((w) => (
+                            <tr key={String(w._id)}>
+                              <td>
+                                <strong>{String(w.displayName)}</strong>
+                              </td>
+                              <td>
+                                <S.Muted>{String(w.prizeLabel)}</S.Muted>
+                              </td>
+                              <td>
+                                <S.Badge
+                                  $tone={
+                                    String(w.status) === "published"
+                                      ? "ok"
+                                      : "warn"
+                                  }
+                                >
+                                  {String(w.status).replace(/_/g, " ")}
+                                </S.Badge>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </S.Table>
+                    </S.TableWrap>
+                  )}
+                  <S.MetaRow>
+                    <S.Chip>Published · {win.published || 0}</S.Chip>
+                    <S.Chip>Pending verify · {win.pending || 0}</S.Chip>
+                    <S.Chip>
+                      7-day attempts · {Number(overview?.submissions7d || 0)}
+                    </S.Chip>
+                  </S.MetaRow>
+                </S.Panel>
 
-            <S.Panel>
-              <h2>Quick actions</h2>
-              <p className="sub">Jump to the work you do most during the campaign</p>
-              <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 6 }}>
-                <S.Action
-                  onClick={() => {
-                    goModule("codes");
-                    setCodesTab("codes");
-                    setModal("import");
-                  }}
-                >
-                  <FaUpload /> Import codes
-                </S.Action>
-                <S.Action
-                  $ghost
-                  onClick={() => {
-                    goModule("prizes");
-                    setPrizesTab("draw");
-                  }}
-                >
-                  <FaDice /> Draw console
-                </S.Action>
-                <S.Action $ghost onClick={() => download("entries")}>
-                  <FaDownload /> Export tickets
-                </S.Action>
-                <S.Action $ghost onClick={() => goModule("users")}>
-                  <FaUsers /> People
-                </S.Action>
-              </div>
-            </S.Panel>
+                <S.Panel>
+                  <h2>Quick actions</h2>
+                  <p className="sub">
+                    Jump to the work you do most during the campaign
+                  </p>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 6,
+                    }}
+                  >
+                    <S.Action
+                      onClick={() => {
+                        goModule("codes");
+                        setCodesTab("codes");
+                        setModal("import");
+                      }}
+                    >
+                      <FaUpload /> Import codes
+                    </S.Action>
+                    <S.Action
+                      $ghost
+                      onClick={() => {
+                        goModule("prizes");
+                        setPrizesTab("draw");
+                      }}
+                    >
+                      <FaDice /> Draw console
+                    </S.Action>
+                    <S.Action $ghost onClick={() => download("entries")}>
+                      <FaDownload /> Export tickets
+                    </S.Action>
+                    <S.Action $ghost onClick={() => goModule("users")}>
+                      <FaUsers /> People
+                    </S.Action>
+                  </div>
+                </S.Panel>
               </>
             )}
           </>
@@ -1122,7 +1328,10 @@ const AdminDashboard: React.FC = () => {
             <S.PageHead>
               <div>
                 <h1>Users</h1>
-                <p>Search, block, or open a profile. Rankings are under Leaderboard.</p>
+                <p>
+                  Search, block, or open a profile. Rankings are under
+                  Leaderboard.
+                </p>
               </div>
               <S.Action onClick={() => download("users")}>
                 <FaDownload /> Export CSV
@@ -1168,7 +1377,7 @@ const AdminDashboard: React.FC = () => {
                     "Delete selected users?",
                     "Used codes stay redeemed.",
                     (ids) => apiService.adminBulkDeleteEntrants(ids),
-                    loadEntrants
+                    loadEntrants,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -1176,134 +1385,152 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 usersShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      {checkTh(selectableIds(entrants))}
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Email</th>
-                      <th>Type</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {entrants.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={7}>
-                          <S.Empty>
-                            <strong>No users found</strong>
-                            Try another search or clear filters.
-                          </S.Empty>
-                        </td>
+                        {checkTh(selectableIds(entrants))}
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                       </tr>
-                    ) : (
-                      entrants.map((e) => (
-                        <tr key={String(e._id)}>
-                          {checkTd(String(e._id), e.role === "admin")}
-                          <td>
-                            <strong>{String(e.fullName)}</strong>
+                    </thead>
+                    <tbody>
+                      {entrants.length === 0 ? (
+                        <tr>
+                          <td colSpan={7}>
+                            <S.Empty>
+                              <strong>No users found</strong>
+                              Try another search or clear filters.
+                            </S.Empty>
                           </td>
-                          <td>
-                            <S.Muted>{String(e.phone || "—")}</S.Muted>
-                          </td>
-                          <td>
-                            <S.Muted>{String(e.email || "—")}</S.Muted>
-                          </td>
-                          <td>
-                            <S.Badge $tone={e.hasAccount ? "ok" : "neutral"}>
-                              {e.hasAccount ? "Account" : "Guest"}
-                            </S.Badge>
-                          </td>
-                          <td>
-                            <S.Badge $tone={e.isActive ? "ok" : "bad"}>
-                              {e.isActive ? "Active" : "Blocked"}
-                            </S.Badge>
-                          </td>
-                          <td>
-                            <S.Actions>
-                              <S.IconBtn
-                                $tone="view"
-                                title="View"
-                                onClick={() => navigate(`/admin/entrants/${String(e._id)}`)}
-                              >
-                                <FaEye />
-                              </S.IconBtn>
-                              {e.isActive ? (
+                        </tr>
+                      ) : (
+                        entrants.map((e) => (
+                          <tr key={String(e._id)}>
+                            {checkTd(String(e._id), e.role === "admin")}
+                            <td>
+                              <strong>{String(e.fullName)}</strong>
+                            </td>
+                            <td>
+                              <S.Muted>{String(e.phone || "—")}</S.Muted>
+                            </td>
+                            <td>
+                              <S.Muted>{String(e.email || "—")}</S.Muted>
+                            </td>
+                            <td>
+                              <S.Badge $tone={e.hasAccount ? "ok" : "neutral"}>
+                                {e.hasAccount ? "Account" : "Guest"}
+                              </S.Badge>
+                            </td>
+                            <td>
+                              <S.Badge $tone={e.isActive ? "ok" : "bad"}>
+                                {e.isActive ? "Active" : "Blocked"}
+                              </S.Badge>
+                            </td>
+                            <td>
+                              <S.Actions>
                                 <S.IconBtn
-                                  $tone="block"
-                                  title="Block"
+                                  $tone="view"
+                                  title="View"
+                                  onClick={() =>
+                                    navigate(`/admin/entrants/${String(e._id)}`)
+                                  }
+                                >
+                                  <FaEye />
+                                </S.IconBtn>
+                                {e.isActive ? (
+                                  <S.IconBtn
+                                    $tone="block"
+                                    title="Block"
+                                    onClick={() =>
+                                      askConfirm({
+                                        title: "Block user?",
+                                        message: `${String(e.fullName)} will not be able to submit codes until unblocked.`,
+                                        confirmLabel: "Block",
+                                        danger: true,
+                                        onConfirm: async () => {
+                                          setConfirmDlg(null);
+                                          await withBusy(
+                                            "Blocking…",
+                                            async () => {
+                                              await apiService.adminBlock(
+                                                String(e._id),
+                                              );
+                                              await loadEntrants();
+                                            },
+                                          );
+                                        },
+                                      })
+                                    }
+                                  >
+                                    <FaBan />
+                                  </S.IconBtn>
+                                ) : (
+                                  <S.IconBtn
+                                    $tone="view"
+                                    title="Unblock"
+                                    onClick={() =>
+                                      askConfirm({
+                                        title: "Unblock user?",
+                                        message: `Allow ${String(e.fullName)} to submit codes again?`,
+                                        confirmLabel: "Unblock",
+                                        onConfirm: async () => {
+                                          setConfirmDlg(null);
+                                          await withBusy(
+                                            "Unblocking…",
+                                            async () => {
+                                              await apiService.adminUnblock(
+                                                String(e._id),
+                                              );
+                                              await loadEntrants();
+                                            },
+                                          );
+                                        },
+                                      })
+                                    }
+                                  >
+                                    <FaCheckCircle />
+                                  </S.IconBtn>
+                                )}
+                                <S.IconBtn
+                                  $tone="delete"
+                                  title="Delete"
                                   onClick={() =>
                                     askConfirm({
-                                      title: "Block user?",
-                                      message: `${String(e.fullName)} will not be able to submit codes until unblocked.`,
-                                      confirmLabel: "Block",
+                                      title: "Delete user?",
+                                      message:
+                                        "Used codes stay redeemed. This cannot be undone.",
+                                      confirmLabel: "Delete",
                                       danger: true,
                                       onConfirm: async () => {
                                         setConfirmDlg(null);
-                                        await withBusy("Blocking…", async () => {
-                                          await apiService.adminBlock(String(e._id));
-                                          await loadEntrants();
-                                        });
+                                        await withBusy(
+                                          "Deleting…",
+                                          async () => {
+                                            await apiService.adminDeleteEntrant(
+                                              String(e._id),
+                                            );
+                                            await loadEntrants();
+                                          },
+                                        );
                                       },
                                     })
                                   }
                                 >
-                                  <FaBan />
+                                  <FaTrash />
                                 </S.IconBtn>
-                              ) : (
-                                <S.IconBtn
-                                  $tone="view"
-                                  title="Unblock"
-                                  onClick={() =>
-                                    askConfirm({
-                                      title: "Unblock user?",
-                                      message: `Allow ${String(e.fullName)} to submit codes again?`,
-                                      confirmLabel: "Unblock",
-                                      onConfirm: async () => {
-                                        setConfirmDlg(null);
-                                        await withBusy("Unblocking…", async () => {
-                                          await apiService.adminUnblock(String(e._id));
-                                          await loadEntrants();
-                                        });
-                                      },
-                                    })
-                                  }
-                                >
-                                  <FaCheckCircle />
-                                </S.IconBtn>
-                              )}
-                              <S.IconBtn
-                                $tone="delete"
-                                title="Delete"
-                                onClick={() =>
-                                  askConfirm({
-                                    title: "Delete user?",
-                                    message: "Used codes stay redeemed. This cannot be undone.",
-                                    confirmLabel: "Delete",
-                                    danger: true,
-                                    onConfirm: async () => {
-                                      setConfirmDlg(null);
-                                      await withBusy("Deleting…", async () => {
-                                        await apiService.adminDeleteEntrant(String(e._id));
-                                        await loadEntrants();
-                                      });
-                                    },
-                                  })
-                                }
-                              >
-                                <FaTrash />
-                              </S.IconBtn>
-                            </S.Actions>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                              </S.Actions>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -1314,7 +1541,10 @@ const AdminDashboard: React.FC = () => {
             <S.PageHead>
               <div>
                 <h1>Leaderboard</h1>
-                <p>Ranked by codes & tickets. Draw picks winners — this list is monitoring only.</p>
+                <p>
+                  Ranked by codes & tickets. Draw picks winners — this list is
+                  monitoring only.
+                </p>
               </div>
               <S.Action onClick={() => download("users")}>
                 <FaDownload /> Export CSV
@@ -1374,7 +1604,7 @@ const AdminDashboard: React.FC = () => {
                     "Delete selected users?",
                     "Used codes stay redeemed.",
                     (ids) => apiService.adminBulkDeleteEntrants(ids),
-                    loadEntrants
+                    loadEntrants,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -1382,106 +1612,118 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 leaderboardShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      {checkTh(selectableIds(entrants))}
-                      <th>Rank</th>
-                      <th>Name</th>
-                      <th>Phone</th>
-                      <th>Type</th>
-                      <th>Codes</th>
-                      <th>Tickets</th>
-                      <th>Next ticket</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {entrants.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={11}>
-                          <S.Empty>
-                            <strong>No matches</strong>
-                            Clear filters or wait for code submissions.
-                          </S.Empty>
-                        </td>
+                        {checkTh(selectableIds(entrants))}
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Type</th>
+                        <th>Codes</th>
+                        <th>Tickets</th>
+                        <th>Next ticket</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                       </tr>
-                    ) : (
-                      entrants.map((e) => (
-                        <tr key={String(e._id)}>
-                          {checkTd(String(e._id), e.role === "admin")}
-                          <td>
-                            <S.Rank $top={Number(e.rank) > 0 && Number(e.rank) <= 3}>
-                              {String(e.rank ?? "—")}
-                            </S.Rank>
-                          </td>
-                          <td>
-                            <strong>{String(e.fullName)}</strong>
-                          </td>
-                          <td>
-                            <S.Muted>{String(e.phone || "—")}</S.Muted>
-                          </td>
-                          <td>
-                            <S.Badge $tone={e.hasAccount ? "ok" : "neutral"}>
-                              {e.hasAccount ? "Account" : "Guest"}
-                            </S.Badge>
-                          </td>
-                          <td>
-                            <S.Num>{String(e.validCodeCount ?? 0)}</S.Num>
-                          </td>
-                          <td>
-                            <S.Num>{String(e.drawEntryCount ?? 0)}</S.Num>
-                          </td>
-                          <td>
-                            <S.Muted>{Number(e.pendingTowardNext ?? 0)} / 4</S.Muted>
-                          </td>
-                          <td>
-                            <S.Badge $tone={e.isActive ? "ok" : "bad"}>
-                              {e.isActive ? "Active" : "Blocked"}
-                            </S.Badge>
-                          </td>
-                          <td>
-                            <S.Actions>
-                              <S.IconBtn
-                                $tone="view"
-                                title="View"
-                                onClick={() => navigate(`/admin/entrants/${String(e._id)}`)}
-                              >
-                                <FaEye />
-                              </S.IconBtn>
-                              {e.role !== "admin" && (
-                                <S.IconBtn
-                                  $tone="delete"
-                                  title="Delete"
-                                  onClick={() =>
-                                    askConfirm({
-                                      title: "Delete user?",
-                                      message: "Used codes stay redeemed. This cannot be undone.",
-                                      confirmLabel: "Delete",
-                                      danger: true,
-                                      onConfirm: async () => {
-                                        setConfirmDlg(null);
-                                        await withBusy("Deleting…", async () => {
-                                          await apiService.adminDeleteEntrant(String(e._id));
-                                          await loadEntrants();
-                                        });
-                                      },
-                                    })
-                                  }
-                                >
-                                  <FaTrash />
-                                </S.IconBtn>
-                              )}
-                            </S.Actions>
+                    </thead>
+                    <tbody>
+                      {entrants.length === 0 ? (
+                        <tr>
+                          <td colSpan={11}>
+                            <S.Empty>
+                              <strong>No matches</strong>
+                              Clear filters or wait for code submissions.
+                            </S.Empty>
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                      ) : (
+                        entrants.map((e) => (
+                          <tr key={String(e._id)}>
+                            {checkTd(String(e._id), e.role === "admin")}
+                            <td>
+                              <S.Rank
+                                $top={Number(e.rank) > 0 && Number(e.rank) <= 3}
+                              >
+                                {String(e.rank ?? "—")}
+                              </S.Rank>
+                            </td>
+                            <td>
+                              <strong>{String(e.fullName)}</strong>
+                            </td>
+                            <td>
+                              <S.Muted>{String(e.phone || "—")}</S.Muted>
+                            </td>
+                            <td>
+                              <S.Badge $tone={e.hasAccount ? "ok" : "neutral"}>
+                                {e.hasAccount ? "Account" : "Guest"}
+                              </S.Badge>
+                            </td>
+                            <td>
+                              <S.Num>{String(e.validCodeCount ?? 0)}</S.Num>
+                            </td>
+                            <td>
+                              <S.Num>{String(e.drawEntryCount ?? 0)}</S.Num>
+                            </td>
+                            <td>
+                              <S.Muted>
+                                {Number(e.pendingTowardNext ?? 0)} / 4
+                              </S.Muted>
+                            </td>
+                            <td>
+                              <S.Badge $tone={e.isActive ? "ok" : "bad"}>
+                                {e.isActive ? "Active" : "Blocked"}
+                              </S.Badge>
+                            </td>
+                            <td>
+                              <S.Actions>
+                                <S.IconBtn
+                                  $tone="view"
+                                  title="View"
+                                  onClick={() =>
+                                    navigate(`/admin/entrants/${String(e._id)}`)
+                                  }
+                                >
+                                  <FaEye />
+                                </S.IconBtn>
+                                {e.role !== "admin" && (
+                                  <S.IconBtn
+                                    $tone="delete"
+                                    title="Delete"
+                                    onClick={() =>
+                                      askConfirm({
+                                        title: "Delete user?",
+                                        message:
+                                          "Used codes stay redeemed. This cannot be undone.",
+                                        confirmLabel: "Delete",
+                                        danger: true,
+                                        onConfirm: async () => {
+                                          setConfirmDlg(null);
+                                          await withBusy(
+                                            "Deleting…",
+                                            async () => {
+                                              await apiService.adminDeleteEntrant(
+                                                String(e._id),
+                                              );
+                                              await loadEntrants();
+                                            },
+                                          );
+                                        },
+                                      })
+                                    }
+                                  >
+                                    <FaTrash />
+                                  </S.IconBtn>
+                                )}
+                              </S.Actions>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -1526,7 +1768,7 @@ const AdminDashboard: React.FC = () => {
                     "Delete selected tickets?",
                     "These tickets will leave the draw pool. Winning tickets are kept. Redeemed codes stay used.",
                     (ids) => apiService.adminBulkDeleteDrawEntries(ids),
-                    loadDrawEntries
+                    loadDrawEntries,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -1534,85 +1776,99 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 entriesShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      {checkTh(selectableIds(drawEntries.filter((row) => !row.isWinner)))}
-                      <th>Ticket ID</th>
-                      <th>Person</th>
-                      <th>Status</th>
-                      <th>Created</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {drawEntries.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={6}>
-                          <S.Empty>
-                            <strong>No tickets yet</strong>
-                            Tickets appear once someone banks 4 valid codes.
-                          </S.Empty>
-                        </td>
+                        {checkTh(
+                          selectableIds(
+                            drawEntries.filter((row) => !row.isWinner),
+                          ),
+                        )}
+                        <th>Ticket ID</th>
+                        <th>Person</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th></th>
                       </tr>
-                    ) : (
-                      drawEntries.map((e) => {
-                        const entrant = e.entrant as {
-                          fullName?: string;
-                          phone?: string;
-                          _id?: string;
-                        } | null;
-                        return (
-                          <tr key={String(e._id)}>
-                            {checkTd(String(e._id), Boolean(e.isWinner))}
-                            <td>
-                              <code>…{String(e._id).slice(-8)}</code>
-                            </td>
-                            <td>
-                              <strong>{entrant?.fullName || "—"}</strong>
-                              {entrant?.phone ? <S.CellMeta>{entrant.phone}</S.CellMeta> : null}
-                            </td>
-                            <td>
-                              <S.Badge $tone={e.isWinner ? "ok" : "neutral"}>
-                                {e.isWinner ? String(e.prizeTier || "Winner") : "In pool"}
-                              </S.Badge>
-                            </td>
-                            <td>
-                              <S.Muted>{fmtWhen(e.createdAt)}</S.Muted>
-                            </td>
-                            <td>
-                              {!e.isWinner ? (
-                                <S.IconBtn
-                                  $tone="delete"
-                                  title="Delete"
-                                  onClick={() =>
-                                    askConfirm({
-                                      title: "Delete ticket?",
-                                      message: "This ticket will leave the draw pool. Redeemed codes stay used.",
-                                      confirmLabel: "Delete",
-                                      danger: true,
-                                      onConfirm: async () => {
-                                        setConfirmDlg(null);
-                                        await withBusy("Deleting…", async () => {
-                                          await apiService.adminDeleteDrawEntry(String(e._id));
-                                          await loadDrawEntries();
-                                        });
-                                      },
-                                    })
-                                  }
-                                >
-                                  <FaTrash />
-                                </S.IconBtn>
-                              ) : null}
-                            </td>
-                          </tr>
-                        );
-                      })
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                    </thead>
+                    <tbody>
+                      {drawEntries.length === 0 ? (
+                        <tr>
+                          <td colSpan={6}>
+                            <S.Empty>
+                              <strong>No tickets yet</strong>
+                              Tickets appear once someone banks 4 valid codes.
+                            </S.Empty>
+                          </td>
+                        </tr>
+                      ) : (
+                        drawEntries.map((e) => {
+                          const entrant = e.entrant as {
+                            fullName?: string;
+                            phone?: string;
+                            _id?: string;
+                          } | null;
+                          return (
+                            <tr key={String(e._id)}>
+                              {checkTd(String(e._id), Boolean(e.isWinner))}
+                              <td>
+                                <code>…{String(e._id).slice(-8)}</code>
+                              </td>
+                              <td>
+                                <strong>{entrant?.fullName || "—"}</strong>
+                                {entrant?.phone ? (
+                                  <S.CellMeta>{entrant.phone}</S.CellMeta>
+                                ) : null}
+                              </td>
+                              <td>
+                                <S.Badge $tone={e.isWinner ? "ok" : "neutral"}>
+                                  {e.isWinner
+                                    ? String(e.prizeTier || "Winner")
+                                    : "In pool"}
+                                </S.Badge>
+                              </td>
+                              <td>
+                                <S.Muted>{fmtWhen(e.createdAt)}</S.Muted>
+                              </td>
+                              <td>
+                                {!e.isWinner ? (
+                                  <S.IconBtn
+                                    $tone="delete"
+                                    title="Delete"
+                                    onClick={() =>
+                                      askConfirm({
+                                        title: "Delete ticket?",
+                                        message:
+                                          "This ticket will leave the draw pool. Redeemed codes stay used.",
+                                        confirmLabel: "Delete",
+                                        danger: true,
+                                        onConfirm: async () => {
+                                          setConfirmDlg(null);
+                                          await withBusy(
+                                            "Deleting…",
+                                            async () => {
+                                              await apiService.adminDeleteDrawEntry(
+                                                String(e._id),
+                                              );
+                                              await loadDrawEntries();
+                                            },
+                                          );
+                                        },
+                                      })
+                                    }
+                                  >
+                                    <FaTrash />
+                                  </S.IconBtn>
+                                ) : null}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -1655,7 +1911,7 @@ const AdminDashboard: React.FC = () => {
                     "Delete selected attempts?",
                     "These log rows will be removed. Redeemed codes stay used.",
                     (ids) => apiService.adminBulkDeleteSubmissions(ids),
-                    loadSubmissions
+                    loadSubmissions,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -1663,81 +1919,94 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 submissionsShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      {checkTh(selectableIds(submissions))}
-                      <th>Code</th>
-                      <th>Person</th>
-                      <th>Result</th>
-                      <th>Note</th>
-                      <th>When</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {submissions.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={7}>
-                          <S.Empty>
-                            <strong>No attempts yet</strong>
-                            Submissions will show up as codes are entered.
-                          </S.Empty>
-                        </td>
+                        {checkTh(selectableIds(submissions))}
+                        <th>Code</th>
+                        <th>Person</th>
+                        <th>Result</th>
+                        <th>Note</th>
+                        <th>When</th>
+                        <th></th>
                       </tr>
-                    ) : (
-                      submissions.map((s) => {
-                        const entrant = s.entrant as { fullName?: string; phone?: string } | null;
-                        return (
-                          <tr key={String(s._id)}>
-                            {checkTd(String(s._id))}
-                            <td>
-                              <code>{String(s.codeAttempted)}</code>
-                            </td>
-                            <td>
-                              <strong>{entrant?.fullName || "—"}</strong>
-                              {entrant?.phone ? <S.CellMeta>{entrant.phone}</S.CellMeta> : null}
-                            </td>
-                            <td>
-                              <S.Badge $tone={resultTone(String(s.result))}>{String(s.result)}</S.Badge>
-                            </td>
-                            <td>
-                              <S.Muted>{String(s.reason || "—")}</S.Muted>
-                            </td>
-                            <td>
-                              <S.Muted>{fmtWhen(s.createdAt)}</S.Muted>
-                            </td>
-                            <td>
-                              <S.IconBtn
-                                $tone="delete"
-                                title="Delete"
-                                onClick={() =>
-                                  askConfirm({
-                                    title: "Delete attempt?",
-                                    message: "This log row will be removed. Redeemed codes stay used.",
-                                    confirmLabel: "Delete",
-                                    danger: true,
-                                    onConfirm: async () => {
-                                      setConfirmDlg(null);
-                                      await withBusy("Deleting…", async () => {
-                                        await apiService.adminDeleteSubmission(String(s._id));
-                                        await loadSubmissions();
-                                      });
-                                    },
-                                  })
-                                }
-                              >
-                                <FaTrash />
-                              </S.IconBtn>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                    </thead>
+                    <tbody>
+                      {submissions.length === 0 ? (
+                        <tr>
+                          <td colSpan={7}>
+                            <S.Empty>
+                              <strong>No attempts yet</strong>
+                              Submissions will show up as codes are entered.
+                            </S.Empty>
+                          </td>
+                        </tr>
+                      ) : (
+                        submissions.map((s) => {
+                          const entrant = s.entrant as {
+                            fullName?: string;
+                            phone?: string;
+                          } | null;
+                          return (
+                            <tr key={String(s._id)}>
+                              {checkTd(String(s._id))}
+                              <td>
+                                <code>{String(s.codeAttempted)}</code>
+                              </td>
+                              <td>
+                                <strong>{entrant?.fullName || "—"}</strong>
+                                {entrant?.phone ? (
+                                  <S.CellMeta>{entrant.phone}</S.CellMeta>
+                                ) : null}
+                              </td>
+                              <td>
+                                <S.Badge $tone={resultTone(String(s.result))}>
+                                  {String(s.result)}
+                                </S.Badge>
+                              </td>
+                              <td>
+                                <S.Muted>{String(s.reason || "—")}</S.Muted>
+                              </td>
+                              <td>
+                                <S.Muted>{fmtWhen(s.createdAt)}</S.Muted>
+                              </td>
+                              <td>
+                                <S.IconBtn
+                                  $tone="delete"
+                                  title="Delete"
+                                  onClick={() =>
+                                    askConfirm({
+                                      title: "Delete attempt?",
+                                      message:
+                                        "This log row will be removed. Redeemed codes stay used.",
+                                      confirmLabel: "Delete",
+                                      danger: true,
+                                      onConfirm: async () => {
+                                        setConfirmDlg(null);
+                                        await withBusy(
+                                          "Deleting…",
+                                          async () => {
+                                            await apiService.adminDeleteSubmission(
+                                              String(s._id),
+                                            );
+                                            await loadSubmissions();
+                                          },
+                                        );
+                                      },
+                                    })
+                                  }
+                                >
+                                  <FaTrash />
+                                </S.IconBtn>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -1807,65 +2076,76 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 codesShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      <th>Code</th>
-                      <th>Status</th>
-                      <th>Batch</th>
-                      <th>Used by</th>
-                      <th>Used at</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {codeRows.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={5}>
-                          <S.Empty>
-                            <strong>No codes found</strong>
-                            Import a master list or adjust filters.
-                          </S.Empty>
-                        </td>
+                        <th>Code</th>
+                        <th>Status</th>
+                        <th>Batch</th>
+                        <th>Used by</th>
+                        <th>Used at</th>
                       </tr>
-                    ) : (
-                      codeRows.map((c) => {
-                        const usedBy = c.usedBy as { fullName?: string; phone?: string } | null;
-                        return (
-                          <tr key={String(c._id)}>
-                            <td>
-                              <code>{String(c.code)}</code>
-                            </td>
-                            <td>
-                              <S.Badge
-                                $tone={
-                                  String(c.status) === "used"
-                                    ? "ok"
-                                    : String(c.status) === "flagged"
-                                      ? "bad"
-                                      : "neutral"
-                                }
-                              >
-                                {String(c.status)}
-                              </S.Badge>
-                            </td>
-                            <td>
-                              <S.Muted>{String(c.sourceBatch || "—")}</S.Muted>
-                            </td>
-                            <td>
-                              {usedBy?.fullName ? <strong>{usedBy.fullName}</strong> : <S.Muted>—</S.Muted>}
-                              {usedBy?.phone ? <S.CellMeta>{usedBy.phone}</S.CellMeta> : null}
-                            </td>
-                            <td>
-                              <S.Muted>{fmtWhen(c.usedAt)}</S.Muted>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                    </thead>
+                    <tbody>
+                      {codeRows.length === 0 ? (
+                        <tr>
+                          <td colSpan={5}>
+                            <S.Empty>
+                              <strong>No codes found</strong>
+                              Import a master list or adjust filters.
+                            </S.Empty>
+                          </td>
+                        </tr>
+                      ) : (
+                        codeRows.map((c) => {
+                          const usedBy = c.usedBy as {
+                            fullName?: string;
+                            phone?: string;
+                          } | null;
+                          return (
+                            <tr key={String(c._id)}>
+                              <td>
+                                <code>{String(c.code)}</code>
+                              </td>
+                              <td>
+                                <S.Badge
+                                  $tone={
+                                    String(c.status) === "used"
+                                      ? "ok"
+                                      : String(c.status) === "flagged"
+                                        ? "bad"
+                                        : "neutral"
+                                  }
+                                >
+                                  {String(c.status)}
+                                </S.Badge>
+                              </td>
+                              <td>
+                                <S.Muted>
+                                  {String(c.sourceBatch || "—")}
+                                </S.Muted>
+                              </td>
+                              <td>
+                                {usedBy?.fullName ? (
+                                  <strong>{usedBy.fullName}</strong>
+                                ) : (
+                                  <S.Muted>—</S.Muted>
+                                )}
+                                {usedBy?.phone ? (
+                                  <S.CellMeta>{usedBy.phone}</S.CellMeta>
+                                ) : null}
+                              </td>
+                              <td>
+                                <S.Muted>{fmtWhen(c.usedAt)}</S.Muted>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -1930,7 +2210,11 @@ const AdminDashboard: React.FC = () => {
                             <code>{String(c.code)}</code>
                           </td>
                           <td>
-                            <S.Badge $tone={String(c.status) === "flagged" ? "bad" : "warn"}>
+                            <S.Badge
+                              $tone={
+                                String(c.status) === "flagged" ? "bad" : "warn"
+                              }
+                            >
                               {String(c.status)}
                             </S.Badge>
                           </td>
@@ -1954,7 +2238,9 @@ const AdminDashboard: React.FC = () => {
                 <h1>Winners</h1>
                 <p>Verify, publish, and manage instant wins.</p>
               </div>
-              <S.Action onClick={() => setModal("instant")}>Add instant win</S.Action>
+              <S.Action onClick={() => setModal("instant")}>
+                Add instant win
+              </S.Action>
             </S.PageHead>
             <S.Panel>
               <S.Toolbar>
@@ -1975,7 +2261,9 @@ const AdminDashboard: React.FC = () => {
                 >
                   <option value="">All statuses</option>
                   <option value="published">Published</option>
-                  <option value="pending_verification">Pending verification</option>
+                  <option value="pending_verification">
+                    Pending verification
+                  </option>
                   <option value="verified">Verified</option>
                   <option value="disqualified">Disqualified</option>
                 </S.Select>
@@ -2003,123 +2291,146 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 winnersShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      <th>Winner</th>
-                      <th>Tier</th>
-                      <th>Status</th>
-                      <th>Prize</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {winners.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={5}>
-                          <S.Empty>
-                            <strong>No winners yet</strong>
-                            Run the draw or add an instant win to get started.
-                          </S.Empty>
-                        </td>
+                        <th>Winner</th>
+                        <th>Tier</th>
+                        <th>Status</th>
+                        <th>Prize</th>
+                        <th>Actions</th>
                       </tr>
-                    ) : (
-                      winners.map((w) => (
-                        <tr key={String(w._id)}>
-                          <td>
-                            <strong>{String(w.displayName)}</strong>
-                          </td>
-                          <td>
-                            <S.Badge $tone="info">{String(w.tier)}</S.Badge>
-                          </td>
-                          <td>
-                            <S.Badge
-                              $tone={
-                                String(w.status) === "published"
-                                  ? "ok"
-                                  : String(w.status) === "pending_verification"
-                                    ? "warn"
-                                    : String(w.status) === "disqualified"
-                                      ? "bad"
-                                      : "neutral"
-                              }
-                            >
-                              {String(w.status).replace(/_/g, " ")}
-                            </S.Badge>
-                          </td>
-                          <td>{String(w.prizeLabel)}</td>
-                          <td>
-                            <S.Actions>
-                              <S.Action
-                                $ghost
-                                onClick={() =>
-                                  apiService.adminWinnerAction(String(w._id), "verify").then(loadWinners)
-                                }
-                              >
-                                Verify
-                              </S.Action>
-                              <S.Action
-                                $ghost
-                                onClick={() =>
-                                  apiService
-                                    .adminWinnerAction(String(w._id), "publish")
-                                    .then(() => {
-                                      toast.success("Published + notify queued");
-                                      loadWinners();
-                                    })
-                                }
-                              >
-                                Publish
-                              </S.Action>
-                              <S.Action
-                                $ghost
-                                onClick={() =>
-                                  askConfirm({
-                                    title: "Disqualify winner?",
-                                    message: `${String(w.displayName)} will be marked disqualified.`,
-                                    confirmLabel: "Disqualify",
-                                    danger: true,
-                                    onConfirm: async () => {
-                                      setConfirmDlg(null);
-                                      await withBusy("Updating…", async () => {
-                                        await apiService.adminWinnerAction(String(w._id), "disqualify");
-                                        await loadWinners();
-                                      });
-                                    },
-                                  })
-                                }
-                              >
-                                DQ
-                              </S.Action>
-                              <S.Action
-                                $danger
-                                onClick={() =>
-                                  askConfirm({
-                                    title: "Delete winner?",
-                                    message: "This winner record will be removed permanently.",
-                                    confirmLabel: "Delete",
-                                    danger: true,
-                                    onConfirm: async () => {
-                                      setConfirmDlg(null);
-                                      await withBusy("Deleting…", async () => {
-                                        await apiService.adminDeleteWinner(String(w._id));
-                                        await loadWinners();
-                                      });
-                                    },
-                                  })
-                                }
-                              >
-                                Delete
-                              </S.Action>
-                            </S.Actions>
+                    </thead>
+                    <tbody>
+                      {winners.length === 0 ? (
+                        <tr>
+                          <td colSpan={5}>
+                            <S.Empty>
+                              <strong>No winners yet</strong>
+                              Run the draw or add an instant win to get started.
+                            </S.Empty>
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                      ) : (
+                        winners.map((w) => (
+                          <tr key={String(w._id)}>
+                            <td>
+                              <strong>{String(w.displayName)}</strong>
+                            </td>
+                            <td>
+                              <S.Badge $tone="info">{String(w.tier)}</S.Badge>
+                            </td>
+                            <td>
+                              <S.Badge
+                                $tone={
+                                  String(w.status) === "published"
+                                    ? "ok"
+                                    : String(w.status) ===
+                                        "pending_verification"
+                                      ? "warn"
+                                      : String(w.status) === "disqualified"
+                                        ? "bad"
+                                        : "neutral"
+                                }
+                              >
+                                {String(w.status).replace(/_/g, " ")}
+                              </S.Badge>
+                            </td>
+                            <td>{String(w.prizeLabel)}</td>
+                            <td>
+                              <S.Actions>
+                                <S.Action
+                                  $ghost
+                                  onClick={() =>
+                                    apiService
+                                      .adminWinnerAction(
+                                        String(w._id),
+                                        "verify",
+                                      )
+                                      .then(loadWinners)
+                                  }
+                                >
+                                  Verify
+                                </S.Action>
+                                <S.Action
+                                  $ghost
+                                  onClick={() =>
+                                    apiService
+                                      .adminWinnerAction(
+                                        String(w._id),
+                                        "publish",
+                                      )
+                                      .then(() => {
+                                        toast.success(
+                                          "Published + notify queued",
+                                        );
+                                        loadWinners();
+                                      })
+                                  }
+                                >
+                                  Publish
+                                </S.Action>
+                                <S.Action
+                                  $ghost
+                                  onClick={() =>
+                                    askConfirm({
+                                      title: "Disqualify winner?",
+                                      message: `${String(w.displayName)} will be marked disqualified.`,
+                                      confirmLabel: "Disqualify",
+                                      danger: true,
+                                      onConfirm: async () => {
+                                        setConfirmDlg(null);
+                                        await withBusy(
+                                          "Updating…",
+                                          async () => {
+                                            await apiService.adminWinnerAction(
+                                              String(w._id),
+                                              "disqualify",
+                                            );
+                                            await loadWinners();
+                                          },
+                                        );
+                                      },
+                                    })
+                                  }
+                                >
+                                  DQ
+                                </S.Action>
+                                <S.Action
+                                  $danger
+                                  onClick={() =>
+                                    askConfirm({
+                                      title: "Delete winner?",
+                                      message:
+                                        "This winner record will be removed permanently.",
+                                      confirmLabel: "Delete",
+                                      danger: true,
+                                      onConfirm: async () => {
+                                        setConfirmDlg(null);
+                                        await withBusy(
+                                          "Deleting…",
+                                          async () => {
+                                            await apiService.adminDeleteWinner(
+                                              String(w._id),
+                                            );
+                                            await loadWinners();
+                                          },
+                                        );
+                                      },
+                                    })
+                                  }
+                                >
+                                  Delete
+                                </S.Action>
+                              </S.Actions>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -2136,22 +2447,29 @@ const AdminDashboard: React.FC = () => {
             <S.DrawHero>
               <h2>Draw console</h2>
               <p>
-                Eligible tickets: <strong>{Number(drawPreview?.eligibleEntries || 0)}</strong> · Distinct people:{" "}
+                Eligible tickets:{" "}
+                <strong>{Number(drawPreview?.eligibleEntries || 0)}</strong> ·
+                Distinct people:{" "}
                 <strong>{Number(drawPreview?.distinctEntrants || 0)}</strong>
-                {drawPreview?.drawAlreadyRun ? " · Draw already run — re-run blocked." : ""}
+                {drawPreview?.drawAlreadyRun
+                  ? " · Draw already run — re-run blocked."
+                  : ""}
               </p>
               <S.Action
                 onClick={() =>
                   askConfirm({
                     title: "Run official draw?",
-                    message: "This selects 1 grand + 2 secondary winners from the ticket pool. It cannot be undone.",
+                    message:
+                      "This selects 1 grand + 2 secondary winners from the ticket pool. It cannot be undone.",
                     confirmLabel: "Run draw",
                     danger: true,
                     onConfirm: async () => {
                       setConfirmDlg(null);
                       await withBusy("Running draw…", async () => {
                         await apiService.adminRunDraw();
-                        toast.success("Draw complete — winners pending verification");
+                        toast.success(
+                          "Draw complete — winners pending verification",
+                        );
                         await loadDrawPreview();
                         await loadDrawWinners();
                       });
@@ -2165,7 +2483,9 @@ const AdminDashboard: React.FC = () => {
             </S.DrawHero>
             <S.Panel>
               <h2>Grand & secondary winners</h2>
-              <p className="sub">Verify on the Winners tab before publishing.</p>
+              <p className="sub">
+                Verify on the Winners tab before publishing.
+              </p>
               <S.TableWrap>
                 <S.Table>
                   <thead>
@@ -2177,7 +2497,9 @@ const AdminDashboard: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {winners.filter((w) => ["grand", "secondary"].includes(String(w.tier))).length === 0 ? (
+                    {winners.filter((w) =>
+                      ["grand", "secondary"].includes(String(w.tier)),
+                    ).length === 0 ? (
                       <tr>
                         <td colSpan={4}>
                           <S.Empty>
@@ -2188,7 +2510,9 @@ const AdminDashboard: React.FC = () => {
                       </tr>
                     ) : (
                       winners
-                        .filter((w) => ["grand", "secondary"].includes(String(w.tier)))
+                        .filter((w) =>
+                          ["grand", "secondary"].includes(String(w.tier)),
+                        )
                         .map((w) => (
                           <tr key={String(w._id)}>
                             <td>
@@ -2202,7 +2526,8 @@ const AdminDashboard: React.FC = () => {
                                 $tone={
                                   String(w.status) === "published"
                                     ? "ok"
-                                    : String(w.status) === "pending_verification"
+                                    : String(w.status) ===
+                                        "pending_verification"
                                       ? "warn"
                                       : "neutral"
                                 }
@@ -2260,7 +2585,7 @@ const AdminDashboard: React.FC = () => {
                     "Remove selected posts?",
                     "These embeds will be removed from the public Social page.",
                     (ids) => apiService.adminBulkDeleteSocial(ids),
-                    loadSocial
+                    loadSocial,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -2287,7 +2612,9 @@ const AdminDashboard: React.FC = () => {
                           {checkTd(String(p._id))}
                           <td style={{ maxWidth: 320, wordBreak: "break-all" }}>
                             <S.Muted>{String(p.embedUrl)}</S.Muted>
-                            {p.platform ? <S.CellMeta>{String(p.platform)}</S.CellMeta> : null}
+                            {p.platform ? (
+                              <S.CellMeta>{String(p.platform)}</S.CellMeta>
+                            ) : null}
                           </td>
                           <td>{String(p.caption || "—")}</td>
                           <td>
@@ -2296,13 +2623,16 @@ const AdminDashboard: React.FC = () => {
                               onClick={() =>
                                 askConfirm({
                                   title: "Remove social post?",
-                                  message: "This embed will be removed from the public Social page.",
+                                  message:
+                                    "This embed will be removed from the public Social page.",
                                   confirmLabel: "Remove",
                                   danger: true,
                                   onConfirm: async () => {
                                     setConfirmDlg(null);
                                     await withBusy("Removing…", async () => {
-                                      await apiService.adminDeleteSocial(String(p._id));
+                                      await apiService.adminDeleteSocial(
+                                        String(p._id),
+                                      );
                                       await loadSocial();
                                     });
                                   },
@@ -2356,7 +2686,7 @@ const AdminDashboard: React.FC = () => {
                     "Delete selected messages?",
                     "These contact messages will be removed.",
                     (ids) => apiService.adminBulkDeleteContact(ids),
-                    loadContact
+                    loadContact,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -2396,7 +2726,9 @@ const AdminDashboard: React.FC = () => {
                             {String(m.message)}
                           </td>
                           <td>
-                            <S.Badge $tone={m.isRead ? "neutral" : "warn"}>{m.isRead ? "Read" : "New"}</S.Badge>
+                            <S.Badge $tone={m.isRead ? "neutral" : "warn"}>
+                              {m.isRead ? "Read" : "New"}
+                            </S.Badge>
                           </td>
                           <td>
                             <S.Muted>{fmtWhen(m.createdAt)}</S.Muted>
@@ -2407,7 +2739,9 @@ const AdminDashboard: React.FC = () => {
                                 <S.Action
                                   $ghost
                                   onClick={() =>
-                                    apiService.adminMarkContactRead(String(m._id)).then(loadContact)
+                                    apiService
+                                      .adminMarkContactRead(String(m._id))
+                                      .then(loadContact)
                                   }
                                 >
                                   Mark read
@@ -2419,13 +2753,16 @@ const AdminDashboard: React.FC = () => {
                                 onClick={() =>
                                   askConfirm({
                                     title: "Delete message?",
-                                    message: "This contact message will be removed.",
+                                    message:
+                                      "This contact message will be removed.",
                                     confirmLabel: "Delete",
                                     danger: true,
                                     onConfirm: async () => {
                                       setConfirmDlg(null);
                                       await withBusy("Deleting…", async () => {
-                                        await apiService.adminDeleteContact(String(m._id));
+                                        await apiService.adminDeleteContact(
+                                          String(m._id),
+                                        );
                                         await loadContact();
                                       });
                                     },
@@ -2494,7 +2831,7 @@ const AdminDashboard: React.FC = () => {
                     "Delete selected events?",
                     "These audit log rows will be removed.",
                     (ids) => apiService.adminBulkDeleteAudit(ids),
-                    loadAudit
+                    loadAudit,
                   )}
                 </S.ToolbarActions>
               </S.Toolbar>
@@ -2502,104 +2839,117 @@ const AdminDashboard: React.FC = () => {
               {loading ? (
                 auditShimmer()
               ) : (
-              <S.TableWrap>
-                <S.Table>
-                  <thead>
-                    <tr>
-                      {checkTh(selectableIds(audit))}
-                      <th>Event</th>
-                      <th>Actor</th>
-                      <th>Role</th>
-                      <th>Target</th>
-                      <th>Code</th>
-                      <th>Tier</th>
-                      <th>Detail</th>
-                      <th>When</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {audit.length === 0 ? (
+                <S.TableWrap>
+                  <S.Table>
+                    <thead>
                       <tr>
-                        <td colSpan={10}>
-                          <S.Empty>
-                            <strong>No audit events</strong>
-                            Admin actions will appear here.
-                          </S.Empty>
-                        </td>
+                        {checkTh(selectableIds(audit))}
+                        <th>Event</th>
+                        <th>Actor</th>
+                        <th>Role</th>
+                        <th>Target</th>
+                        <th>Code</th>
+                        <th>Tier</th>
+                        <th>Detail</th>
+                        <th>When</th>
+                        <th></th>
                       </tr>
-                    ) : (
-                      audit.map((a) => (
-                        <tr key={String(a._id)}>
-                          {checkTd(String(a._id))}
-                          <td>
-                            <strong>{String(a.eventLabel || a.action)}</strong>
-                          </td>
-                          <td>
-                            <strong>{String(a.actorName || "—")}</strong>
-                            {a.actorPhone ? <S.CellMeta>{String(a.actorPhone)}</S.CellMeta> : null}
-                          </td>
-                          <td>
-                            <S.Badge
-                              $tone={
-                                a.actorRoleLabel === "Admin"
-                                  ? "info"
-                                  : a.actorRoleLabel === "Account"
-                                    ? "ok"
-                                    : a.actorRoleLabel === "Guest"
-                                      ? "neutral"
-                                      : "neutral"
-                              }
-                            >
-                              {String(a.actorRoleLabel || a.actorType || "System")}
-                            </S.Badge>
-                          </td>
-                          <td>{String(a.target || "—")}</td>
-                          <td>
-                            {a.code && a.code !== "—" ? <code>{String(a.code)}</code> : <S.Muted>—</S.Muted>}
-                          </td>
-                          <td>
-                            {a.tier && a.tier !== "—" ? (
-                              <S.Badge $tone="info">{String(a.tier)}</S.Badge>
-                            ) : (
-                              <S.Muted>—</S.Muted>
-                            )}
-                          </td>
-                          <td>
-                            <S.Muted>{String(a.detail || "—")}</S.Muted>
-                          </td>
-                          <td>
-                            <S.Muted>{fmtWhen(a.createdAt)}</S.Muted>
-                          </td>
-                          <td>
-                            <S.IconBtn
-                              $tone="delete"
-                              title="Delete"
-                              onClick={() =>
-                                askConfirm({
-                                  title: "Delete event?",
-                                  message: "This audit log row will be removed.",
-                                  confirmLabel: "Delete",
-                                  danger: true,
-                                  onConfirm: async () => {
-                                    setConfirmDlg(null);
-                                    await withBusy("Deleting…", async () => {
-                                      await apiService.adminDeleteAudit(String(a._id));
-                                      await loadAudit();
-                                    });
-                                  },
-                                })
-                              }
-                            >
-                              <FaTrash />
-                            </S.IconBtn>
+                    </thead>
+                    <tbody>
+                      {audit.length === 0 ? (
+                        <tr>
+                          <td colSpan={10}>
+                            <S.Empty>
+                              <strong>No audit events</strong>
+                              Admin actions will appear here.
+                            </S.Empty>
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </S.Table>
-              </S.TableWrap>
+                      ) : (
+                        audit.map((a) => (
+                          <tr key={String(a._id)}>
+                            {checkTd(String(a._id))}
+                            <td>
+                              <strong>
+                                {String(a.eventLabel || a.action)}
+                              </strong>
+                            </td>
+                            <td>
+                              <strong>{String(a.actorName || "—")}</strong>
+                              {a.actorPhone ? (
+                                <S.CellMeta>{String(a.actorPhone)}</S.CellMeta>
+                              ) : null}
+                            </td>
+                            <td>
+                              <S.Badge
+                                $tone={
+                                  a.actorRoleLabel === "Admin"
+                                    ? "info"
+                                    : a.actorRoleLabel === "Account"
+                                      ? "ok"
+                                      : a.actorRoleLabel === "Guest"
+                                        ? "neutral"
+                                        : "neutral"
+                                }
+                              >
+                                {String(
+                                  a.actorRoleLabel || a.actorType || "System",
+                                )}
+                              </S.Badge>
+                            </td>
+                            <td>{String(a.target || "—")}</td>
+                            <td>
+                              {a.code && a.code !== "—" ? (
+                                <code>{String(a.code)}</code>
+                              ) : (
+                                <S.Muted>—</S.Muted>
+                              )}
+                            </td>
+                            <td>
+                              {a.tier && a.tier !== "—" ? (
+                                <S.Badge $tone="info">{String(a.tier)}</S.Badge>
+                              ) : (
+                                <S.Muted>—</S.Muted>
+                              )}
+                            </td>
+                            <td>
+                              <S.Muted>{String(a.detail || "—")}</S.Muted>
+                            </td>
+                            <td>
+                              <S.Muted>{fmtWhen(a.createdAt)}</S.Muted>
+                            </td>
+                            <td>
+                              <S.IconBtn
+                                $tone="delete"
+                                title="Delete"
+                                onClick={() =>
+                                  askConfirm({
+                                    title: "Delete event?",
+                                    message:
+                                      "This audit log row will be removed.",
+                                    confirmLabel: "Delete",
+                                    danger: true,
+                                    onConfirm: async () => {
+                                      setConfirmDlg(null);
+                                      await withBusy("Deleting…", async () => {
+                                        await apiService.adminDeleteAudit(
+                                          String(a._id),
+                                        );
+                                        await loadAudit();
+                                      });
+                                    },
+                                  })
+                                }
+                              >
+                                <FaTrash />
+                              </S.IconBtn>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </S.Table>
+                </S.TableWrap>
               )}
             </S.Panel>
           </>
@@ -2611,7 +2961,8 @@ const AdminDashboard: React.FC = () => {
           <S.ModalCard onClick={(e) => e.stopPropagation()}>
             <h2>Import codes</h2>
             <p className="sub">
-              CSV of GRAND PRIZE ENTRY Print Text/Code only. Instant-win skipped.
+              CSV of GRAND PRIZE ENTRY Print Text/Code only. Instant-win
+              skipped.
             </p>
             <S.FileRow>
               <label htmlFor="codes-csv-modal">
@@ -2627,12 +2978,16 @@ const AdminDashboard: React.FC = () => {
                       const text = await file.text();
                       const parsed = parseCodesFromCsv(text);
                       if (!parsed.length) {
-                        toast.error("No valid grand-prize codes found in that file");
+                        toast.error(
+                          "No valid grand-prize codes found in that file",
+                        );
                         return;
                       }
                       setCsv(parsed.join("\n"));
                       setCsvFileName(`${file.name} · ${parsed.length} codes`);
-                      toast.info(`Loaded ${parsed.length} codes from ${file.name}`);
+                      toast.info(
+                        `Loaded ${parsed.length} codes from ${file.name}`,
+                      );
                     } catch {
                       toast.error("Could not read that file");
                     } finally {
@@ -2665,11 +3020,16 @@ const AdminDashboard: React.FC = () => {
                   }
                   setModal(null);
                   await withBusy("Importing codes…", async () => {
-                    const res = (await apiService.adminImportCodes(codes.join("\n"), `ui-${Date.now()}`)) as {
+                    const res = (await apiService.adminImportCodes(
+                      codes.join("\n"),
+                      `ui-${Date.now()}`,
+                    )) as {
                       inserted: number;
                       skipped: number;
                     };
-                    toast.success(`Inserted ${res.inserted}, skipped ${res.skipped}`);
+                    toast.success(
+                      `Inserted ${res.inserted}, skipped ${res.skipped}`,
+                    );
                     setCsv("");
                     setCsvFileName("");
                     await loadStats();
@@ -2688,7 +3048,9 @@ const AdminDashboard: React.FC = () => {
         <S.ModalBackdrop onClick={() => setModal(null)}>
           <S.ModalCard onClick={(e) => e.stopPropagation()}>
             <h2>Add instant win</h2>
-            <p className="sub">Shown on the public Winners page after publish.</p>
+            <p className="sub">
+              Shown on the public Winners page after publish.
+            </p>
             <S.FormGrid>
               <S.Input
                 placeholder="Display name"
@@ -2756,7 +3118,8 @@ const AdminDashboard: React.FC = () => {
           <S.ModalCard onClick={(e) => e.stopPropagation()}>
             <h2>Add post</h2>
             <p className="sub">
-              Paste a public post URL (Share → Copy link is fine, including facebook.com/share/p/…). It appears on the site Social feed.
+              Paste a public post URL (Share → Copy link is fine, including
+              facebook.com/share/p/…). It appears on the site Social feed.
             </p>
             <S.FormGrid style={{ gridTemplateColumns: "1fr" }}>
               <S.Input

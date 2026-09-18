@@ -192,7 +192,9 @@ const AuthModal: React.FC = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [forgotDevOtp, setForgotDevOtp] = useState("");
-  const [forgotStep, setForgotStep] = useState<"email" | "otp" | "password">("email");
+  const [forgotStep, setForgotStep] = useState<"email" | "otp" | "password">(
+    "email",
+  );
   const [step, setStep] = useState<"form" | "otp">("form");
   const [loading, setLoading] = useState(false);
 
@@ -235,7 +237,14 @@ const AuthModal: React.FC = () => {
         token: string;
         user: { _id: string; fullName: string; role: string };
       };
-      dispatch(login({ token: data.token, userId: data.user._id, username: data.user.fullName, role: data.user.role }));
+      dispatch(
+        login({
+          token: data.token,
+          userId: data.user._id,
+          username: data.user.fullName,
+          role: data.user.role,
+        }),
+      );
       trackEvent("login");
       toast.success("Welcome back");
       clearAuthFields();
@@ -383,7 +392,10 @@ const AuthModal: React.FC = () => {
             {forgotStep === "email" && (
               <>
                 <Title>Forgot password</Title>
-                <Sub>Enter your account email. We&apos;ll send a 6-digit reset code.</Sub>
+                <Sub>
+                  Enter your account email. We&apos;ll send a 6-digit reset
+                  code.
+                </Sub>
                 <form onSubmit={onForgotEmail}>
                   <Label>Email</Label>
                   <Input
@@ -424,7 +436,11 @@ const AuthModal: React.FC = () => {
                     {loading ? "Checking…" : "Verify code"}
                   </Submit>
                 </form>
-                <Switch type="button" onClick={() => setForgotStep("email")} disabled={loading}>
+                <Switch
+                  type="button"
+                  onClick={() => setForgotStep("email")}
+                  disabled={loading}
+                >
                   Resend / change email
                 </Switch>
               </>
@@ -442,7 +458,9 @@ const AuthModal: React.FC = () => {
                     required
                     autoComplete="new-password"
                   />
-                  <Hint>8+ characters with a letter, number, and special character.</Hint>
+                  <Hint>
+                    8+ characters with a letter, number, and special character.
+                  </Hint>
                   <Label>Confirm password</Label>
                   <PasswordInput
                     value={confirmPassword}
@@ -523,7 +541,11 @@ const AuthModal: React.FC = () => {
             {devOtp && <DevOtp>{devOtp}</DevOtp>}
             <form onSubmit={onVerify}>
               <Label>Verification code</Label>
-              <Input value={otp} onChange={(e) => setOtp(e.target.value)} required />
+              <Input
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
               <Submit type="submit" disabled={loading}>
                 {loading ? "Verifying…" : "Verify"}
               </Submit>
@@ -532,16 +554,36 @@ const AuthModal: React.FC = () => {
         ) : (
           <>
             <Title>Sign up</Title>
-            <Sub>Optional — you can also enter codes as a guest with name + phone.</Sub>
+            <Sub>
+              Optional — you can also enter codes as a guest with name + phone.
+            </Sub>
             <form onSubmit={onSignUp}>
               <Label>Full name</Label>
-              <Input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+              <Input
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
               <Label>Phone</Label>
-              <Input value={phone} onChange={(e) => setPhone(e.target.value)} required />
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
               <Label>Email</Label>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
               <Label>Date of birth</Label>
-              <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} required />
+              <Input
+                type="date"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                required
+              />
               <Label>Password</Label>
               <PasswordInput
                 value={password}
@@ -549,7 +591,9 @@ const AuthModal: React.FC = () => {
                 required
                 autoComplete="new-password"
               />
-              <Hint>8+ characters with a letter, number, and special character.</Hint>
+              <Hint>
+                8+ characters with a letter, number, and special character.
+              </Hint>
               <Label>Confirm password</Label>
               <PasswordInput
                 value={signupConfirm}
@@ -558,7 +602,11 @@ const AuthModal: React.FC = () => {
                 autoComplete="new-password"
               />
               <Check>
-                <input type="checkbox" checked={isOver18} onChange={(e) => setIsOver18(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={isOver18}
+                  onChange={(e) => setIsOver18(e.target.checked)}
+                />
                 I am 18+ and agree to the Terms & Conditions.
               </Check>
               <Submit type="submit" disabled={loading}>

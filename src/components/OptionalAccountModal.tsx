@@ -106,7 +106,9 @@ const OptionalAccountModal: React.FC<Props> = ({
 
   useEffect(() => {
     const pinEnter = () => {
-      document.getElementById("enter")?.scrollIntoView({ behavior: "auto", block: "start" });
+      document
+        .getElementById("enter")
+        ?.scrollIntoView({ behavior: "auto", block: "start" });
     };
     pinEnter();
     const frame = window.requestAnimationFrame(pinEnter);
@@ -147,7 +149,9 @@ const OptionalAccountModal: React.FC<Props> = ({
       }
       trackEvent("optional_account_accept");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not create account");
+      toast.error(
+        error instanceof Error ? error.message : "Could not create account",
+      );
     } finally {
       setLoading(false);
     }
@@ -157,7 +161,9 @@ const OptionalAccountModal: React.FC<Props> = ({
     setLoading(true);
     try {
       await apiService.verifyOtp(email, otp);
-      toast.success("Account verified. You can log in next time with just your code.");
+      toast.success(
+        "Account verified. You can log in next time with just your code.",
+      );
       setEmail("");
       setOtp("");
       setDevOtp("");
@@ -174,12 +180,17 @@ const OptionalAccountModal: React.FC<Props> = ({
       <Card>
         <h3>Create an account? Optional.</h3>
         <p style={{ margin: "8px 0 16px", color: COLORS.muted }}>
-          Next time you only need to enter your code. You can skip and keep using your name + phone.
+          Next time you only need to enter your code. You can skip and keep
+          using your name + phone.
         </p>
         {step === "form" ? (
           <>
             <label>Email</label>
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+            />
             <label>Password</label>
             <PasswordInput
               wrapStyle={{ marginTop: 8, marginBottom: 12 }}
@@ -204,7 +215,15 @@ const OptionalAccountModal: React.FC<Props> = ({
         ) : (
           <>
             {devOtp && (
-              <p style={{ marginBottom: 10, color: COLORS.red, fontWeight: 800, letterSpacing: "0.16em", textAlign: "center" }}>
+              <p
+                style={{
+                  marginBottom: 10,
+                  color: COLORS.red,
+                  fontWeight: 800,
+                  letterSpacing: "0.16em",
+                  textAlign: "center",
+                }}
+              >
                 {devOtp}
               </p>
             )}
@@ -220,7 +239,7 @@ const OptionalAccountModal: React.FC<Props> = ({
         )}
       </Card>
     </Overlay>,
-    document.body
+    document.body,
   );
 };
 
