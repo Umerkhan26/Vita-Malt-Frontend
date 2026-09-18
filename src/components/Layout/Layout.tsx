@@ -7,7 +7,10 @@ import { COLORS } from "../../constants/colors";
 import { contentWidth, contentPadX } from "../../constants/layout";
 import { RootState } from "../../redux/store";
 import { logout } from "../../redux/slices/auth";
-import { AuthModalProvider, useAuthModal } from "../../context/AuthModalContext";
+import {
+  AuthModalProvider,
+  useAuthModal,
+} from "../../context/AuthModalContext";
 import AuthModal from "../AuthModal/AuthModal";
 import { PageEnter } from "../Reveal/Reveal";
 import logo from "../../assets/vita-malt-logo.png";
@@ -30,7 +33,12 @@ const TopBar = styled.header`
     right: 0;
     bottom: 0;
     height: 2px;
-    background: linear-gradient(90deg, ${COLORS.redDeep}, ${COLORS.gold}, ${COLORS.red});
+    background: linear-gradient(
+      90deg,
+      ${COLORS.redDeep},
+      ${COLORS.gold},
+      ${COLORS.red}
+    );
   }
 `;
 
@@ -299,7 +307,11 @@ const Page = styled.main`
 const FooterWrap = styled.footer`
   position: relative;
   background:
-    radial-gradient(ellipse 70% 60% at 100% 0%, rgba(243, 112, 33, 0.22), transparent 55%),
+    radial-gradient(
+      ellipse 70% 60% at 100% 0%,
+      rgba(243, 112, 33, 0.22),
+      transparent 55%
+    ),
     ${COLORS.redDeep};
   color: ${COLORS.white};
   padding-top: 52px;
@@ -500,7 +512,10 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <>
                   <Welcome>Hi, {auth.username}</Welcome>
                   {auth.role === "admin" ? (
-                    <Ghost type="button" onClick={() => navigate("/admin/dashboard")}>
+                    <Ghost
+                      type="button"
+                      onClick={() => navigate("/admin/dashboard")}
+                    >
                       Admin panel
                     </Ghost>
                   ) : (
@@ -529,7 +544,11 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </>
               )}
             </DesktopAuth>
-            <Burger onClick={() => setOpen((v) => !v)} aria-label="Menu" aria-expanded={open}>
+            <Burger
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Menu"
+              aria-expanded={open}
+            >
               {open ? <FaTimes /> : <FaBars />}
             </Burger>
           </Right>
@@ -538,7 +557,11 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <HeaderSpacer />
 
       <Page>
-        {isAdminRoute ? children : <PageEnter key={location.pathname}>{children}</PageEnter>}
+        {isAdminRoute ? (
+          children
+        ) : (
+          <PageEnter key={location.pathname}>{children}</PageEnter>
+        )}
       </Page>
 
       <FooterWrap>
@@ -546,10 +569,13 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <FooterCol>
             <FooterLogo src={logo} alt="Vita Malt" />
             <p>
-              Vitalize Your Game — buy participating Vita Malt, check under the crown, and enter for Instant Wins plus
-              the Ultimate Entertainment Package.
+              Vitalize Your Game buy participating Vita Malt, check under the
+              crown, and enter for Instant Wins plus the Ultimate Entertainment
+              Package.
             </p>
-            <p>Campaign: Sep 18 – Nov 20, 2026 · Support: drinkvitamalt@gmail.com</p>
+            <p>
+              Campaign: Sep 18 – Nov 20, 2026 · Support: drinkvitamalt@gmail.com
+            </p>
           </FooterCol>
           <FooterCol>
             <h4>Enter</h4>
@@ -571,7 +597,10 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <p>18+ · Saint Vincent and the Grenadines residents only.</p>
           </FooterCol>
         </FooterGrid>
-        <Copy>© 2026 St. Vincent Brewery Ltd. / Vita Malt — Vitalize Your Game. All rights reserved.</Copy>
+        <Copy>
+          © 2026 St. Vincent Brewery Ltd. / Vita Malt Vitalize Your Game. All
+          rights reserved.
+        </Copy>
       </FooterWrap>
       <AuthModal />
     </>
