@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { FaTicketAlt, FaCheckCircle, FaTrophy, FaSearch } from "react-icons/fa";
+import { FaTicketAlt, FaCheckCircle, FaTrophy, FaSearch, FaMedal } from "react-icons/fa";
 import Layout from "../../components/Layout/Layout";
 import { PageHero } from "../../components/PageHero/PageHero";
 import Reveal from "../../components/Reveal/Reveal";
@@ -18,6 +18,7 @@ interface DashboardData {
   progressTowardNextEntry: number;
   codes: { code: string; usedAt?: string }[];
   entries: { id: string; submittedAt: string; isWinner: boolean; prizeTier?: string }[];
+  leaderboard?: { rank: number; name: string; codes: number; entries: number; isMe: boolean }[];
 }
 
 const Dashboard: React.FC = () => {
@@ -223,6 +224,35 @@ const Dashboard: React.FC = () => {
                   )}
                 </S.Card>
               </S.Grid>
+
+              {data.leaderboard && data.leaderboard.length > 0 && (
+                <S.Card style={{ marginTop: 16 }}>
+                  <h3>
+                    <FaMedal /> Top 10 leaderboard
+                  </h3>
+                  <p className="hint">Ranked by validated codes</p>
+                  <S.List>
+                    {data.leaderboard.map((row) => (
+                      <S.Row
+                        key={row.rank}
+                        style={row.isMe ? { background: "rgba(177, 18, 38, 0.06)", borderRadius: 10, paddingInline: 8 } : undefined}
+                      >
+                        <div className="icon">#{row.rank}</div>
+                        <div className="meta">
+                          <strong>
+                            {row.name}
+                            {row.isMe ? " (You)" : ""}
+                          </strong>
+                          <span>
+                            {row.entries} entr{row.entries === 1 ? "y" : "ies"}
+                          </span>
+                        </div>
+                        <span className="tag">{row.codes} codes</span>
+                      </S.Row>
+                    ))}
+                  </S.List>
+                </S.Card>
+              )}
             </>
             </Reveal>
           )}
