@@ -574,7 +574,7 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               Package.
             </p>
             <p>
-              Campaign: Sep 18 – Nov 20, 2026 · Support: drinkvitamalt@gmail.com
+              Campaign: Sep 18 – Dec 1, 2026 · Support: drinkvitamalt@gmail.com
             </p>
           </FooterCol>
           <FooterCol>

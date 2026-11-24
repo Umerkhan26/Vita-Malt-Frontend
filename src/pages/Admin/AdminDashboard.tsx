@@ -923,7 +923,7 @@ const AdminDashboard: React.FC = () => {
               <div>
                 <h1>Overview</h1>
                 <p>
-                  {campaign.start || "Sep 18"} – {campaign.end || "Nov 20"} ·
+                  {campaign.start || "Sep 18"} – {campaign.end || "Dec 1"} ·
                   Draw {campaign.draw || "Nov 23"}
                 </p>
               </div>

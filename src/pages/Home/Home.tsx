@@ -225,7 +225,7 @@ const Home: React.FC = () => {
         <HeroShade />
         <HeroContent>
           <HeroTop>
-            <Kicker>Sep 18 – Nov 20, 2026</Kicker>
+            <Kicker>Sep 18 – Dec 1, 2026</Kicker>
           </HeroTop>
           <HeroBottom>
             <HeroActions>
@@ -244,7 +244,7 @@ const Home: React.FC = () => {
                 <FaCalendarAlt aria-hidden />
                 Campaign window
               </strong>
-              <span>September 18 – November 20, 2026</span>
+              <span>September 18 – December 1, 2026</span>
             </DateItem>
             <DateItem>
               <strong>

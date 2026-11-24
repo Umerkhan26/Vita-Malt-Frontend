@@ -316,8 +316,8 @@ const Terms: React.FC = () => (
           <Section id="promotion-period">
             <h3>3. Promotion Period</h3>
             <p>
-              The Promotion starts on September 18, 2026 and ends on November
-              20, 2026. Entries submitted outside this period will not be
+              The Promotion starts on September 18, 2026 and ends on December
+              1, 2026. Entries submitted outside this period will not be
               accepted.
             </p>
           </Section>

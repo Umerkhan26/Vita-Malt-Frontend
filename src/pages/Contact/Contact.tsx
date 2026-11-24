@@ -244,7 +244,7 @@ const Contact: React.FC = () => {
                 drinkvitamalt@gmail.com
               </a>
               <br />
-              Must be 18+ and reside in Saint Vincent and the Grenadines. Campaign: Sep 18 – Nov 20, 2026.
+              Must be 18+ and reside in Saint Vincent and the Grenadines. Campaign: Sep 18 – Dec 1, 2026.
             </MetaNote>
           </Info>
         </Reveal>
